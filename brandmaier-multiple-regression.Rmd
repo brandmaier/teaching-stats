@@ -1,0 +1,251 @@
+---
+title: "Multiple Regression"
+author: "Andreas M. Brandmaier"
+date: "12/3/2019"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+mytheme <- ggthemes::theme_base()
+
+require(ggplot2)
+
+##Cohen (2003) Table 3.5.1
+cohen.dat <- data.frame(
+    salary = c(51876, 54511, 53425, 61863, 52926, 47034, 66432, 61100, 41934,
+      47454, 49832, 47047, 39115, 59677, 61458, 54528, 60327, 56600,
+      52542, 50455, 51647, 62895, 53740, 75822, 56596, 55682, 62091,
+      42162, 52646, 74199, 50729, 70011, 37939, 39652, 68987, 55579,
+      54671, 57704, 44045, 51122, 47082, 60009, 58632, 38340, 71219,
+      53712, 54782, 83503, 47212, 52840, 53650, 50931, 66784, 49751,
+      74343, 57710, 52676, 41195, 45662, 47606, 44301, 58582),
+pubs =c(18,3,2,17,11,6,38,48,9,22,30,21, 10, 27, 37, 8, 13, 6, 12, 29, 29, 7, 6, 69, 11, 9, 20, 41, 3, 27, 14, 23, 1, 7, 19, 11, 31, 9, 12, 32, 26, 12, 9, 6, 39, 16, 12, 50, 18, 16, 5, 20, 50,
+      6, 19, 11, 13, 3, 8, 11, 25, 4),
+    cits = c(50, 26, 50, 34, 41, 37, 48, 56, 19, 29,
+        28, 31, 25, 40, 61, 32, 36, 69, 47, 29, 35,
+        35, 18, 90, 60, 30, 27, 35, 14, 56, 50, 25,
+        35, 1, 69, 69, 27, 50, 32, 33, 45, 54, 47, 29,
+        69, 47, 43, 55, 33, 28, 42, 24, 31, 27,
+        83, 49, 14, 36, 34, 70, 27, 28),
+sex= c(1,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,
+  0,1,0,0,1,1,1,1,0,1,1,1,1,1)
+)
+```
+
+## Warum Regression?
+
+Bei der Vorhersage von Erleben und Verhalten muss häufig mehr als seine Variable betrachtet werden. 
+Es werden unterschiedliche Informationen mit einbezogen, von denen man annimmt, dass sie alle das zu vorhersagende Phänomen beeinflussen. Diese sind also der Ausgangspunkt für die Vorhersage - man nennt sie Prädiktorvariablen. 
+
+## Erinnerung: Einfache Regression
+
+Einfache Regressionsgleichung:
+
+$$ y_i = b \times x_i + \epsilon_i$$
+
+## Erinnerung: Kleinste-Quadrate Schätzer
+
+```{r}
+plot_kq <- function(intercept=NULL, slope=NULL) {
+model <- lm(salary~pubs, data = cohen.dat)
+if (!is.null(intercept)) { model$coefficients[1]<-intercept }
+if (!is.null(slope)) { model$coefficients[2]<-slope }
+
+
+y.hat<-predict(model)
+empty <- rep(NA,nrow(cohen.dat)*4)
+df <- data.frame(x=empty,y=empty,grp=empty)
+for (i in 1:nrow(cohen.dat)) {
+  dist <- y.hat[i]-cohen.dat[i,"salary"]
+  disty <- dist
+  distx <- dist / sqrt(var(cohen.dat$salary))/sqrt(var(cohen.dat$pubs))
+  y <- cohen.dat[i,"salary"]
+  x <- cohen.dat[i,"pubs"] 
+ 
+  df[ (i-1)*4+1, ] <- c(x,y,i)
+  df[ (i-1)*4+2, ] <- c(x-distx,y,i)
+  df[ (i-1)*4+3, ] <- c(x-distx,y+disty,i)  
+  df[ (i-1)*4+4, ] <- c(x,y+disty,i)  
+}
+ggplot(cohen.dat, aes(x=pubs,y=salary))+
+  
+ # geom_smooth(method='lm',se=FALSE)+
+ 
+  geom_polygon(data=df,aes(x=x,y=y,group=grp),alpha=.20, fill='#FFC43F',color='#FFFFFF')+
+  geom_point(data=cohen.dat, aes(x=pubs,y=salary))+
+   geom_abline(intercept=coef(model)[1],slope=coef(model)[2])+
+  xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
+  mytheme
+}
+
+plot_kq()
+```
+
+## Inferenz in der einfachen Regression
+
+- Wie schätzen wir die Größe des Regressionskoeffizienten (Effektstärke)?
+- Wie testen wir die Signifikanz der Abweichung von 0?
+
+
+## Erinnerung: Kleinste-Quadrate Schätzer
+
+```{r}
+plot_kq(intercept=58000, slope=100)
+```
+
+
+
+```{r}
+ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
+  xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
+  
+  mytheme
+```
+
+
+
+## Multiple Regression
+
+- Frage: Wie groß ist der Einfluss einer oder mehrerer metrischer oder
+kategorialer Prädiktoren auf ein metrisches Kriterium?
+
+
+- Allgemeine Form:
+
+$$ y_i = b_0 + b_1 \dot x_{i,1} + b_2 \cdot x_{i,2} + \ldots + b_k \cdot x_{i,k}+ \epsilon_i$$
+
+- $y_i$: Wert von Person $i$ im Kriterium
+- $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $j$
+- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
+- $b_0$: Regressionskonstante (Intercept)
+- $b_j$: Regressionsgewichte ($j=1\ldots j$)
+
+
+## Beispiel: Zwei Prädiktoren
+
+```{r}
+knitr::kable(head(cohen.dat))
+```
+
+_Cohen \& Cohen, 1993_
+
+## Beispiel: Zwei Prädiktoren
+
+- Multiple Regressionsgleichung (zwei Prädiktoren) für eine Person $i$:
+
+$$ y_i = b_0 + b_1 \cdot x_{i,1} + b_2 \cdot x_{i,2} + \epsilon_i$$
+
+## Im 3D-Plot
+
+```{r}
+library(scatterplot3d) # This library will allow us to draw 3d plot
+
+plot3d <- scatterplot3d(cohen.dat$pubs, cohen.dat$cits, cohen.dat$salary,angle=55, scale.y=0.7, pch=16,
+                        xlab="X: Publications", ylab="Y: Citations", zlab="Z: Salary")
+
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+plot3d$plane3d(my.lm, lty.box = "solid")
+```
+
+## Erklären
+
+Was bedeuten die Regressionskoeffizienten?
+
+
+## Prädiktion
+
+Den vorhergesagten Wert für die Kriteriumsvariable erhält man durch einsetzen der Werte der Prädiktoren.
+
+$$ \hat{y}_i = b_0 + b_1 \cdot x_{i,1} + b_2 \cdot x_{i,2}$$
+
+(über den Fehler wissen wir natürlich nichts außer seinem Erwartungswert von 0)
+
+In unserem Beispiel:
+
+$$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen} = $$
+
+## Prädiktion
+
+In unserem Beispiel:
+
+$$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen} $$
+
+Ein Professor mit 10 Publikationen, die 20 mal zitiert wurden, erhält:
+
+In unserem Beispiel:
+
+$$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen}= 47853 $$
+
+## Partielle Regressionskoeffizienten
+
+## Inferenz
+
+- Wie gut sagen unsere Unabhängigen Variablen zusammen die Abhängige Variable vorher?
+- Wieviel trägt jede einzelne UV zur Vorhersage von Y bei?
+- Wieviel trägt jede einzelne UV zusätzlich zu allen anderen zur Vorhersage von Y bei?
+
+
+
+## Erklärte Varianz
+
+Varianz: Maß für die Unsicherheit einer normalverteilten Variable
+
+> Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler
+
+# Erklärte Varianz
+
+Multiples $R^2$:
+
+$$ R^2 = \frac{\mathrm{ durch\  alle\ Prädiktoren\ in \ }Y\ \mathrm{erklärte\ Varianz }}{\mathrm{Varianz\ von\ }Y} $$
+## F-Test
+
+Ist die erklärte Varianz überzufällig?
+
+Wichtig: Die erklärte Varianz kann zwar numerisch groß sein, aber ihre statistische Präzision trotzdem klein!
+
+Wie testen: Modellvergleich!
+
+## Modellvergleiche
+
+- Modellvergleiche führen wir durch mittels unseres Kandidatenmodells ($H1$) und eines eingeschränkten $H0$-Modells.
+
+- Das eingeschränkte Modell hat weniger Freiheitsgrade und dadurch immer eine schlechtere Passung zu den Daten
+
+- Null-Hypothese: Beide Modelle erklären die Daten gleich gut. Die Unterschiede in der Modellpassung sind lediglich zufällig
+
+Teststatistik: $F=\frac{n-p_{H1}-1}{p_{H1}-p_{H0}} \cdot \frac{R^2_{H1}-R^2_{H0}}{1-R^2_{H1}} $
+
+- mit $R^2_{H1}$ die Modellpassung von $H1$ und $p_{H0}$ die Anzahl der Paramater des Modells
+
+## Modellvergleiche
+
+Globaler Test: Erklären wir überhaupt irgendetwas überzufälliges?
+Nullmodell: Regressionsgleichung ohne Prädiktoren, d.h., nur die Regressionskonstante
+
+## Venn
+
+```{r}
+library(venn)
+venn("011+111")
+```
+
+## Modellannahmen (oder, was kann alles schief gehen)
+
+- Die multiple Regression trifft (wie jedes statistische Modelle) eine ganze Reihe von Annahmen
+- Sind diese Annahmen korrekt, erhalten wir Optimalitätsgarantien für unsere Methode, z.B.:
+  - die Schätzer sind unverzerrt (im Mittel schätzen wir die wahren Werte ohne Verzerrung)
+
+## Modellannahmen
+
+- Linearität
+
+```{r}
+
+```
+
+- Heteroskedastizität (auch: Varianzheterogenität)
+
+
+
