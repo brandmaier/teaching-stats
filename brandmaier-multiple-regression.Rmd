@@ -1,9 +1,19 @@
 ---
 title: "Multiple Regression"
+subtitle: "Bachelor Psychologie, 2.FS"
 author: "Andreas M. Brandmaier"
+#institute: "Max Planck Institute for Human Development"
 date: "12/3/2019"
-output: beamer_presentation
+output: 
+  beamer_presentation:
+    theme: metropolis
+
+    includes:
+      in_header: mystyle.tex
+classoption: "aspectratio=169"
 ---
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -39,20 +49,36 @@ sex= c(1,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0
 Bei der Vorhersage von Erleben und Verhalten muss häufig mehr als seine Variable betrachtet werden. 
 Es werden unterschiedliche Informationen mit einbezogen, von denen man annimmt, dass sie alle das zu vorhersagende Phänomen beeinflussen. Diese sind also der Ausgangspunkt für die Vorhersage - man nennt sie Prädiktorvariablen. 
 
+- *Ursachenanalyse*: Gibt es einen Zusammenhang zwischen den Prädiktoren und der Kriteriumsvariable? Wie eng ist dieser?
+- *Wirkungsanalyse*: Wie verändert sich die Kriteriumsvariable bei einer Änderung der Prädiktoren?
+- *Prognose*: Können die Messwerte der Kriteriumsvariable durch die Werte der Prädiktoren vorhergesagt werden?
+
 ## Erinnerung: Einfache Regression
 
-Einfache Regressionsgleichung:
+Einfache Regressionsgleichung für die Variablen $X$ und $Y$:
 
-$$ y_i = b \times x_i + \epsilon_i$$
+\Huge
+$$ y_i = \color{blue}b_0\color{black} + \color{blue}b_1\color{black} \cdot x_i + \color{red}{e_i}$$
+\normalsize
+
+- $y_i$: Wert von Person $i$ im Kriterium
+- $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $X$
+- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
+- $\color{blue}b_0$: Regressionskonstante (Intercept)
+- $\color{blue}b_1$: Regressionskoeffizient
 
 ## Erinnerung: Kleinste-Quadrate Schätzer
 
-```{r}
+\center
+
+```{r out.height="80%"}
 plot_kq <- function(intercept=NULL, slope=NULL) {
+  
 model <- lm(salary~pubs, data = cohen.dat)
 if (!is.null(intercept)) { model$coefficients[1]<-intercept }
 if (!is.null(slope)) { model$coefficients[2]<-slope }
 
+scf <- sqrt(var(cohen.dat$salary))/sqrt(var(cohen.dat$pubs))
 
 y.hat<-predict(model)
 empty <- rep(NA,nrow(cohen.dat)*4)
@@ -60,7 +86,7 @@ df <- data.frame(x=empty,y=empty,grp=empty)
 for (i in 1:nrow(cohen.dat)) {
   dist <- y.hat[i]-cohen.dat[i,"salary"]
   disty <- dist
-  distx <- dist / sqrt(var(cohen.dat$salary))/sqrt(var(cohen.dat$pubs))
+  distx <- dist / scf
   y <- cohen.dat[i,"salary"]
   x <- cohen.dat[i,"pubs"] 
  
@@ -80,22 +106,18 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+
   mytheme
 }
 
-plot_kq()
+(plot_kq())
 ```
-
-## Inferenz in der einfachen Regression
-
-- Wie schätzen wir die Größe des Regressionskoeffizienten (Effektstärke)?
-- Wie testen wir die Signifikanz der Abweichung von 0?
-
 
 ## Erinnerung: Kleinste-Quadrate Schätzer
 
-```{r}
+\center
+
+```{r out.height="80%"}
 plot_kq(intercept=58000, slope=100)
 ```
 
-
+## XXX
 
 ```{r}
 ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
@@ -108,13 +130,13 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 
 ## Multiple Regression
 
-- Frage: Wie groß ist der Einfluss einer oder mehrerer metrischer oder
+- Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder
 kategorialer Prädiktoren auf ein metrisches Kriterium?
 
 
 - Allgemeine Form:
 
-$$ y_i = b_0 + b_1 \dot x_{i,1} + b_2 \cdot x_{i,2} + \ldots + b_k \cdot x_{i,k}+ \epsilon_i$$
+$$ y_i = b_0 + b_1 \cdot x_{i,1} + b_2 \cdot x_{i,2} + \ldots + b_k \cdot x_{i,k}+ e_i$$
 
 - $y_i$: Wert von Person $i$ im Kriterium
 - $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $j$
@@ -126,7 +148,10 @@ $$ y_i = b_0 + b_1 \dot x_{i,1} + b_2 \cdot x_{i,2} + \ldots + b_k \cdot x_{i,k}
 ## Beispiel: Zwei Prädiktoren
 
 ```{r}
-knitr::kable(head(cohen.dat))
+cohen.dat2 <- cohen.dat
+names(cohen.dat2) <- c("Gehalt", "Publikationen","Zitationen","Geschlecht")
+
+knitr::kable(head(cohen.dat2))
 ```
 
 _Cohen \& Cohen, 1993_
@@ -139,97 +164,321 @@ $$ y_i = b_0 + b_1 \cdot x_{i,1} + b_2 \cdot x_{i,2} + \epsilon_i$$
 
 ## Im 3D-Plot
 
-```{r}
+```{r fig.height=3}
 library(scatterplot3d) # This library will allow us to draw 3d plot
 
-plot3d <- scatterplot3d(cohen.dat$pubs, cohen.dat$cits, cohen.dat$salary,angle=55, scale.y=0.7, pch=16,
+cohenplot <- function() {
+  plot3d <- scatterplot3d(cohen.dat$pubs, cohen.dat$cits, cohen.dat$salary,angle=55, scale.y=0.7, pch=16,
                         xlab="X: Publications", ylab="Y: Citations", zlab="Z: Salary")
 
-my.lm<- lm(salary ~ pubs + cits, cohen.dat)
-plot3d$plane3d(my.lm, lty.box = "solid")
+  my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+  plot3d$plane3d(my.lm, lty.box = "solid")
+  return(plot3d)
+}
+
+plot3d <- cohenplot()
 ```
 
 ## Erklären
 
+\begincols
+  \begincol{.48\textwidth}
+
+```{r fig.height=4}
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+plot3d <- cohenplot()
+plot3d$points3d(0,0,coef(my.lm)[1],col="red",pch=16,cex=3)
+```
+
+  \endcol
+\begincol{.48\textwidth}
+
 Was bedeuten die Regressionskoeffizienten?
 
+> Gehalt = `r round(coef(my.lm)[1],2)`+ `r round(coef(my.lm)[2],2)` $\cdot$ Publikationen + `r round(coef(my.lm)[3],2)` $\cdot$ Zitationen 
+
+\endcol
+\endcols
+
+## Regressionskoeffizient
+
+$b_0$ gibt an, welcher Wert für die deterministische Komponente der Untersuchungsvariablen zu erwarten ist, falls sämtliche exogenen Variablen den Wert Null realisieren.
+
+## Regressionskoeffizient
+
+- Die $b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert und man alle übrigen Prädiktoren konstant hält.
+
+- Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
+
+## Regressionskoeffizient
+
+```{r}
+my.lm<-lm(salary~pubs+cits,cohen.dat)
+
+#my.lm.pubs <- lm(salary~pubs, cohen.dat)
+coefs1 <- coef(my.lm)
+coefs2 <- coefs1+c(20*coef(my.lm)[3],0,0)
+coefs3 <- coefs1+c(40*coef(my.lm)[3],0,0)
+ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point(col='white')+
+  xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
+  geom_abline(intercept=coefs1[1], slope=coefs1[2])+
+  geom_abline(intercept=coefs2[1], slope=coefs2[2])+
+    geom_abline(intercept=coefs3[1], slope=coefs3[2])+
+  #geom_abline(intercept=coefs4[1], slope=coefs4[2])+
+  geom_text(x=30,y=45000,label="<- 0 Zitationen")+
+  geom_text(x=50,y=55000,label="<- 20 Zitationen")+
+  geom_text(x=45,y=65000,label="40 Zitationen ->")+
+  mytheme
+```
+
+
+## Relative Wichtigkeit
+
+Wie groß sind die Einflüsse relativ zu einander?
+
+Die Regressionskoeffizienten sind zunächst für direkte Vergleiche (innerhalb des Modells) ungeeignet, da sie von der Streuung der Prädiktoren abhängen.
+
+Bsp.: Die Einheit von $b_1$ ist $\frac{USD}{Publikation}$, die von $b_2$ ist $\frac{USD}{Zitation}$.
+
+-> Standardisieren
+
+Allgemein: 
+$$\beta_i=\frac{SD_{X_i}}{SD_{Y_i}} \cdot b_i $$
+
+
+Interpretation: 
+Veränderung im Kriterium, wenn man Prädiktor um eine Standardabweichung erhöht (kontrolliert für alle anderen Prädiktoren)
+
+```{r}
+std.lm <- lm(scale(salary) ~ scale(pubs)+scale(cits), data=cohen.dat)
+```
+
+## Standardisierte Partielle Regressionskoeffizienten
+
+Rechenbeispiel:
+
+- $SD_{X_i}=$ `r round(sd(cohen.dat$pubs),2)`
+- $SD_{Y}=$ `r round(sd(cohen.dat$salary),2)`
+ 
+$$b_i'=\frac{SD_{X_i}}{SD_{Y_i}} \cdot b_i = \frac{}{} $$
+
+In unserem Fall erhalten wir folgende (einheitenlose) standardisierten partiellen Regressionskoeffizienten:
+
+> Gehalt = 0+ `r round(coef(std.lm)[2],2)` $\cdot$ Publikationen + `r round(coef(std.lm)[3],2)` $\cdot$ Zitationen 
 
 ## Prädiktion
 
-Den vorhergesagten Wert für die Kriteriumsvariable erhält man durch einsetzen der Werte der Prädiktoren.
+Den vorhergesagten Wert für die Kriteriumsvariable erhält man durch Einsetzen der Werte der Prädiktoren.
 
 $$ \hat{y}_i = b_0 + b_1 \cdot x_{i,1} + b_2 \cdot x_{i,2}$$
-
-(über den Fehler wissen wir natürlich nichts außer seinem Erwartungswert von 0)
+  
+  (über den Fehler wissen wir natürlich nichts außer seinem Erwartungswert von 0)
 
 In unserem Beispiel:
-
-$$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen} = $$
-
+  
+  $$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen} = $$
+  
 ## Prädiktion
-
-In unserem Beispiel:
-
-$$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen} $$
-
-Ein Professor mit 10 Publikationen, die 20 mal zitiert wurden, erhält:
-
-In unserem Beispiel:
-
-$$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen}= 47853 $$
-
-## Partielle Regressionskoeffizienten
-
+  
+  In unserem Beispiel:
+  
+  $$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen} $$
+  
+  Ein Professor mit 10 Publikationen, die 20 mal zitiert wurden, erhält:
+  
+  In unserem Beispiel:
+  
+  $$ \mathrm{Gehalt} = 40493 + 252 \cdot \mathrm{Publikationen} + 242 \cdot \mathrm{Zitationen}= 47853 $$
+  
+  
 ## Inferenz
-
-- Wie gut sagen unsere Unabhängigen Variablen zusammen die Abhängige Variable vorher?
-- Wieviel trägt jede einzelne UV zur Vorhersage von Y bei?
-- Wieviel trägt jede einzelne UV zusätzlich zu allen anderen zur Vorhersage von Y bei?
-
-
-
+  
+  - Wie gut sagen unsere Prädiktoren *zusammen* die Kriteriumsvariable vorher?
+  - Wieviel trägt *jeder einzelne Prädiktor* zur Vorhersage von Y bei?
+  - Wieviel trägt *jeder einzelne Prädiktor zusätzlich* zu allen anderen zur Vorhersage von Y bei?
+  
 ## Erklärte Varianz
-
+  
 Varianz: Maß für die Unsicherheit einer normalverteilten Variable
 
 > Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler
-
-# Erklärte Varianz
-
-Multiples $R^2$:
-
-$$ R^2 = \frac{\mathrm{ durch\  alle\ Prädiktoren\ in \ }Y\ \mathrm{erklärte\ Varianz }}{\mathrm{Varianz\ von\ }Y} $$
-## F-Test
-
-Ist die erklärte Varianz überzufällig?
-
-Wichtig: Die erklärte Varianz kann zwar numerisch groß sein, aber ihre statistische Präzision trotzdem klein!
-
-Wie testen: Modellvergleich!
-
-## Modellvergleiche
-
-- Modellvergleiche führen wir durch mittels unseres Kandidatenmodells ($H1$) und eines eingeschränkten $H0$-Modells.
-
-- Das eingeschränkte Modell hat weniger Freiheitsgrade und dadurch immer eine schlechtere Passung zu den Daten
-
-- Null-Hypothese: Beide Modelle erklären die Daten gleich gut. Die Unterschiede in der Modellpassung sind lediglich zufällig
-
-Teststatistik: $F=\frac{n-p_{H1}-1}{p_{H1}-p_{H0}} \cdot \frac{R^2_{H1}-R^2_{H0}}{1-R^2_{H1}} $
-
-- mit $R^2_{H1}$ die Modellpassung von $H1$ und $p_{H0}$ die Anzahl der Paramater des Modells
-
-## Modellvergleiche
-
-Globaler Test: Erklären wir überhaupt irgendetwas überzufälliges?
-Nullmodell: Regressionsgleichung ohne Prädiktoren, d.h., nur die Regressionskonstante
 
 ## Venn
 
 ```{r}
 library(venn)
-venn("011+111")
+cohen.venn <- function(x, ...) {
+  venn(x,snames = c("Zitationen","Publikationen","Gehalt"), cexsn=1,...)
+}
+
+venn.label <- function(x, txt) {
+  centroid <- getCentroid(getZones(x))[[1]]
+  text(centroid[1], centroid[2], labels = txt, cex = 0.85)
+}
+
 ```
+
+```{r}
+
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+smlm <- summary(my.lm)
+
+r2.total <- smlm$r.squared # 42% explained
+
+my.lm.pubs <- lm(salary ~ pubs, cohen.dat)
+r2.pubs <- summary(my.lm.pubs)$r.squared # 25%
+
+
+my.lm.cits <- lm(salary ~ cits, cohen.dat)
+r2.cits <- summary(my.lm.cits)$r.squared # 30%
+
+cits.unique <- r2.total-r2.cits
+pubs.unique <- r2.total-r2.pubs
+r2.joint <- r2.total-pubs.unique-cits.unique
+```
+
+Schatierte Fläche: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium)
+
+```{r}
+venn("001+111+101+011",snames = c("Zitationen","Publikationen","Gehalt"))
+```
+
+## Erklärte Varianz
+
+Determinationskoeffizient  / Bestimmheitsmaß (Multiples $R^2$):
+  
+  $$ R^2 = \frac{\mathrm{ durch\  alle\ Prädiktoren\ in \ }Y\ \mathrm{erklärte\ Varianz }}{\mathrm{Varianz\ von\ }Y} $$
+
+Je höher, desto besser!
+
+## Venn
+
+Schatierte Fläche: Aufgeklärte Varianz in der einfachen Regression (Reduktion unserer Unsicherheit über das Kriterium)
+
+Das Verhältnis dieser und der vorherigen Fläche entspricht dem Bestimmtheitsmaß $R^2$.
+
+```{r out.height="80%", fig.height=3}
+cits.percent <- paste0(round(r2.cits*100),"%")
+pubs.percent <- paste0(round(r2.pubs*100),"%")
+
+par(mfrow=c(1,2))
+venn("111+011",snames = c("Zitationen","Publikationen","Gehalt"))
+venn.label("111+011", cits.percent)
+venn("111+101",snames = c("Zitationen","Publikationen","Gehalt"))
+venn.label("111+101",pubs.percent)
+```
+
+## Zusammen
+
+```{r}
+venn("111+101+011")
+venn.label("111+101+011", round(100*r2.total,2))
+```
+
+## Und weiter
+\center
+```{r, out.height="80%", fig.height=3}
+
+
+library(venn)
+#venn("011+111") # Total of B in C
+#venn("101+111") # Total of A in C
+#venn("101") # Unique of A
+#venn("011") # Unique of B
+#venn("111") # Shared A and B
+#venn("001") # Unique in C (unexplained by A and B)
+
+venn("001",snames = c("Zitationen","Publikationen","Gehalt"))
+venn.label("001",txt = round(1-r2.total,2))
+venn.label("111",txt=round(r2.joint,2))
+venn.label("101",txt = round(cits.unique,2))
+venn.label("011",txt = round(pubs.unique,2))
+```
+
+
+## F-Test
+
+- Ist die erklärte Varianz überzufällig?
+  
+- Wichtig: Die erklärte Varianz kann zwar numerisch groß sein, aber ihre statistische Präzision (in kleinen Stichproben) trotzdem klein!
+  
+- Wie testen? Modellvergleich!
+  
+## Modellvergleiche
+  
+- Modellvergleiche führen wir durch mittels unseres Kandidatenmodells ($H1$) und eines eingeschränkten $H0$-Modells.
+
+- Das eingeschränkte Modell hat weniger Prädiktoren (und damit Freiheitsgrade) und dadurch immer eine schlechtere Passung zu den Daten
+
+- Null-Hypothese: Beide Modelle erklären die Daten gleich gut. Die Unterschiede in der Modellpassung sind lediglich zufällig und nicht systematisch
+
+## Modellvergleiche
+
+
+\begincols
+  \begincol{.48\textwidth}
+
+Teststatistik: $$F=\frac{n-p_{H1}-1}{p_{H1}-p_{H0}} \cdot \frac{R^2_{H1}-R^2_{H0}}{1-R^2_{H1}} $$
+  
+- mit  $R^2_{H1}$  die Modellpassung von $H1$ und $p_{H0}$  die Anzahl der Paramater des Modells
+
+- Signifikanz: Wir verwerfen die H0 und damit das eingeschränkte Modell
+
+
+  \endcol
+\begincol{.48\textwidth}
+
+```{r}
+x <- seq(0,10,.01)
+y<-df(x,df1=15, df2=3)
+crit<-qf(0.95,df1 = 15,df2=3)
+ggplot(data=data.frame(x,y),aes(x=x,y=y))+geom_line()+xlab("F-Werte")+mytheme+
+  geom_vline(xintercept=crit,lty=2)
+
+```
+
+  \endcol
+\endcols
+
+
+## Modellvergleiche
+
+Globaler Test: Erklären wir überhaupt irgendetwas überzufälliges?
+
+Nullmodell: Regressionsgleichung ohne Prädiktoren, d.h., nur die Regressionskonstante
+
+```{r}
+
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+
+my.lm.null<- lm(salary ~ 1, cohen.dat)
+
+results <- anova(my.lm.null, my.lm)[2,]
+```
+
+In unserem Beispiel erhalten wir ein $F$=`r round(results$F, 2)` mit $p$=`r results$p`.
+
+(Zur Erinnerung, wenn $F>F_{krit}$, lehnen wir die H0 ab)
+
+## Modellvergleiche 2
+
+Lokaler Test: Ist der Beitrag einer einzelnen Variable überzufällig?
+
+Nullmodell: Regressionsgleichung ohne *einen* Prädiktor
+
+```{r}
+
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+
+my.lm.null<- lm(salary ~ cits, cohen.dat)
+
+results <- anova(my.lm.null, my.lm)[2,]
+```
+
+In unserem Beispiel erhalten wir ein $F$=`r round(results$F, 2)` mit $p$=`r results$p`.
+
+(alternativ wird oft auch eine t-verteilte Prüfgröße konstruiert.)
+
 
 ## Modellannahmen (oder, was kann alles schief gehen)
 
@@ -239,13 +488,31 @@ venn("011+111")
 
 ## Modellannahmen
 
-- Linearität
+Linearität der Zusammenhänge
+
+- Der Zusammenhang von jedem $X_i$ und $Y$ soll (zumindest näherungsweise) linear sein
+- Dafür zeichnen wir den Zusammenhang bereinigt um den Effekt aller anderen $X_1$ bis $X_k$ ohne $X_i$.
 
 ```{r}
-
+# Zusammenhang von Publikationen und Gehalt bereinigt für Effekt von Zitationen
+res1 <- lm(pubs ~ cits, cohen.dat)
+res2 <- lm(salary ~ cits, cohen.dat )
+df <- data.frame(res1=residuals(res1), res2=residuals(res2))
+ggplot(data=df,aes(x=res2,y=res1))+geom_point()+geom_smooth(method = "lm",se=FALSE)+mytheme+
+  ggtitle("Partielles Regressionsdiagramm", subtitle="Abhängige Variable:  Publikationen")+
+  ylab("Publikationen (residualisiert)")+xlab("Gehalt (residualisiert)")
 ```
+
+## Modellannahmen
 
 - Heteroskedastizität (auch: Varianzheterogenität)
 
+```{r}
+res <- resid(lm(salary ~ cits+pubs, cohen.dat))
+plot(cohen.dat$cits, res)
+abline(h=sqrt(var(res))*2,lty=2)
+abline(h=-sqrt(var(res))*2,lty=2)
+```
 
+Bei Verletzung: KQ-Verfahren nicht mehr effizient, Parameterschätzer und statistische Tests verzerrt
 
