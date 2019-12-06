@@ -46,43 +46,48 @@ sex= c(1,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0
 )
 ```
 
-## Warum Regression?
+## Was ist Regression?
 
-> - Bei der Vorhersage von Erleben und Verhalten muss häufig mehr als seine Variable betrachtet werden. 
- Es werden unterschiedliche Informationen mit einbezogen, von denen man annimmt, dass sie alle das zu vorhersagende Phänomen beeinflussen. Diese sind also der Ausgangspunkt für die Vorhersage - man nennt sie Prädiktorvariablen. 
+Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädiktoren auf ein metrisches Kriterium?
+
+![](pathdiagram.pdf)
+
+## Zentrale Fragestellungen
+
 > - *Ursachenanalyse*: Gibt es einen Zusammenhang zwischen den Prädiktoren und der Kriteriumsvariable? Wie eng ist dieser?
 > - *Wirkungsanalyse*: Wie verändert sich die Kriteriumsvariable bei einer Änderung der Prädiktoren?
 > - *Prognose*: Können die Messwerte der Kriteriumsvariable durch die Werte der Prädiktoren vorhergesagt werden?
 
-## 
+## Ein einfaches Vorhersagemodell
 
-## Einfache Regression
-
-$$ y_i = \color{blue}b_0 $$
-
-- $y_i$: Wert von Person $i$ im Kriterium
-
-## Einfache Regression
-
-Einfache Regressionsgleichung für einen Prädiktor $X$ und die metrische Kriteriumsvariable $Y$:
-
-\Huge
-$$ y_i = \color{blue}b_0\color{black} + \color{blue}b_1\color{black} \cdot x_i + \color{red}{e_i}$$
-\normalsize
-
-- $y_i$: Wert von Person $i$ im Kriterium
-- $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $X$
-- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
-- $\color{blue}b_0$: Regressionskonstante 
-- $\color{blue}b_1$: Regressionskoeffizient
-
-## Beispiel
-
-
-\note{Hier sehen sie die einfache Regression von Gehalt auf die Anzahl der Publikationen. Die schwarzen Punkte sind unsere Beobachtungen und die blaue Linie stellt die Modellvorhersage (im Erwartungswert) dar.  }
+Ein einfaches Prognose-Modell: Wir sagen für jede Person den Mittelwert von Gehalt vorher (ohne die Prädiktoren zu kennen)
 
 \center
 
+```{r fig.height=3.5, fig.width=5, out.height="80%"}
+lm.dumb<- lm(salary~1, data=cohen.dat)
+
+ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
+  xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
+    geom_abline(intercept=coef(lm.dumb),slope=0,lwd=2,color="blue")+
+  mytheme#+
+  #ggtitle("Einfache Regression",subtitle="Abhängige Variable: Gehalt")
+
+
+```
+
+## Konstante Regression
+
+Ein formales Modell für die beobachteten Daten $i \in 1..N$ mit $N$ die Stichprobengröße:
+$$ y_i = \color{blue}b_0 + \color{red}e_i$$
+
+- $y_i$: Wert von Person $i$ im Kriterium
+- $\color{blue}b_0$: Regressionskonstante 
+- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
+
+## Ein verbessertes Vorhersagemodell
+
+\center
 ```{r fig.height=3.5, fig.width=5}
 lm.pubs <- lm(salary~pubs, data=cohen.dat)
 
@@ -92,22 +97,36 @@ df.test$salary <- predict(lm.pubs, df.test)
 
 ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
   xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
-    geom_smooth(method = "lm",se=FALSE)+
-    geom_point(data=df.test,size=8,color='blue',pch=1)+
-  geom_segment(x=60,xend=60,y=0,yend=df.test$salary,lty=2,col="grey")+
-  geom_segment(x=0,xend=60,y=df.test$salary,yend=df.test$salary,lty=2,col="grey")+
+    geom_smooth(method = "lm",se=FALSE,lwd=2)+
+ #   geom_point(data=df.test,size=8,color='blue',pch=1)+
+ # geom_segment(x=60,xend=60,y=0,yend=df.test$salary,lty=2,col="grey")+
+#  geom_segment(x=0,xend=60,y=df.test$salary,yend=df.test$salary,lty=2,col="grey")+
   mytheme#+
   #ggtitle("Einfache Regression",subtitle="Abhängige Variable: Gehalt")
 
 
 ```
 
+
+## Einfache Regression
+
+Einfache Regressionsgleichung für einen Prädiktor $X$ und die metrische Kriteriumsvariable $Y$:
+
+\Huge$$ y_i = \color{blue}b_0\color{black} + \color{blue}b_1\color{black} \cdot x_i + \color{red}{e_i}$$\normalsize
+
+- $y_i$: Wert von Person $i$ im Kriterium
+- $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $X$
+- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
+- $\color{blue}b_0$: Regressionskonstante 
+- $\color{blue}b_1$: Regressionskoeffizient
+
+
 ## Vorhersage
 
 - Wir erhalten eine Modellvorhersage für einen neuen Punkt durch Einsetzen der Prädiktoren-Werte
 - Unsere Regressionsgleichung lautet
 
-$$y_i = 48439 + 351 \cdot x_i$$
+$$y_i = 48439 + 351 \cdot x_i + e_i$$
 
 - Für den Fehler nehmen wir an, dass er im Erwartungswert 0 ist (siehe Modellannahmen später) und somit erhalten wir
 
@@ -187,7 +206,6 @@ $$ \sum_{i=1}^n{} e^2_i = \sum_{i=1}^n \left(y_i - b_0 + b_1 \cdot x_i \right) $
 
 ## Kleinste Quadrate Methode
 
-
 \center
 
 ```{r out.height="80%",fig.height=4, fig.width=6}
@@ -236,7 +254,6 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+
 plot_kq(intercept=68000, slope=100)
 ```
 
-
 ## Multiple Regression
 
 Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder
@@ -249,8 +266,6 @@ $$\color{black}\Huge y_i = \color{blue}b_0 + \color{blue}b_1\color{black} \cdot 
 - $e_i$: Vorhersagefehler für Person $i$ (Residuum)
 - $b_0$: Regressionskonstante (Intercept)
 - $b_j$: Regressionsgewichte ($j=1\ldots j$)
-
-\vfill
 
 ## Beispiel
 
@@ -316,25 +331,14 @@ dev.off()
 
 
 
-## Regressionskoeffizient
+## Partielle Regressionskoeffizient
 
 - Die $b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
 
 - Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
 
-## Partielle Regression
 
-- Die  _partiellen Regressionskoeffizienten_ kann man sich als Koeffizienten einer bedingten einfachen Regression vorstellen
-
-- Die Regression ist dabei bedingt auf alle anderen Prädiktoren
-
-$$Gehalt = 40493 + 252 \cdot Publikationen + 242 \cdot Zitationen$$
-
-z.B. für 20 Zitationen:
-
-$$ Gehalt = 40493 + 252 \cdot Publikationen + 242 \cdot 20 = 45333 + 252 \cdot Publikationen$$
-
-## Partielle Regression
+## Modellvorhersagen mit der Partiellen Regression
 
 ```{r fig.height=4, fig.width=6}
 my.lm<-lm(salary~pubs+cits,cohen.dat)
@@ -354,6 +358,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point(col='white')+
   geom_text(x=45,y=65000,label="40 Zitationen ->")+
   mytheme
 ```
+
 
 ## Relative Wichtigkeit
 
@@ -413,6 +418,7 @@ Determinationskoeffizient  / Bestimmheitsmaß (Multiples $R^2$):
 
 - Berechnung der erklärten Varianz als $$1- \frac{1}{n-1} \cdot RSQ $$
 - Je höher, desto besser!
+
   
 ## Venn-Diagramm der Varianzen
 
@@ -523,5 +529,6 @@ venn.label("011",txt = round(pubs.unique,2))
 
 - Statistische Tests für die Modellgüte und die Beiträge einzelner Variablen (bisher nur Effektstärken)
 - Modellannahmen und was tun, wenn diese verletzt sind
+
 
 
