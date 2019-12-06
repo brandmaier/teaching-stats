@@ -340,7 +340,7 @@ r2.joint <- r2.total-pubs.unique-cits.unique
 Schatierte Fläche: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium)
 
 ```{r}
-venn("001+111+101+011",snames = c("Zitationen","Publikationen","Gehalt"))
+cohen.venn("001+111+101+011")
 ```
 
 ## Erklärte Varianz
@@ -371,13 +371,13 @@ venn.label("111+101",pubs.percent)
 ## Zusammen
 
 ```{r}
-venn("111+101+011")
+cohen.venn("111+101+011")
 venn.label("111+101+011", round(100*r2.total,2))
 ```
 
 ## Und weiter
 \center
-```{r, out.height="80%", fig.height=3}
+```{r, out.height="80%"}
 
 
 library(venn)
@@ -416,7 +416,7 @@ venn.label("011",txt = round(pubs.unique,2))
 
 
 \begincols
-  \begincol{.48\textwidth}
+\begincol{.48\textwidth}
 
 Teststatistik: $$F=\frac{n-p_{H1}-1}{p_{H1}-p_{H0}} \cdot \frac{R^2_{H1}-R^2_{H0}}{1-R^2_{H1}} $$
   
@@ -425,7 +425,7 @@ Teststatistik: $$F=\frac{n-p_{H1}-1}{p_{H1}-p_{H0}} \cdot \frac{R^2_{H1}-R^2_{H0
 - Signifikanz: Wir verwerfen die H0 und damit das eingeschränkte Modell
 
 
-  \endcol
+\endcol
 \begincol{.48\textwidth}
 
 ```{r}
@@ -490,8 +490,14 @@ In unserem Beispiel erhalten wir ein $F$=`r round(results$F, 2)` mit $p$=`r resu
 
 Linearität der Zusammenhänge
 
+\begincols
+\begincol{.48\textwidth}
+
 - Der Zusammenhang von jedem $X_i$ und $Y$ soll (zumindest näherungsweise) linear sein
 - Dafür zeichnen wir den Zusammenhang bereinigt um den Effekt aller anderen $X_1$ bis $X_k$ ohne $X_i$.
+
+\endcol
+\begincol{.48\textwidth}
 
 ```{r}
 # Zusammenhang von Publikationen und Gehalt bereinigt für Effekt von Zitationen
@@ -503,16 +509,28 @@ ggplot(data=df,aes(x=res2,y=res1))+geom_point()+geom_smooth(method = "lm",se=FAL
   ylab("Publikationen (residualisiert)")+xlab("Gehalt (residualisiert)")
 ```
 
+\endcol
+\endcols
+
 ## Modellannahmen
 
-- Heteroskedastizität (auch: Varianzheterogenität)
 
-```{r}
+\begincols
+\begincol{.48\textwidth}
+
+- Heteroskedastizität (auch: Varianzheterogenität)
+Bei Verletzung: KQ-Verfahren nicht mehr effizient, Parameterschätzer und statistische Tests verzerrt
+
+\endcol
+\begincol{.48\textwidth}
+
+```{r fig.height=3, fig.width=3}
 res <- resid(lm(salary ~ cits+pubs, cohen.dat))
 plot(cohen.dat$cits, res)
 abline(h=sqrt(var(res))*2,lty=2)
 abline(h=-sqrt(var(res))*2,lty=2)
 ```
 
-Bei Verletzung: KQ-Verfahren nicht mehr effizient, Parameterschätzer und statistische Tests verzerrt
+\endcol
+\endcols
 
