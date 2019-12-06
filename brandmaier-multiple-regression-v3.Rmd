@@ -3,7 +3,7 @@ title: "Multiple Regression"
 subtitle: "Bachelor Psychologie, 2.FS"
 author: "Andreas M. Brandmaier"
 #institute: "Max Planck Institute for Human Development"
-date: "12/3/2019"
+date: "Dec/16/2019"
 output: 
   beamer_presentation:
     latex_engine: xelatex
@@ -17,7 +17,7 @@ classoption: "aspectratio=169"
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, out.height = "90%", cache=FALSE)
+knitr::opts_chunk$set(echo = FALSE, out.height = "90%", cache=TRUE)
 require(ggplot2)
 
 mytheme <- ggthemes::theme_base()
@@ -46,7 +46,7 @@ sex= c(1,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0
 )
 ```
 
-## Was ist Regression?
+## Wann benötigen wir die multiple Regression?
 
 Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädiktoren auf ein metrisches Kriterium?
 
@@ -55,8 +55,8 @@ Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädi
 ## Zentrale Fragestellungen
 
 > - *Ursachenanalyse*: Gibt es einen Zusammenhang zwischen den Prädiktoren und der Kriteriumsvariable? Wie eng ist dieser?
-> - *Wirkungsanalyse*: Wie verändert sich die Kriteriumsvariable bei einer Änderung der Prädiktoren?
-> - *Prognose*: Können die Messwerte der Kriteriumsvariable durch die Werte der Prädiktoren vorhergesagt werden?
+> - *Wirkungsanalyse*: Wie verändert sich die Kriteriumsvariable in Abhängigkeit der Prädiktoren?
+> - *Prognose*: Kann die Kriteriumsvariable durch die Werte der Prädiktoren vorhergesagt werden?
 
 ## Ein einfaches Vorhersagemodell
 
@@ -64,7 +64,7 @@ Ein einfaches Prognose-Modell: Wir sagen für jede Person den Mittelwert von Geh
 
 \center
 
-```{r fig.height=3.5, fig.width=5, out.height="80%"}
+```{r fig.height=3.5, fig.width=5, out.height="72%"}
 lm.dumb<- lm(salary~1, data=cohen.dat)
 
 ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
@@ -79,7 +79,10 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 ## Konstante Regression
 
 Ein formales Modell für die beobachteten Daten $i \in 1..N$ mit $N$ die Stichprobengröße:
+
+\beginlarge
 $$ y_i = \color{blue}b_0 + \color{red}e_i$$
+\endlarge
 
 - $y_i$: Wert von Person $i$ im Kriterium
 - $\color{blue}b_0$: Regressionskonstante 
@@ -116,21 +119,10 @@ Einfache Regressionsgleichung für einen Prädiktor $X$ und die metrische Kriter
 
 - $y_i$: Wert von Person $i$ im Kriterium
 - $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $X$
-- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
+- $\color{red}e_i$: Vorhersagefehler für Person $i$ (Residuum)
 - $\color{blue}b_0$: Regressionskonstante 
 - $\color{blue}b_1$: Regressionskoeffizient
 
-
-## Vorhersage
-
-- Wir erhalten eine Modellvorhersage für einen neuen Punkt durch Einsetzen der Prädiktoren-Werte
-- Unsere Regressionsgleichung lautet
-
-$$y_i = 48439 + 351 \cdot x_i + e_i$$
-
-- Für den Fehler nehmen wir an, dass er im Erwartungswert 0 ist (siehe Modellannahmen später) und somit erhalten wir
-
-$$\hat{y}_i = 48439 + 351 \cdot 60 = 69487$$
 
 ## Interpretation der Koeffizienten
 
@@ -139,7 +131,7 @@ $$\hat{y}_i = 48439 + 351 \cdot 60 = 69487$$
 
 - *Regressionskonstante*: Wert des Kriteriums, wenn der Prädiktor den Wert 0 annimmt.
 - *Regressionskoeffizienten* (auch Regressionsgewichte): Erwartete Veränderung des Kriteriums $Y$, wenn
-man den Prädiktor $X_i$ um eine Einheit erhöht.
+man den Prädiktor $X$ um eine Einheit erhöht.
 
 \endcol
 \begincol{.58\textwidth}
@@ -163,6 +155,49 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 ```
 \endcol
 \endcols
+
+## Interpretation der Koeffizienten
+
+\begincols
+\begincol{.38\textwidth}
+
+- *Regressionskonstante*: $b_0=48439$ 
+- *Regressionskoeffizienten* (auch Regressionsgewichte): $b_1=351$
+- $20\cdot351 = 7020$
+
+\endcol
+\begincol{.58\textwidth}
+
+```{r fig.height=3.5, fig.width=5}
+lm.pubs <- lm(salary~pubs, data=cohen.dat)
+
+lm.pubs <- lm(salary~pubs, data=cohen.dat)
+df.test <- data.frame(pubs = 0)
+df.test$salary <- predict(lm.pubs, df.test)
+df.test2 <- data.frame(pubs = 20)
+df.test2$salary <- predict(lm.pubs, df.test2)
+ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
+  xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
+  geom_smooth(method = "lm",se=FALSE)+
+  geom_point(data=df.test,size=8,color='blue',pch=1)+
+  geom_segment(x=20,xend=20,y=coef(lm.pubs)[1],yend=df.test2$salary,lty=2,col="blue")+
+  geom_segment(x=0,xend=20,y=coef(lm.pubs)[1],yend=coef(lm.pubs)[1],lty=2,col="blue")+
+  mytheme#+
+#  ggtitle("Einfache Regression",subtitle="Abhängige Variable: Gehalt")
+```
+\endcol
+\endcols
+
+## Vorhersage
+
+- Wir erhalten eine Modellvorhersage für einen neuen Punkt durch Einsetzen der Prädiktoren-Werte
+- Unsere Regressionsgleichung lautet
+
+$$y_i = 48439 + 351 \cdot x_i + e_i$$
+- Beispiel: Gesucht sei die Vorhersage für einen Professor mit 60 Publikationen
+- Für den Fehler nehmen wir an, dass er im Erwartungswert 0 ist (siehe Modellannahmen später) und somit erhalten wir
+
+$$\hat{y}_i = 48439 + 351 \cdot 60 = 69487$$
 
 
 
@@ -299,9 +334,9 @@ plot3d <- cohenplot()
 \begincols
   \begincol{.38\textwidth}
   
-> Gehalt = `r round(coef(my.lm)[1],2)`+ `r round(coef(my.lm)[2],2)` $\cdot$ Publikationen + `r round(coef(my.lm)[3],2)` $\cdot$ Zitationen 
+$$\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{blue}252\color{black} * Publikationen + \color{blue} 242\color{black} * Zitationen$$
 
-$b_0$ gibt an, welcher Wert für die deterministische Komponente der Untersuchungsvariablen zu erwarten ist, falls sämtliche exogenen Variablen den Wert Null realisieren.
+$b_0$ gibt an, welcher Wert zu erwarten ist, falls sämtliche Prädiktoren den Wert Null realisieren.
 
 
   \endcol
@@ -333,13 +368,14 @@ dev.off()
 
 ## Partielle Regressionskoeffizient
 
-- Die $b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
+- Die $\color{blue}b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
 
 - Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
 
 
 ## Modellvorhersagen mit der Partiellen Regression
 
+\center
 ```{r fig.height=4, fig.width=6}
 my.lm<-lm(salary~pubs+cits,cohen.dat)
 
@@ -368,7 +404,7 @@ Die Regressionskoeffizienten sind zunächst für direkte Vergleiche (innerhalb d
 
 Bsp.: Die Einheit von $b_1$ ist $\frac{USD}{Publikation}$, die von $b_2$ ist $\frac{USD}{Zitation}$.
 
--> Standardisieren
+$\rightarrow$ Standardisieren
 
 Allgemein: 
 $$\beta_i=\frac{SD_{X_i}}{SD_{Y_i}} \cdot b_i $$
@@ -403,7 +439,7 @@ In unserem Fall erhalten wir folgende (einheitenlose) standardisierten partielle
 
 ## Erklärte Varianz
 
-Varianz: Maß für die Unsicherheit einer normalverteilten Variable
+Varianz: Maß für die Unsicherheit einer metrischen Variable (unter Normalverteilungsannahmen)
 
 > Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler
 
