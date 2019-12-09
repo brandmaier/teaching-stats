@@ -52,15 +52,15 @@ Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädi
 
 ![](pathdiagram.pdf)
 
-## Zentrale Fragestellungen
+## Zentrale Analyseansätze
 
 > - *Ursachenanalyse*: Gibt es einen Zusammenhang zwischen den Prädiktoren und der Kriteriumsvariable? Wie eng ist dieser?
 > - *Wirkungsanalyse*: Wie verändert sich die Kriteriumsvariable in Abhängigkeit der Prädiktoren?
 > - *Prognose*: Kann die Kriteriumsvariable durch die Werte der Prädiktoren vorhergesagt werden?
 
-## Ein einfaches Vorhersagemodell
+## Ein einfaches Modell
 
-Ein einfaches Prognose-Modell: Wir sagen für jede Person den Mittelwert von Gehalt vorher (ohne die Prädiktoren zu kennen)
+Ein einfaches Erklärungs- und Prognose-Modell: Wir sagen für jede Person den Mittelwert von Gehalt vorher (ohne die Prädiktoren zu kennen)
 
 \center
 
@@ -115,7 +115,9 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 
 Einfache Regressionsgleichung für einen Prädiktor $X$ und die metrische Kriteriumsvariable $Y$:
 
-\Huge$$ y_i = \color{blue}b_0\color{black} + \color{blue}b_1\color{black} \cdot x_i + \color{red}{e_i}$$\normalsize
+\beginlarge
+$$ y_i = \color{blue}b_0\color{black} + \color{blue}b_1\color{black} \cdot x_i + \color{red}{e_i}$$\normalsize
+\endlarge
 
 - $y_i$: Wert von Person $i$ im Kriterium
 - $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $X$
@@ -194,6 +196,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 - Unsere Regressionsgleichung lautet
 
 $$y_i = 48439 + 351 \cdot x_i + e_i$$
+
 - Beispiel: Gesucht sei die Vorhersage für einen Professor mit 60 Publikationen
 - Für den Fehler nehmen wir an, dass er im Erwartungswert 0 ist (siehe Modellannahmen später) und somit erhalten wir
 
@@ -201,9 +204,9 @@ $$\hat{y}_i = 48439 + 351 \cdot 60 = 69487$$
 
 
 
-## Beispiel
+## Fehler
 
-Wie gut ist unsere Regressionsgerade überhaupt? Dazu betrachten wir die Fehler in den beobachteten Werten:
+Wie schätzen wir die Parameter? Dazu betrachten wir die Fehler in den beobachteten Werten:
 
 \center
 
@@ -233,10 +236,9 @@ $$\sum^n_{i=1} (e_i-\bar{e}_i)^2 = \sum^n_{i=1}{e^2_i}=SQR$$
 
 - Wähle die Koeffizienten so, dass wir die Summe der quadrierten Fehlerterme  minimieren
 
-$$ \sum_{i=1}^n{} e^2_i = \sum_{i=1}^n \left(y_i - b_0 + b_1 \cdot x_i \right) $$
+$$ \sum_{i=1}^n{} e^2_i = \sum_{i=1}^n \left[y_i - (b_0 + b_1 \cdot x_i )\right] $$
 
 - Exakt und effizient lösbar (falls lösbar)
-
 - Konform mit einem Gaußschen Fehlermodell: Die Störgrößen sind normalverteilt
 
 ## Kleinste Quadrate Methode
@@ -275,7 +277,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+
   geom_point(data=cohen.dat, aes(x=pubs,y=salary))+
    geom_abline(intercept=coef(model)[1],slope=coef(model)[2])+
   xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
-  mytheme+ ggtitle("Einfache Regression",subtitle="Abhängige Variable: Gehalt")
+  mytheme#+ ggtitle("Einfache Regression",subtitle="Abhängige Variable: Gehalt")
 }
 
 (plot_kq())
@@ -291,22 +293,23 @@ plot_kq(intercept=68000, slope=100)
 
 ## Multiple Regression
 
-Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder
-kategorialer Prädiktoren auf ein metrisches Kriterium?
+Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädiktoren auf ein metrisches Kriterium?
 
+\beginlarge
 $$\color{black}\Huge y_i = \color{blue}b_0 + \color{blue}b_1\color{black} \cdot x_{i,1} +\color{blue} b_2\color{black} \cdot x_{i,2} + \ldots + \color{blue}b_k \color{black} \cdot x_{i,k}+\color{red} e_i$$
+\endlarge
 
 - $y_i$: Wert von Person $i$ im Kriterium
 - $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $j$
-- $e_i$: Vorhersagefehler für Person $i$ (Residuum)
-- $b_0$: Regressionskonstante (Intercept)
-- $b_j$: Regressionsgewichte ($j=1\ldots j$)
+- $\color{red} e_i$: Vorhersagefehler für Person $i$ (Residuum)
+- $\color{blue}  b_0$: Regressionskonstante (Intercept)
+- $\color{blue}  b_j$: Regressionsgewichte ($j=1\ldots k$)
 
 ## Beispiel
 
 \center
 
-```{r  fig.height=4, fig.width=6, out.width="85%", out.height="85%"}
+```{r  fig.height=4, fig.width=4, out.width="85%", out.height="85%"}
 library(scatterplot3d) # This library will allow us to draw 3d plot
 
 cohenplot <- function() {
@@ -330,13 +333,14 @@ plot3d <- cohenplot()
 
 ## Regressionskoeffizient
 
-
+\center
+Ebene: $\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{blue}252\color{black} \cdot Publikationen + \color{blue} 242\color{black} \cdot Zitationen$
 \begincols
   \begincol{.38\textwidth}
   
-$$\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{blue}252\color{black} * Publikationen + \color{blue} 242\color{black} * Zitationen$$
 
-$b_0$ gibt an, welcher Wert zu erwarten ist, falls sämtliche Prädiktoren den Wert Null realisieren.
+
+$\color{blue}b_0$ gibt an, welcher Wert zu erwarten ist, falls sämtliche Prädiktoren den Wert Null realisieren.
 
 
   \endcol
@@ -347,14 +351,14 @@ $b_0$ gibt an, welcher Wert zu erwarten ist, falls sämtliche Prädiktoren den W
   temp <- cohen.dat 
   temp$salary <- temp$salary/1000
   
-  pdf("temp-3d.pdf", width=5, height=5)
+  pdf("temp-3d.pdf", width=4, height=4)
   
   plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
                         xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
 
   my.lm<- lm(salary ~ pubs + cits, temp)
   plot3d$plane3d(my.lm, lty.box = "solid")
-plot3d$points3d(0,0,coef(my.lm)[1],col="red",pch=16,cex=3)
+plot3d$points3d(0,0,coef(my.lm)[1],col="blue",pch=16,cex=3)
 
 dev.off()
 ```
@@ -364,36 +368,201 @@ dev.off()
 \endcol
 \endcols
 
+## Interpretation der Koeffizienten
 
+\center
+Ebene: $\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{blue}252\color{black} \cdot Publikationen + \color{blue} 242\color{black} \cdot Zitationen$
 
-## Partielle Regressionskoeffizient
-
-- Die $\color{blue}b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
+\begincols
+\begincol{.38\textwidth}
+  
+- Die $\color{blue} b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
 
 - Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
 
 
-## Modellvorhersagen mit der Partiellen Regression
+\endcol
+\begincol{.58\textwidth}
+
+```{r  message=FALSE, echo=FALSE, warning=FALSE, results=FALSE}
+pdf("temp-3d-2.pdf", width=4, height=4)
+  
+plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
+                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
+
+my.lm<- lm(salary ~ pubs + cits, temp)
+plot3d$plane3d(my.lm, lty.box = "solid")
+#plot3d$points3d(40,60,coef(my.lm)[1]+40*coef(my.lm)[2]+60*coef(my.lm)[2],col="red",pch=16,cex=3)
+plot3d$points3d(c(0,70),c(0,0),c(coef(my.lm)[1],coef(my.lm)[1]+70*coef(my.lm)[2]), col="blue",type="l",lwd=2)
+offs <- 60
+plot3d$points3d(c(0,70),c(offs,offs),c(coef(my.lm)[1]+offs*coef(my.lm)[3],coef(my.lm)[1]+70*coef(my.lm)[2]+offs*coef(my.lm)[3]), col="blue",type="l",lwd=2)
+
+dev.off()
+
+```
+
+![](temp-3d-2.pdf)
+
+\endcol
+\endcols
+
+## Modellgüte
+
+- Wie gut klappt das eigentlich? Wie gut beschreiben wir die Daten?
+- Die Summe der quadrierten Residuuen (SQR) ist ein Maß für die Modellpassungsgüte 
+- Je kleiner, desto besser die Passung des Modells zu den Daten
+- SQR ist abhängig von der Einheit der Kriteriumsvariable (hier, $USD^2$)
+- Standardisieren!
+
+## Streuung und Unsicherheit
+
+- Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler $\rightarrow$ Maß für Unsicherheit
+
+- Varianz der Fehlerterme: Maß für die verbleibende Unsicherheit in unserem Modell
+
+- Wir standardisieren die Varianz der Fehler (Unsicherheit trotz des Modells) anhand der Varianz der Kriteriumsvariable (Unsicherheit ohne Modell) und erhalten ein prozentuales Maß der erklärten Varianz (oder: aufgeklärten Unsicherheit)
+
+
+## Bestimmtheitsmaß
+
+Determinationskoeffizient  / Bestimmheitsmaß (Multiples $R^2$):
+  
+  $$ R^2 = \frac{\text{ durch  alle Prädiktoren in  }Y \text{ erklärte Varianz}}{\mathrm{Varianz\ von\ }Y} $$
+
+- Je höher, desto besser!
+
+- Menschliches Verhalten ist schwer vorherzusagen, daher erwarten wir oft keine hohen Werte (<50%)
+
+## Berechnung
+
+- Berechnung über die Quadratsummen
+
+$$ R^2 = 1- \frac{\sum^n_i{e^2_i}}{\sum^n_i{(y_i-\bar{y})^2}} $$
+
+  
+## Venn-Diagramm der Varianzen
+
+```{r}
+# only code --- no graphics output
+library(venn)
+cohen.venn <- function(x, ...) {
+  venn(x,snames = c("Zitationen","Publikationen","Gehalt"), cexsn=1,...)
+}
+
+venn.label <- function(x, txt) {
+  centroid <- getCentroid(getZones(x))[[1]]
+  text(centroid[1], centroid[2], labels = txt, cex = 0.85)
+}
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+smlm <- summary(my.lm)
+
+r2.total <- smlm$r.squared # 42% explained
+
+my.lm.pubs <- lm(salary ~ pubs, cohen.dat)
+r2.pubs <- summary(my.lm.pubs)$r.squared # 25%
+
+
+my.lm.cits <- lm(salary ~ cits, cohen.dat)
+r2.cits <- summary(my.lm.cits)$r.squared # 30%
+
+cits.unique <- r2.total-r2.cits
+pubs.unique <- r2.total-r2.pubs
+r2.joint <- r2.total-pubs.unique-cits.unique
+```
+
+Schatierte Fläche: Links: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium); Rechts: Die nicht-erklärte Varianz
 
 \center
-```{r fig.height=4, fig.width=6}
-my.lm<-lm(salary~pubs+cits,cohen.dat)
 
-#my.lm.pubs <- lm(salary~pubs, cohen.dat)
-coefs1 <- coef(my.lm)
-coefs2 <- coefs1+c(20*coef(my.lm)[3],0,0)
-coefs3 <- coefs1+c(40*coef(my.lm)[3],0,0)
-ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point(col='white')+
-  xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
-  geom_abline(intercept=coefs1[1], slope=coefs1[2])+
-  geom_abline(intercept=coefs2[1], slope=coefs2[2])+
-    geom_abline(intercept=coefs3[1], slope=coefs3[2])+
-  #geom_abline(intercept=coefs4[1], slope=coefs4[2])+
-  geom_text(x=30,y=45000,label="<- 0 Zitationen")+
-  geom_text(x=50,y=55000,label="<- 20 Zitationen")+
-  geom_text(x=45,y=65000,label="40 Zitationen ->")+
-  mytheme
+\begincols
+  \begincol{.38\textwidth}
+
+  \endcol
+\endcols
+
+```{r fig.height=4, fig.width=8, out.height="70%"}
+par(mfrow=c(1,2))
+cohen.venn("001+111+101+011")
+cohen.venn("001")
 ```
+
+
+
+
+## Venn-Diagramm der einfachen $R^2$
+
+- Schatierte Fläche: Aufgeklärte Varianz in der einfachen Regression (Reduktion unserer Unsicherheit über das Kriterium)
+
+\center
+```{r out.height="62%", fig.height=4, fig.width=7}
+cits.percent <- paste0(round(r2.cits*100),"%")
+pubs.percent <- paste0(round(r2.pubs*100),"%")
+
+par(mfrow=c(1,2))
+venn("111+011",snames = c("Zitationen","Publikationen","Gehalt"))
+venn.label("111+011", cits.percent)
+venn("111+101",snames = c("Zitationen","Publikationen","Gehalt"))
+venn.label("111+101",pubs.percent)
+```
+
+## Multiples $R^2$
+
+
+\begincols
+  \begincol{.48\textwidth}
+
+  - Warum summieren sich die $R^2$ der einfachen Regression nicht auf?
+  - Abhängigkeit (Kovarianz) der Prädiktoren führt zu gemeinsamer Information über das Kriterium, die nur einmal genutzt werden kann
+  
+\endcol
+\begincol{.48\textwidth}
+  
+\center
+
+```{r fig.height=4, fig.width=6}
+cohen.venn("111+101+011")
+venn.label("111+101+011", paste0(round(100*r2.total),"%"))
+#title("CENN")
+```
+
+\endcol
+\endcols
+
+
+## Gemeinsame und einzigartige Effekte (hierarchische Regression)
+
+\center
+```{r, out.height="80%", fig.height=4, fig.width=6}
+
+
+library(venn)
+#venn("011+111") # Total of B in C
+#venn("101+111") # Total of A in C
+#venn("101") # Unique of A
+#venn("011") # Unique of B
+#venn("111") # Shared A and B
+#venn("001") # Unique in C (unexplained by A and B)
+
+venn("001",snames = c("Zitationen","Publikationen","Gehalt"))
+venn.label("001",txt = round(1-r2.total,2))
+venn.label("111",txt=round(r2.joint,2))
+venn.label("101",txt = round(cits.unique,2))
+venn.label("011",txt = round(pubs.unique,2))
+```
+
+    
+## Zusammenfassung
+
+- Die Regression erlaubt uns den Zusammenhang mehrerer Variablen mit einer Kriteriumsvariable zu untersuchen
+- Wir können damit Ursachen und Wirkungen analysieren, sowie Vorhersagen treffen
+- Dazu betrachten wir die (partiellen) Regressionskoeffizienten und die Modellpassung (Bestimmtheitsmaß)
+
+## Ausblick
+
+- Statistische Tests für die Modellgüte und die Beiträge einzelner Variablen (bisher nur Effektstärken; *praktische Bedeutsamkeit* VS *statistische Bedeutsamkeit*)
+- Modellannahmen und was tun, wenn diese verletzt sind
+
+
 
 
 ## Relative Wichtigkeit
@@ -429,142 +598,4 @@ $$\beta_1=\frac{SD_{X_1}}{SD_{Y}} \cdot b_1 = \frac{14 \mathrm{\ Pub}}{9706 \ US
 In unserem Fall erhalten wir folgende (einheitenlose) standardisierten partielle Regressionskoeffizienten:
 
 > Gehalt = 0+ `r round(coef(std.lm)[2],2)` $\cdot$ Publikationen + `r round(coef(std.lm)[3],2)` $\cdot$ Zitationen 
-
-## Modellgüte
-
-- Die Summe der quadrierten Residuuen (SQR) ist ein Maß für die Modellgüte 
-- Je kleiner, desto besser die Passung des Modells zu den Daten
-- Auch hier gilt, SQR ist abhängig von der Einheit der Kriteriumsvariable (hier, $USD^2$)
-- Standardisieren!
-
-## Erklärte Varianz
-
-Varianz: Maß für die Unsicherheit einer metrischen Variable (unter Normalverteilungsannahmen)
-
-> Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler
-
-- Wir standardisieren die Streuung der Fehler (Unsicherheit trotz des Modells) anhand der Streuung der Kriteriumsvariable (Unsicherheit ohne Modell) und erhalten ein prozentuales Maß der erklärten Varianz (oder: aufgeklärten Unsicherheit)
-
-
-## Bestimmtheitsmaß
-
-Determinationskoeffizient  / Bestimmheitsmaß (Multiples $R^2$):
-  
-  $$ R^2 = \frac{\mathrm{ durch\  alle\ Prädiktoren\ in \ }Y\ \mathrm{erklärte\ Varianz }}{\mathrm{Varianz\ von\ }Y} $$
-
-- Berechnung der erklärten Varianz als $$1- \frac{1}{n-1} \cdot RSQ $$
-- Je höher, desto besser!
-
-  
-## Venn-Diagramm der Varianzen
-
-```{r}
-# only code --- no graphics output
-library(venn)
-cohen.venn <- function(x, ...) {
-  venn(x,snames = c("Zitationen","Publikationen","Gehalt"), cexsn=1,...)
-}
-
-venn.label <- function(x, txt) {
-  centroid <- getCentroid(getZones(x))[[1]]
-  text(centroid[1], centroid[2], labels = txt, cex = 0.85)
-}
-my.lm<- lm(salary ~ pubs + cits, cohen.dat)
-smlm <- summary(my.lm)
-
-r2.total <- smlm$r.squared # 42% explained
-
-my.lm.pubs <- lm(salary ~ pubs, cohen.dat)
-r2.pubs <- summary(my.lm.pubs)$r.squared # 25%
-
-
-my.lm.cits <- lm(salary ~ cits, cohen.dat)
-r2.cits <- summary(my.lm.cits)$r.squared # 30%
-
-cits.unique <- r2.total-r2.cits
-pubs.unique <- r2.total-r2.pubs
-r2.joint <- r2.total-pubs.unique-cits.unique
-```
-
-Schatierte Fläche: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium)
-
-```{r fig.height=4, fig.width=6, out.height="75%"}
-cohen.venn("001+111+101+011")
-```
-
-## Venn-Diagramm der einfachen $R^2$
-
-- Schatierte Fläche: Aufgeklärte Varianz in der einfachen Regression (Reduktion unserer Unsicherheit über das Kriterium)
-- Das Verhältnis dieser und der gesamten Fläche des Kriteriums entspricht dem Bestimmtheitsmaß $R^2$.
-
-\center
-```{r out.height="62%", fig.height=4, fig.width=6}
-cits.percent <- paste0(round(r2.cits*100),"%")
-pubs.percent <- paste0(round(r2.pubs*100),"%")
-
-par(mfrow=c(1,2))
-venn("111+011",snames = c("Zitationen","Publikationen","Gehalt"))
-venn.label("111+011", cits.percent)
-venn("111+101",snames = c("Zitationen","Publikationen","Gehalt"))
-venn.label("111+101",pubs.percent)
-```
-
-## Multiples $R^2$
-
-
-\begincols
-  \begincol{.48\textwidth}
-
-  - Warum summieren sich die $R^2$ der einfachen Regression nicht auf?
-  - Abhängigkeit der Prädiktoren führt zu gemeinsamer Information über das Kriterium, die nur einmal genutzt werden kann
-  
-\endcol
-\begincol{.48\textwidth}
-  
-\center
-
-```{r fig.height=4, fig.width=6}
-cohen.venn("111+101+011")
-venn.label("111+101+011", paste0(round(100*r2.total),"%"))
-#title("CENN")
-```
-
-\endcol
-\endcols
-
-
-## Gemeinsame und einzigartige Effekte
-
-\center
-```{r, out.height="80%", fig.height=4, fig.width=6}
-
-
-library(venn)
-#venn("011+111") # Total of B in C
-#venn("101+111") # Total of A in C
-#venn("101") # Unique of A
-#venn("011") # Unique of B
-#venn("111") # Shared A and B
-#venn("001") # Unique in C (unexplained by A and B)
-
-venn("001",snames = c("Zitationen","Publikationen","Gehalt"))
-venn.label("001",txt = round(1-r2.total,2))
-venn.label("111",txt=round(r2.joint,2))
-venn.label("101",txt = round(cits.unique,2))
-venn.label("011",txt = round(pubs.unique,2))
-```
-
-    
-## Zusammenfassung
-
-- Die Regression erlaubt uns den Zusammenhang mehrerer Variablen mit einer Kriteriumsvariable zu untersuchen
-- Wir können damit Ursachen und Wirkungen analysieren, sowie Vorhersagen treffen
-- Dazu betrachten wir die (partiellen) Regressionskoeffizienten und die Modellpassung (Bestimmtheitsmaß)
-
-## Ausblick
-
-- Statistische Tests für die Modellgüte und die Beiträge einzelner Variablen (bisher nur Effektstärken)
-- Modellannahmen und was tun, wenn diese verletzt sind
-
-
 
