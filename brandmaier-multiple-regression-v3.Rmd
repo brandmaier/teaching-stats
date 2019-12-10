@@ -1,6 +1,6 @@
 ---
 title: "Multiple Regression"
-subtitle: "Bachelor Psychologie, 2.FS"
+subtitle: "Bachelor-Studiengang Psychologie, 2.FS; Materialien:\_https://github.com/brandmaier/teaching-stats"
 author: "Andreas M. Brandmaier"
 #institute: "Max Planck Institute for Human Development"
 date: "Dec/16/2019"
@@ -65,11 +65,14 @@ Ein einfaches Erklärungs- und Prognose-Modell: Wir sagen für jede Person den M
 \center
 
 ```{r fig.height=3.5, fig.width=5, out.height="72%"}
+id <-45
+ymax <- cohen.dat[id,"salary"]
 lm.dumb<- lm(salary~1, data=cohen.dat)
-
+ymin <- coef(lm.dumb)[1]
 ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
   xlab("Anzahl Publikationen")+ylab("Gehalt [USD]")+
     geom_abline(intercept=coef(lm.dumb),slope=0,lwd=2,color="blue")+
+    geom_linerange(lty=2,x=cohen.dat[id,"pubs"],ymin=ymin,ymax=ymax,col="red")+
   mytheme#+
   #ggtitle("Einfache Regression",subtitle="Abhängige Variable: Gehalt")
 
@@ -190,19 +193,127 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 \endcol
 \endcols
 
-## Vorhersage
 
-- Wir erhalten eine Modellvorhersage für einen neuen Punkt durch Einsetzen der Prädiktoren-Werte
-- Unsere Regressionsgleichung lautet
+## Multiple Regression
 
-$$y_i = 48439 + 351 \cdot x_i + e_i$$
+Frage: Wie groß ist der Einfluss *mehrerer* (metrischer oder kategorialer) Prädiktoren auf ein metrisches Kriterium?
 
-- Beispiel: Gesucht sei die Vorhersage für einen Professor mit 60 Publikationen
-- Für den Fehler nehmen wir an, dass er im Erwartungswert 0 ist (siehe Modellannahmen später) und somit erhalten wir
+\beginlarge
+$$\color{black}\Huge y_i = \color{blue}b_0 + \color{blue}b_1\color{black} \cdot x_{i,1} +\color{blue} b_2\color{black} \cdot x_{i,2} + \ldots + \color{blue}b_k \color{black} \cdot x_{i,k}+\color{red} e_i$$
+\endlarge
 
-$$\hat{y}_i = 48439 + 351 \cdot 60 = 69487$$
+- $y_i$: Wert von Person $i$ im Kriterium
+- $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $j$
+- $\color{red} e_i$: Vorhersagefehler für Person $i$ (Residuum)
+- $\color{blue}  b_0$: Regressionskonstante (Intercept)
+- $\color{blue}  b_j$: Regressionsgewichte ($j=1\ldots k$)
+
+## Beispiel ($k=2$)
+
+\center
+
+```{r  fig.height=4, fig.width=4, out.width="85%", out.height="85%"}
+library(scatterplot3d) # This library will allow us to draw 3d plot
+
+id <- 45
 
 
+  temp <- cohen.dat 
+  temp$salary <- temp$salary/1000
+  
+  ymax <- temp[id,"salary"]
+my.lm<- lm(salary~pubs+cits, data=temp)
+ymin <- predict(my.lm)[id]
+  
+  plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
+                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
+
+  my.lm<- lm(salary ~ pubs + cits, temp)
+  plot3d$plane3d(my.lm, lty.box = "solid", col="blue")
+  plot3d$points3d(x = c(cohen.dat[id,"pubs"],cohen.dat[id,"pubs"]) ,
+                  y=c(cohen.dat[id,"cits"],cohen.dat[id,"cits"]),
+                  z=c(ymin,ymax), col="red", type="l",lwd=3)
+
+
+
+my.lm<- lm(salary ~ pubs + cits, cohen.dat)
+
+```
+
+## Regressionskoeffizient
+
+\center
+Ebene: $\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{black}252\color{black} \cdot Publikationen + \color{black} 242\color{black} \cdot Zitationen$
+\begincols
+  \begincol{.38\textwidth}
+  
+
+
+$\color{blue}b_0$ gibt an, welcher Wert zu erwarten ist, falls sämtliche Prädiktoren den Wert Null realisieren.
+
+
+  \endcol
+\begincol{.58\textwidth}
+
+```{r message=FALSE, echo=FALSE, warning=FALSE, results=FALSE}
+  
+  temp <- cohen.dat 
+  temp$salary <- temp$salary/1000
+  
+  pdf("temp-3d.pdf", width=4, height=4)
+  
+  plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
+                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
+
+  my.lm<- lm(salary ~ pubs + cits, temp)
+  plot3d$plane3d(my.lm, lty.box = "solid")
+plot3d$points3d(0,0,coef(my.lm)[1],col="blue",pch=16,cex=3)
+
+dev.off()
+```
+
+![](temp-3d.pdf)
+
+\endcol
+\endcols
+
+## Interpretation der Koeffizienten
+
+\center
+Ebene: $\mathrm{Gehalt} = \color{black}40493\color{black} + \color{blue}252\color{black} \cdot Publikationen + \color{black} 242\color{black} \cdot Zitationen$
+
+\begincols
+\begincol{.38\textwidth}
+  
+- Die $\color{blue} b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
+
+- Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
+
+
+\endcol
+\begincol{.58\textwidth}
+
+```{r  message=FALSE, echo=FALSE, warning=FALSE, results=FALSE}
+pdf("temp-3d-2.pdf", width=4, height=4)
+  
+plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
+                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
+
+my.lm<- lm(salary ~ pubs + cits, temp)
+plot3d$plane3d(my.lm, lty.box = "solid",col="black")
+#plot3d$points3d(40,60,coef(my.lm)[1]+40*coef(my.lm)[2]+60*coef(my.lm)[2],col="red",pch=16,cex=3)
+plot3d$points3d(c(0,70),c(0,0),c(coef(my.lm)[1],coef(my.lm)[1]+70*coef(my.lm)[2]), col="blue",type="l",lwd=2)
+offs <- 60
+plot3d$points3d(c(0,70),c(offs,offs),c(coef(my.lm)[1]+offs*coef(my.lm)[3],coef(my.lm)[1]+70*coef(my.lm)[2]+offs*coef(my.lm)[3]), col="blue",type="l",lwd=2)
+
+dev.off()
+
+```
+
+![](temp-3d-2.pdf)
+
+\endcol
+\endcols
 
 ## Fehler
 
@@ -235,13 +346,9 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 $$\sum^n_{i=1} (e_i-\bar{e}_i)^2 = \sum^n_{i=1}{e^2_i}=SQR$$
 
 - Wähle die Koeffizienten so, dass wir die Summe der quadrierten Fehlerterme  minimieren
-
-$$ \sum_{i=1}^n{} e^2_i = \sum_{i=1}^n \left[y_i - (b_0 + b_1 \cdot x_i )\right] $$
-
 - Exakt und effizient lösbar (falls lösbar)
-- Konform mit einem Gaußschen Fehlermodell: Die Störgrößen sind normalverteilt
 
-## Kleinste Quadrate Methode
+## Kleinste Quadrate Methode (Schematisch)
 
 \center
 
@@ -283,7 +390,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+
 (plot_kq())
 ```
 
-## Kleinste-Quadrate Schätzer
+## Kleinste-Quadrate Schätzer (Schematisch)
 
 \center
 
@@ -291,120 +398,6 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+
 plot_kq(intercept=68000, slope=100)
 ```
 
-## Multiple Regression
-
-Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädiktoren auf ein metrisches Kriterium?
-
-\beginlarge
-$$\color{black}\Huge y_i = \color{blue}b_0 + \color{blue}b_1\color{black} \cdot x_{i,1} +\color{blue} b_2\color{black} \cdot x_{i,2} + \ldots + \color{blue}b_k \color{black} \cdot x_{i,k}+\color{red} e_i$$
-\endlarge
-
-- $y_i$: Wert von Person $i$ im Kriterium
-- $x_{i,j}$: Wert von Person $i$ in dem Prädiktor $j$
-- $\color{red} e_i$: Vorhersagefehler für Person $i$ (Residuum)
-- $\color{blue}  b_0$: Regressionskonstante (Intercept)
-- $\color{blue}  b_j$: Regressionsgewichte ($j=1\ldots k$)
-
-## Beispiel
-
-\center
-
-```{r  fig.height=4, fig.width=4, out.width="85%", out.height="85%"}
-library(scatterplot3d) # This library will allow us to draw 3d plot
-
-cohenplot <- function() {
-  
-  temp <- cohen.dat 
-  temp$salary <- temp$salary/1000
-  
-  plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
-                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
-
-  my.lm<- lm(salary ~ pubs + cits, temp)
-  plot3d$plane3d(my.lm, lty.box = "solid")
-  return(plot3d)
-}
-
-
-my.lm<- lm(salary ~ pubs + cits, cohen.dat)
-plot3d <- cohenplot()
-
-```
-
-## Regressionskoeffizient
-
-\center
-Ebene: $\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{blue}252\color{black} \cdot Publikationen + \color{blue} 242\color{black} \cdot Zitationen$
-\begincols
-  \begincol{.38\textwidth}
-  
-
-
-$\color{blue}b_0$ gibt an, welcher Wert zu erwarten ist, falls sämtliche Prädiktoren den Wert Null realisieren.
-
-
-  \endcol
-\begincol{.58\textwidth}
-
-```{r message=FALSE, echo=FALSE, warning=FALSE, results=FALSE}
-  
-  temp <- cohen.dat 
-  temp$salary <- temp$salary/1000
-  
-  pdf("temp-3d.pdf", width=4, height=4)
-  
-  plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
-                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
-
-  my.lm<- lm(salary ~ pubs + cits, temp)
-  plot3d$plane3d(my.lm, lty.box = "solid")
-plot3d$points3d(0,0,coef(my.lm)[1],col="blue",pch=16,cex=3)
-
-dev.off()
-```
-
-![](temp-3d.pdf)
-
-\endcol
-\endcols
-
-## Interpretation der Koeffizienten
-
-\center
-Ebene: $\mathrm{Gehalt} = \color{blue}40493\color{black} + \color{blue}252\color{black} \cdot Publikationen + \color{blue} 242\color{black} \cdot Zitationen$
-
-\begincols
-\begincol{.38\textwidth}
-  
-- Die $\color{blue} b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
-
-- Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
-
-
-\endcol
-\begincol{.58\textwidth}
-
-```{r  message=FALSE, echo=FALSE, warning=FALSE, results=FALSE}
-pdf("temp-3d-2.pdf", width=4, height=4)
-  
-plot3d <- scatterplot3d(temp$pubs, temp$cits, temp$salary,angle=55, scale.y=0.7, pch=16,
-                        xlab="X: Publikationen", ylab="Y: Zitationen", zlab="Z: Gehalt [T-USD]")
-
-my.lm<- lm(salary ~ pubs + cits, temp)
-plot3d$plane3d(my.lm, lty.box = "solid")
-#plot3d$points3d(40,60,coef(my.lm)[1]+40*coef(my.lm)[2]+60*coef(my.lm)[2],col="red",pch=16,cex=3)
-plot3d$points3d(c(0,70),c(0,0),c(coef(my.lm)[1],coef(my.lm)[1]+70*coef(my.lm)[2]), col="blue",type="l",lwd=2)
-offs <- 60
-plot3d$points3d(c(0,70),c(offs,offs),c(coef(my.lm)[1]+offs*coef(my.lm)[3],coef(my.lm)[1]+70*coef(my.lm)[2]+offs*coef(my.lm)[3]), col="blue",type="l",lwd=2)
-
-dev.off()
-
-```
-
-![](temp-3d-2.pdf)
-
-\endcol
-\endcols
 
 ## Modellgüte
 
@@ -544,12 +537,11 @@ library(venn)
 #venn("001") # Unique in C (unexplained by A and B)
 
 venn("001",snames = c("Zitationen","Publikationen","Gehalt"))
-venn.label("001",txt = round(1-r2.total,2))
-venn.label("111",txt=round(r2.joint,2))
-venn.label("101",txt = round(cits.unique,2))
-venn.label("011",txt = round(pubs.unique,2))
+venn.label("001",txt = round((1-r2.total)*100,0))
+venn.label("111",txt=round(r2.joint*100,0))
+venn.label("101",txt = round(cits.unique*100,0))
+venn.label("011",txt = round(pubs.unique*100,0))
 ```
-
     
 ## Zusammenfassung
 
@@ -559,11 +551,37 @@ venn.label("011",txt = round(pubs.unique,2))
 
 ## Ausblick
 
-- Statistische Tests für die Modellgüte und die Beiträge einzelner Variablen (bisher nur Effektstärken; *praktische Bedeutsamkeit* VS *statistische Bedeutsamkeit*)
-- Modellannahmen und was tun, wenn diese verletzt sind
+- Statistische Tests für die Modellgüte und die Beiträge einzelner Variablen (bisher nur Effektstärken; *praktische Bedeutsamkeit* versus *statistische Bedeutsamkeit*)
+- Modellannahmen (z.B. Linearität, Varianzgleichheit) und was tun, wenn diese verletzt sind
+- Kodierung von kategorialen Variablen
+- Interaktionen (Multiplikative Effekte)
 
+## Zusatzmaterial
 
+## Linearität
 
+Residuen-Plot
+
+```{r}
+set.seed(234)
+x <- seq()
+N<-100
+x <- seq(1:N)
+y<-rnorm(N,(50-x)^2/1000,1)
+ggplot(data=data.frame(x,y),aes(x=x,y=y))+geom_point()+
+  xlab("Prädizierter Wert")+ylab("Residuen")
+
+```
+
+## Varianzgleichheit (Homoskedastizität)
+
+```{r}
+N<-100
+x <- seq(1:N)
+y<-rnorm(N,0, 1+8*(x/N))
+ggplot(data=data.frame(x,y),aes(x=x,y=y))+geom_point()+
+  xlab("Prädizierter Wert")+ylab("Residuen")
+```
 
 ## Relative Wichtigkeit
 
