@@ -52,11 +52,10 @@ Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädi
 
 ![](pathdiagram.pdf)
 
-## Zentrale Analyseansätze
+## Zentrale Ansätze
 
-> - *Ursachenanalyse*: Gibt es einen Zusammenhang zwischen den Prädiktoren und der Kriteriumsvariable? Wie eng ist dieser?
-> - *Wirkungsanalyse*: Wie verändert sich die Kriteriumsvariable in Abhängigkeit der Prädiktoren?
-> - *Prognose*: Kann die Kriteriumsvariable durch die Werte der Prädiktoren vorhergesagt werden?
+> - Erklären: Hängen die Prädiktoren mit dem Kriterium zusammen? Wenn ja, wie stark? Wie gut erklären wir das Kriterium?
+> - Vorhersagen: Wie gut können wir das Kriterium (in neuen Daten) vorhersagen?
 
 ## Ein einfaches Modell
 
@@ -341,9 +340,9 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 
 - Idee: Das beste Regressionsmodell soll das sein, das die Streuung der Fehler minimiert
 
-- Wir nennen das die Residuenquadratsumme oder auch Summe der quadrierten Residuuen (SQR)
+- Wir nennen das die Residuenquadratsumme oder auch Summe der quadrierten Residuen (SQR)
 
-$$\sum^n_{i=1} (e_i-\bar{e}_i)^2 = \sum^n_{i=1}{e^2_i}=SQR$$
+$$SQR=\sum^n_{i=1}{e^2_i}=\sum^n_{i=1}\left[y_i-(b_0+b_1x_{i,1}+\ldots+b_kx_{i,k})^2\right]$$
 
 - Wähle die Koeffizienten so, dass wir die Summe der quadrierten Fehlerterme  minimieren
 - Exakt und effizient lösbar (falls lösbar)
@@ -402,28 +401,30 @@ plot_kq(intercept=68000, slope=100)
 ## Modellgüte
 
 - Wie gut klappt das eigentlich? Wie gut beschreiben wir die Daten?
-- Die Summe der quadrierten Residuuen (SQR) ist ein Maß für die Modellpassungsgüte 
+- Die Summe der quadrierten Residuen (SQR) ist ein Maß für die Modellpassungsgüte 
 - Je kleiner, desto besser die Passung des Modells zu den Daten
 - SQR ist abhängig von der Einheit der Kriteriumsvariable (hier, $USD^2$)
 - Standardisieren!
 
 ## Streuung und Unsicherheit
 
+- Varianz ist Normierung der Abweichungsquadratsumme anhand der Stichprobengröße
+
 - Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler $\rightarrow$ Maß für Unsicherheit
 
 - Varianz der Fehlerterme: Maß für die verbleibende Unsicherheit in unserem Modell
 
-- Wir standardisieren die Varianz der Fehler (Unsicherheit trotz des Modells) anhand der Varianz der Kriteriumsvariable (Unsicherheit ohne Modell) und erhalten ein prozentuales Maß der erklärten Varianz (oder: aufgeklärten Unsicherheit)
+- Wir standardisieren die Varianz der Fehler (Unsicherheit trotz des Modells) anhand der Varianz der Kriteriumsvariable (Unsicherheit ohne Modell) und erhalten ein prozentuales Maß der erklärten Varianz
 
 
 ## Bestimmtheitsmaß
 
-Determinationskoeffizient  / Bestimmheitsmaß (Multiples $R^2$):
+Determinationskoeffizient  / Bestimmtheitsmaß (Multiples $R^2$):
   
   $$ R^2 = \frac{\text{ durch  alle Prädiktoren in  }Y \text{ erklärte Varianz}}{\mathrm{Varianz\ von\ }Y} $$
 
+- Normiert zwischen 0 und 1
 - Je höher, desto besser!
-
 - Menschliches Verhalten ist schwer vorherzusagen, daher erwarten wir oft keine hohen Werte (<50%)
 
 ## Berechnung
@@ -463,7 +464,7 @@ pubs.unique <- r2.total-r2.pubs
 r2.joint <- r2.total-pubs.unique-cits.unique
 ```
 
-Schatierte Fläche: Links: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium); Rechts: Die nicht-erklärte Varianz
+Schatierte Fläche: Links: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium); Rechts: Die nicht-erklärte Varianz (Varianz ist normierte Streuung)
 
 \center
 
@@ -473,7 +474,7 @@ Schatierte Fläche: Links: Die gesamte Varianz des Kriteriums (unsere Unsicherhe
   \endcol
 \endcols
 
-```{r fig.height=4, fig.width=8, out.height="70%"}
+```{r fig.height=4, fig.width=8, out.height="65%"}
 par(mfrow=c(1,2))
 cohen.venn("001+111+101+011")
 cohen.venn("001")
@@ -537,22 +538,22 @@ library(venn)
 #venn("001") # Unique in C (unexplained by A and B)
 
 venn("001",snames = c("Zitationen","Publikationen","Gehalt"))
-venn.label("001",txt = round((1-r2.total)*100,0))
-venn.label("111",txt=round(r2.joint*100,0))
-venn.label("101",txt = round(cits.unique*100,0))
-venn.label("011",txt = round(pubs.unique*100,0))
+venn.label("001",txt = paste0(round((1-r2.total)*100,0),"%"))
+venn.label("111",txt=paste0(round(r2.joint*100,0),"%"))
+venn.label("101",txt = paste0(round(cits.unique*100,0),"%"))
+venn.label("011",txt = paste0(round(pubs.unique*100,0),"%"))
 ```
     
 ## Zusammenfassung
 
 - Die Regression erlaubt uns den Zusammenhang mehrerer Variablen mit einer Kriteriumsvariable zu untersuchen
-- Wir können damit Ursachen und Wirkungen analysieren, sowie Vorhersagen treffen
+- Wir können Vorhersagen treffen
 - Dazu betrachten wir die (partiellen) Regressionskoeffizienten und die Modellpassung (Bestimmtheitsmaß)
 
 ## Ausblick
 
 - Statistische Tests für die Modellgüte und die Beiträge einzelner Variablen (bisher nur Effektstärken; *praktische Bedeutsamkeit* versus *statistische Bedeutsamkeit*)
-- Modellannahmen (z.B. Linearität, Varianzgleichheit) und was tun, wenn diese verletzt sind
+- Modellannahmen (z.B. Korrektheit, Linearität, Homoskedastizität) und was tun, wenn diese verletzt sind
 - Kodierung von kategorialen Variablen
 - Interaktionen (Multiplikative Effekte)
 
