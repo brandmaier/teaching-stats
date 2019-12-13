@@ -54,7 +54,7 @@ Frage: Wie groß ist der Einfluss *mehrerer* metrischer oder kategorialer Prädi
 
 ## Zentrale Ansätze
 
-> - Erklären: Hängen die Prädiktoren mit dem Kriterium zusammen? Wenn ja, wie stark? Wie gut erklären wir das Kriterium?
+> - Erklären: Hängen die Prädiktoren mit dem Kriterium zusammen? \newline Wenn ja, wie stark? Wie gut erklären sie das Kriterium?
 > - Vorhersagen: Wie gut können wir das Kriterium (in neuen Daten) vorhersagen?
 
 ## Ein einfaches Modell
@@ -80,7 +80,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 
 ## Konstante Regression
 
-Ein formales Modell für die beobachteten Daten $i \in 1..N$ mit $N$ die Stichprobengröße:
+Ein formales Modell für die beobachteten Daten $i \in 1..N$ mit $N$ als Stichprobengröße:
 
 \beginlarge
 $$ y_i = \color{blue}b_0 + \color{red}e_i$$
@@ -133,7 +133,7 @@ $$ y_i = \color{blue}b_0\color{black} + \color{blue}b_1\color{black} \cdot x_i +
 \begincols
 \begincol{.38\textwidth}
 
-- *Regressionskonstante*: Wert des Kriteriums, wenn der Prädiktor den Wert 0 annimmt.
+- *Regressionskonstante*: \newline Wert des Kriteriums, wenn der Prädiktor den Wert 0 annimmt.
 - *Regressionskoeffizienten* (auch Regressionsgewichte): Erwartete Veränderung des Kriteriums $Y$, wenn
 man den Prädiktor $X$ um eine Einheit erhöht.
 
@@ -286,7 +286,7 @@ Ebene: $\mathrm{Gehalt} = \color{black}40493\color{black} + \color{blue}252\colo
   
 - Die $\color{blue} b_i$ geben an, um wieviel sich der Wert von dem Kriterium ($y$) ändert, wenn man den zugehörigen $i$-ten Prädiktor um 1 Einheit verändert *und* man alle übrigen Prädiktoren konstant hält.
 
-- Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_
+- Daher bezeichnen wir diese nun als _partielle Regressionskoeffizienten_.
 
 
 \endcol
@@ -336,7 +336,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+geom_point()+
 
 ```
 
-## Schätzung: Kleinste Quadrate Methode
+## Schätzung: Methode der kleinsten Quadrate
 
 - Idee: Das beste Regressionsmodell soll das sein, das die Streuung der Fehler minimiert
 
@@ -347,7 +347,7 @@ $$SQR=\sum^n_{i=1}{e^2_i}=\sum^n_{i=1}\left[y_i-(b_0+b_1x_{i,1}+\ldots+b_kx_{i,k
 - Wähle die Koeffizienten so, dass wir die Summe der quadrierten Fehlerterme  minimieren
 - Exakt und effizient lösbar (falls lösbar)
 
-## Kleinste Quadrate Methode (Schematisch)
+##  Methode der kleinsten Quadrate (Schematisch)
 
 \center
 
@@ -389,7 +389,7 @@ ggplot(cohen.dat, aes(x=pubs,y=salary))+
 (plot_kq())
 ```
 
-## Kleinste-Quadrate Schätzer (Schematisch)
+##  Methode der kleinsten Quadrate (Schematisch)
 
 \center
 
@@ -465,7 +465,7 @@ pubs.unique <- r2.total-r2.pubs
 r2.joint <- r2.total-pubs.unique-cits.unique
 ```
 
-Schatierte Fläche: Links: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium); Rechts: Die nicht-erklärte Varianz (Varianz ist normierte Streuung)
+Links schattiert: Die gesamte Varianz des Kriteriums (unsere Unsicherheit über das Kriterium) \newline Rechts schattiert: Die nicht-erklärte Varianz (verbleibende Unsicherheit)
 
 \center
 
@@ -486,7 +486,7 @@ cohen.venn("001")
 
 ## Venn-Diagramm der einfachen $R^2$
 
-- Schatierte Fläche: Aufgeklärte Varianz in der einfachen Regression (Reduktion unserer Unsicherheit über das Kriterium)
+- Schattierte Fläche: Aufgeklärte Varianz in der einfachen Regression (Reduktion unserer Unsicherheit über das Kriterium)
 
 \center
 ```{r out.height="62%", fig.height=4, fig.width=7}
