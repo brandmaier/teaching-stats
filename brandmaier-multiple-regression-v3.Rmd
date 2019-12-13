@@ -408,7 +408,7 @@ plot_kq(intercept=68000, slope=100)
 
 ## Streuung und Unsicherheit
 
-- Varianz ist Normierung der Abweichungsquadratsumme anhand der Stichprobengröße
+- Residuenquadratsumme: gesamte Streuung; Varianz: erwartete Streuung
 
 - Varianz der Kriteriumsvariable: Die erwartete (quadrierte) Abweichung vom Mittelwert. Wenn wir die Kriteriumsvariable raten müssten, wäre das der erwartete (quadrierte) Fehler $\rightarrow$ Maß für Unsicherheit
 
@@ -433,6 +433,7 @@ Determinationskoeffizient  / Bestimmtheitsmaß (Multiples $R^2$):
 
 $$ R^2 = 1- \frac{\sum^n_i{e^2_i}}{\sum^n_i{(y_i-\bar{y})^2}} $$
 
+($\bar{y}$: Mittelwert der $y_i$)
   
 ## Venn-Diagramm der Varianzen
 
