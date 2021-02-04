@@ -3,7 +3,7 @@ title: "Multiple Regression"
 subtitle: "Bachelor-Studiengang Psychologie, 2.FS; Materialien:\_https://github.com/brandmaier/teaching-stats"
 author: "Andreas M. Brandmaier"
 #institute: "Max Planck Institute for Human Development"
-date: "Dec/16/2019"
+date: "16.12.2019"
 output: 
   beamer_presentation:
     latex_engine: xelatex

@@ -1,0 +1,20 @@
+---
+title: "Multiple Regression"
+subtitle: "Bachelor Psychologie, 2.FS"
+author: "Andreas M. Brandmaier"
+#institute: "Max Planck Institute for Human Development"
+date: "12/3/2019"
+output: 
+  beamer_presentation:
+    latex_engine: xelatex
+    theme: metropolis
+    includes:
+      in_header: mystyle.tex
+classoption: "aspectratio=169"
+
+---
+
+## Hallo
+
+test!
+#\HUGE{123}
