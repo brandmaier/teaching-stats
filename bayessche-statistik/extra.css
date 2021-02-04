@@ -1,0 +1,68 @@
+.citation {
+  position: absolute;
+  bottom: 50px;
+  color: #666666;
+  font-size: 50%;
+}
+
+.segue-large-red {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #e64626;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+  font-size:180%;
+}
+
+.segue-large-gold {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #E4B00B;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+  font-size:180%;
+}
+
+.read_more:before {
+    content: "\00BB";
+    margin-right: 6px;
+}
+
+.idea{
+  content: "\U+1F4A1";
+  margin-right: 6px;
+}
+
+.question {
+  color: #00dd33;
+}
+
+.highlight {
+  color: #00dd33;
+  font-weight: bold;
+}
+.emph {
+  color: #7A1414;
+  font-weight: bold;
+}
+
+.hide {
+  color: #FFFFFF;
+}
+
+.bigfont {
+  font-size: 2em;
+}
+
+.largemath {
+  font-size: 2.3em;
+}
+
+.largermath {
+  font-size: 1.8em;
+}
+
+.eg {
+  background-color: #F1F1F1;
+  /* rgb(231, 238, 242); */
+}
