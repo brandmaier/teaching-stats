@@ -18,7 +18,7 @@ plt <- df %>% ggplot(aes(y=tval,x=x))+
   geom_ribbon(aes(ymax=tvalfilled,ymin=0), fill="red")+
   xlab("Statistik")+ ylab("Dichte")+
   ggtitle("t-Verteilung")+
-  geom_text(x=mytest$statistic,hjust=-.5, size=10,
+  geom_text(x=mytest$statistic,hjust=-.5, size=8,
             y=.3,label=paste0("t = ",round(mytest$statistic,2) ))+
   ggthemes::theme_hc()+
   theme(text=element_text(size=25)) # increase all font sizes

@@ -1,0 +1,73 @@
+/* adapted from USYD blockquote */
+blockquote, .blockquote {
+  display: block;
+  margin-top: 0.1em;
+  margin-bottom: 0.2em;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-left: solid 10px #0148A4;
+  border-top: solid 2px #0148A4;
+  border-bottom: solid 2px #0148A4;
+  border-right: solid 2px #0148A4;
+  box-shadow: 0 0 6px rgba(0,0,0,0.5);
+  /* background-color: #e64626; */
+  color: #e64626;
+  padding: 0.5em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+.blockquote p {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h1:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h2:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h3:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.blockquote > h4:first-of-type {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+/* segue */
+.segue {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #0148A4;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+}
+.segue .remark-slide-number {
+  display: none;
+}
+
+.segue-red {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #e64626;
+  color: #ffffff;
+  text-shadow: 0 0 20px #333;
+}
+.segue-red .remark-slide-number {
+  display: none;
+}
+
+.segue-yellow {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #FFB800;
+  color: #424242;
+  text-shadow: 0 0 2px #333;
+}
+.segue-yellow .remark-slide-number {
+  display: none;
+}

@@ -22,20 +22,31 @@ output:
 
 library(here)
 library(tidyverse)
+library(ggx)
 #source(here("R/scripts.R"))
 source("R/scripts.R")
 ```
 
 # Ziel der Inferenzstatistik
 
+.hide[fill]
+.hide[fill]
 
-.read_more[Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik] - Allgemeingültigkeit!
+.larger[
 
-.read_more[Typische Fragen in der Psychologie sind:]
+.read_more[Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik.] 
 
-- Wirkt eine neue Therapieform B besser als eine Therapieform A?
+.read_more[Allgemeingültigkeit]
+
+.read_more[Quantifizierung der Unsicherheit]
+
+]
+
+<!--.read_more[Typische Fragen in der Psychologie sind:]
+
+ - Wirkt eine neue Therapieform B besser als eine Therapieform A?
 - Gibt es einen Zusammenhang zwischen Computerspielen und Gewalt bei Jugendlichen?
-- Werden attraktivere Menschen als erfolgreicher eingeschätzt?
+- Werden attraktivere Menschen als erfolgreicher eingeschätzt? -->
 
 ---
 
@@ -48,10 +59,11 @@ source("R/scripts.R")
 
 Die Stichprobe $y_1,\ldots, y_{10}$ sei:
 
-```{r iq, eval=TRUE, echo=FALSE}
+```{r iq, eval=TRUE, echo=FALSE, fig.height=5,warning=FALSE,results="hide",message=FALSE}
 set.seed(234)
 iqdat <- tibble(x= rnorm(10,mean=110,sd=10))
-ggplot(iqdat,aes(y=x))+geom_boxplot()+ geom_point(x=0,size=4)+ylab("IQ")
+ggplot(iqdat,aes(y=x))+geom_boxplot()+ geom_point(x=0,size=4)+ylab("IQ")+
+  gg_("set y-axis font size to 20")
 ```
 ]
 .pull-right[
@@ -76,23 +88,8 @@ $$Y_i = \mu + \epsilon_i$$
 
 - Unter allen möglichen Normalverteilungen $N(m,s^2)$ mit Mittelwert $m$ uns Varianz $s^2$, wähle die, die am plausibelsten die Daten erzeugt hat:
 
-```{r echo=FALSE, fig.height=4, fig.width=4}
-x <- iqdat$x
-
-dist_means <- c(80,mean(x), 120)
-dist_sds <- c(10, sqrt(var(x)), 10)
-
-df <- data.frame(x=seq(60,140,.1))
-for (i in 1:3) {
-#y1 <- dnorm(x, mean = dis)
-  df[,paste0("y",i)] <- dnorm(df$x, dist_means[i], dist_sds[i])
-}
-
-df %>% pivot_longer(-1) %>% 
-  ggplot(aes(x=x,y=value,group=name,color=name,fill=name))+
-  geom_line()+geom_ribbon(aes(ymin=0,ymax=value))
-  
-sum(log(dnorm(iqdat$x,mean = 80, sd=10)))
+```{r echo=FALSE, fig.height=4, fig.width=6}
+source("R/likelihood.R")
 
 ```
 
@@ -103,6 +100,8 @@ sum(log(dnorm(iqdat$x,mean = 80, sd=10)))
 .pull-right[
 ## Testen
 
+Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
+
 ```{r echo=FALSE, fig.height=5, fig.width=5, results="hide", warning=FALSE}
 source("R/t-verteilung.R")
 ```
@@ -110,18 +109,47 @@ source("R/t-verteilung.R")
 
 ---
 
+# Frequentistischer Ansatz
+
+.pull-left[
+## Schätzen
+
+.largermath[
+$$\arg \max_\theta P\left( D | M_\theta \right)$$
+]
+
+
+
+]
+
+.pull-right[
+## Testen
+
+.largermath[
+
+$$P\left(D | M_0 \right) $$
+]
+]
+
+---
 
 # Missverständnisse in der frequentistischen Inferenz
 
-Die frequentistische Inferenz wird oft falsch verstanden. Typische Denkfehler sind, zu glauben, ...
+Dennoch sind wir sind wir oft versucht, Aussagen über $P\left(M | D \right)$ zu treffen:
 
-- dass ein nicht-signifikanter Unterschied zwischen zwei Gruppen bedeutet, dass deren Mittelwerte in Wahrheit gleich sind (richtig ist: es ist keine Aussage möglich)
+- dass ein nicht-signifikanter Unterschied bedeutet, dass der Mittelwerte mit hoher Wahrscheinlichkeit gleich 100 ist (richtig ist: es ist keine Aussage möglich)
 
 - dass der $p$-Wert die Wahrscheinlichkeit der Nullhypothese angibt (richtig: es gibt an, wie (un)glaubwürdig das Ergebnis (oder ein extremeres) unter der Nullhypothese ist)
 
-Unbefriedigend ist:
+- dass das Konfidenzintervall mit 95% Wahrscheinlichkeit den wahren Wert enthält (95% unserer Konfidenzintervalle enthalten den wahren Wert)
 
-- bei einem nicht-signifikantem Ergebnis, ist "keine Aussage" unbefriedigend, da die gesammelte Information nicht genutzt ist
+---
+
+class: segue-large-red
+
+.bigfont[
+Idee: Können wir $P\left(M | D \right)$ aus $P\left(D | M \right)$ berechnen?
+]
 
 ---
 
@@ -137,8 +165,8 @@ $$P \left( A | B \right) = \frac{ P\left( A \cap B \right) }{ P\left(B \right) }
 
 Beispiele:
 
-$P\left(\textrm{Die Straße ist nass} | \textrm{es hat geregnet}\right) \approx 1$
-$P\left(\textrm{es hat geregnet} | \textrm{die Straße ist nass}\right) < 1$
+- $P\left(\textrm{Die Straße ist nass} | \textrm{es hat geregnet}\right) \approx 1$
+- $P\left(\textrm{es hat geregnet} | \textrm{die Straße ist nass}\right) < 1$
 
 ---
 
@@ -166,26 +194,17 @@ PrP <- PrPV*PrV + PrPM*(1-PrV)
 PrVP <- PrPV*PrV/PrP
 ```
 
-Bekannt sei ein Test, der mit einer Erfolgschance von `r cat(PrPV)` Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
+Bekannt sei ein Test, der mit einer Erfolgschance von `r round(PrPV*100)`% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
 
 $$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
---
 
-- $P \left( + | Vampir \right) = `r print(PrPV)`$
-- $P \left( Vampir \right) = `r print(PrV)`$
-- $P \left( + \right) =  `r print(PrP)`$
+- $P \left( + | Vampir \right) =$ `r PrPV`
+- $P \left( Vampir \right) =$ `r PrV`
+- $P \left( + \right) =$  `r PrP`
 
 Erlaubt uns den Schluss:
 
-$P\left( Vampir | + \right) = $ `r cat(PrVP)`
-
----
-
-class: segue-large-red
-
-.bigfont[
-Aber Achtung: Die Anwendung des Satzes von Bayes macht noch keinen Bayesianer aus Ihnen!
-]
+- $P \left( Vampir | + \right) =$ `r round(PrVP,2)`
 
 ---
 
@@ -213,7 +232,7 @@ $$ \underbrace{P\left( Modell | Daten \right)}_{Posterior} = \frac{ \overbrace{P
 ]
 
 
-.read_more[Der Nenner P(Daten) ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
+.read_more[Der Nenner $P(Daten)$ ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
 
 
 ---
@@ -235,29 +254,10 @@ Aber Moment... was ist denn die _Wahrscheinlichkeit einer Hypothese_ überhaupt?
 
 - F2: Die wahren Parameter sind unbekannte Konstanten. Weil sie nicht veränderlich sind, kann man keine probabilistischen Aussagen über sie treffen.
 
-- F3:
+- F3: Statistische Prozeduren werden so entworfen, dass sie Langzeit-Garantien geben. Beispielsweise enthalten 95 von 100 Konfidenzintervalle enthalten im Mittel den wahren Wert.
 
 
 .citation[frei nach 'All of Statistics' von L. Wassermann]
----
-
-# Wahrscheinlichkeiten
-
-.pull-left[
-
-.content-box-blue[Frequentistische Perspektive]
-
-Aus klassischer Sicht ist es inakzeptabel Modellparameter durch Wahrscheinlichkeitsverteilungen zu repräsentieren, weil sie als konstant angenommen werden. Nur die beobachteten Daten sind zufällig gezogen und dürfen durch Wahrscheinlichkeitsverteilungen beschrieben werden.
-]
-
-.pull-right[
-
-.content-box-gray[Bayesianische Perspektive]
-
-Jedes Element des Modells, das mit Unsicherheit behaftet ist, kann durch eine Wahrscheinlichkeitsverteilung abgebildet werden, die den Grad der Unsicherheit abbildet, insbesondere Modellparameter.
-]
-
-
 ---
 
 
@@ -293,14 +293,14 @@ Obwohl wir dieselbe Axiomatik der Wahrscheinlichkeitsrechnung nutzen, ist dies e
 .pull-left[
 Beispiel: Statistisches Modell mit einem Parameter (z.B., Mittlerer IQ)
 
-- Prior: Glaubwürdigkeit aller möglichen Mittelwerte
-- Likelihood: Plausibilität gegeben den Daten
-- Posterior: Glaubwürdigkeit nach Beobachtung der Daten
+- .blue[Prior]: Glaubwürdigkeit aller möglichen Mittelwerte
+- .red[Likelihood]: Plausibilität gegeben den Daten
+- .green[Posterior]: Glaubwürdigkeit nach Beobachtung der Daten
 ]
 
 .pull-right[
 
-```{r fig.width=6, fig.height=6, echo=FALSE, message=FALSE}
+```{r fig.width=7, fig.height=7, echo=FALSE, message=FALSE}
 source("R/schematic-bayes.R")
 ```
 ]
@@ -322,22 +322,7 @@ source("R/schematic-bayes.R")
 ]
 ---
 
-# Wann spielt der Prior eine Rolle?
 
-.pull-left[
-Die Auswirkung der A-Priori-Verteilung ist schwächer,
-- je breiter die Verteilung ist (flacher Prior = wenig Vorinformation)
-- je mehr Daten wir beobachten
-]
-.pull-right[
-```{r fig.width=7, fig.height=7, echo=FALSE}
-prior_sd <- 15
-nfakefac <- 20
-source("R/schematic-bayes.R")
-```
-]
-
----
 
 # Woher kommt der Prior?
 
@@ -366,13 +351,6 @@ prior.demo(2)
 
 ---
 
-# Beispiel: Eruierte Prior
-
-![](Screenshot 2021-01-26 at 14.45.02.png)
-
-.citation[Dallow et al. "Better Decision Making in Drug Development Through Adoption of Formal Prior Elicitation"]
----
-
 # Posterior
 
 Das Ergebnis einer Schätzung ist der Posterior:
@@ -382,12 +360,14 @@ Das Ergebnis einer Schätzung ist der Posterior:
 
 - Enthält nicht nur einen einzelnen Punktschätzer (z.B. Effektstärke), sondern auch Informationen über die Genauigkeit / (Un-)Sicherheit unserer Schätzung
 
-- Posterior ist die Verteilung über all möglichne Parameter gleichzeitig
+- Spezifiziert vollständig unsere Unsicherheit
+
+- Erlaubt Aussagen wie, das 95%-Intervall (HDI) enthält zu 95% den wahren Parameter
 ]
 
 .pull-right[
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE}
 source("R/posterior.R")
 ```
 
@@ -422,7 +402,7 @@ $$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
 
 Es existieren verschiedene Ansätze:
 
-- Analytische Lösungen mit .emph[konjugierten Priors]
+.read_more[] Analytische Lösungen mit .emph[konjugierten Priors]
 
   Bestimmte statistische Modelle haben Priors, die zu Posteriors führen, die aus derselben Verteilungsfamilie stammen
   
@@ -434,7 +414,7 @@ Es existieren verschiedene Ansätze:
 
   Anstatt exakt zu rechnen, ziehen wir zufällig aus der Posteriorverteilung und rechnen mit den Samples weiter
 
----  
+---
 
 
 # Zusammenfassung
@@ -445,55 +425,5 @@ Die Bayessche Statistik
 - erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
 - hat subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv)
 - ist oft aufwendig zu berechnen
-
----
-
-# Inkrementelles Lernen: Bayesian Updating
-
-Der Bayesianische Ansatz entspricht der Idee von Wissenschaft als kumulativem Prozeß
-
-Beispiel: Wir möchten die Prävalenz depressiver Erkrankungen in der Bevölkerung schätzen
-
-- Wahrscheinlichkeitsmodell: Binomialverteilung (zur Erinnerung: Diese modelliert das Ergebnis einer Reihe von Münzwürfen), gesucht ist die Wahrscheinlichkeit, eine depressive Erkrankung zu beobachten
-
-- konjugierte Priorverteilung: Betaverteilung mit zwei Parametern
-
----
-
-# Bayesian Updating
-
-```{r, echo=FALSE, eval=TRUE, fig.width=12, fig.height=6,out.width="120%"}
-# beta-binomial model
-betabinomial_plot <- function(a1=1,b1=1,a2=1,b2=2) {
-x<-seq(0,1,.01)
-prior <- dbeta(x, shape1=a1, shape2=b1)
-posterior <- dbeta(x, shape1=a2, shape2=b2)
-
-df <- data.frame(x,Prior=prior, Posterior=posterior)
-
-df %>% pivot_longer(Prior:Posterior,names_to = "Verteilung") %>%
-  ggplot(aes(x=x,y=value,group=Verteilung,lty=Verteilung,color=Verteilung))+
-  geom_line(lwd=2)+
-  ggthemes::theme_clean()+
-  xlab("Prävalenz Depression")+
-  ylab("Plausibilität")
-}
-
-
-b1 <- betabinomial_plot(1,1,2,1) + ggtitle("1 Ziehung")+theme(legend.box = "horizontal")#+theme(legend.position="none")
-b2 <- betabinomial_plot(2,1,2,2)+ ggtitle("2 Ziehungen")#+theme(legend.position="none")
-b3 <- betabinomial_plot(2,2,2,3) + ggtitle("3 Ziehungen")#+theme(legend.position="none")
-b4 <- betabinomial_plot(2,3,5,45)+ ggtitle("50 Ziehungen")
-
-legend <- g_legend(b1)
-
-b1 <- b1 + theme(legend.position="none")
-b2 <- b2 + theme(legend.position="none")
-b3 <- b3 + theme(legend.position="none")
-b4 <- b4 + theme(legend.position="none")
-
-library(patchwork)
-(b1 | b2 | b3 | b4 ) / legend
-```
 
 ---

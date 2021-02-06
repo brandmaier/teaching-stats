@@ -1,3 +1,13 @@
+.red {
+  color: #F8766D; "#00BA38" "#619CFF"
+}
+.blue {
+  color:  #619CFF;
+}
+.green {
+  color: #619CFF;
+}
+
 .citation {
   position: absolute;
   bottom: 50px;
@@ -17,7 +27,7 @@
 .segue-large-gold {
   text-align:center;
   vertical-align: middle;
-  background-color: #E4B00B;
+  background-color: #F0F8FF; /*#E4B00B;*/
   color: #ffffff;
   text-shadow: 0 0 20px #333;
   font-size:180%;
@@ -60,6 +70,10 @@
 
 .largermath {
   font-size: 1.8em;
+}
+
+.larger {
+  font-size: 1.5em;
 }
 
 .eg {
