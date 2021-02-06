@@ -28,11 +28,10 @@ source("R/scripts.R")
 
 # Ziel der Inferenzstatistik
 
-.contentbox-blue[Das Anliegen einer jeden wissenschaftlichen Aussage ist, dass sie möglichst allgemeingültig sein soll]
 
-Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik
+.read_more[Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik] - Allgemeingültigkeit!
 
-Typische Fragen in der Psychologie sind:
+.read_more[Typische Fragen in der Psychologie sind:]
 
 - Wirkt eine neue Therapieform B besser als eine Therapieform A?
 - Gibt es einen Zusammenhang zwischen Computerspielen und Gewalt bei Jugendlichen?
@@ -40,18 +39,79 @@ Typische Fragen in der Psychologie sind:
 
 ---
 
-# Frequentistische Inferenz
 
-.read_more[Beispiel TODO]
-Typischerweise zwei Aufgaben: Schätzen und Testen
+# Ein Beispiel - Mittelwerte schätzen
 
-```{r echo=FALSE, message=FALSE, result='hide', warning=FALSE}
-source("R/t-verteilung.R")
+.question[Fragestellung: ] Haben Studierende aus Potsdam einen höheren IQ als 100?
+
+.pull-left[
+
+Die Stichprobe $y_1,\ldots, y_{10}$ sei:
+
+```{r iq, eval=TRUE, echo=FALSE}
+set.seed(234)
+iqdat <- tibble(x= rnorm(10,mean=110,sd=10))
+ggplot(iqdat,aes(y=x))+geom_boxplot()+ geom_point(x=0,size=4)+ylab("IQ")
 ```
+]
+.pull-right[
+
+Dabei sei $\mu$ der unbekannte wahre Mittelwert der Potsdamer Studierenden
+
+Unsere Modellannahme sei:
+
+$$Y_i = \mu + \epsilon_i$$
+
+- $y_i$ sind Realisierungen einer Zufallsvariable $Y_i$
+- $\mu_i$ ist der wahre aber unbekannte Mittelwert
+- $\epsilon_i$ sind unabhängige Zufallsvariablen mit Mittelwert 0 und Varianz $\sigma^2$, die sowohl wahre Unterschiede als auch Messfehler widerspiegeln
+]
 
 ---
 
-# Missverstaendnisse in der frequentistischen Inferenz
+# Frequentistischer Ansatz:
+
+.pull-left[
+## Schätzen
+
+- Unter allen möglichen Normalverteilungen $N(m,s^2)$ mit Mittelwert $m$ uns Varianz $s^2$, wähle die, die am plausibelsten die Daten erzeugt hat:
+
+```{r echo=FALSE, fig.height=4, fig.width=4}
+x <- iqdat$x
+
+dist_means <- c(80,mean(x), 120)
+dist_sds <- c(10, sqrt(var(x)), 10)
+
+df <- data.frame(x=seq(60,140,.1))
+for (i in 1:3) {
+#y1 <- dnorm(x, mean = dis)
+  df[,paste0("y",i)] <- dnorm(df$x, dist_means[i], dist_sds[i])
+}
+
+df %>% pivot_longer(-1) %>% 
+  ggplot(aes(x=x,y=value,group=name,color=name,fill=name))+
+  geom_line()+geom_ribbon(aes(ymin=0,ymax=value))
+  
+sum(log(dnorm(iqdat$x,mean = 80, sd=10)))
+
+```
+
+--
+
+]
+
+.pull-right[
+## Testen
+
+```{r echo=FALSE, fig.height=5, fig.width=5, results="hide", warning=FALSE}
+source("R/t-verteilung.R")
+```
+]
+
+---
+
+
+# Missverständnisse in der frequentistischen Inferenz
 
 Die frequentistische Inferenz wird oft falsch verstanden. Typische Denkfehler sind, zu glauben, ...
 
@@ -72,7 +132,7 @@ Die .emph[bedingte Wahrscheinlichkeit], dass A eintritt, wenn B bereits eingetre
 <!--\newcommand{ba}{\color{blue}{A}}-->
 
 .largemath[
-$$P \left( \color{blue}{A} | B \right) = \frac{ P\left( A \cap B \right) }{ P\left(B \right) } $$
+$$P \left( A | B \right) = \frac{ P\left( A \cap B \right) }{ P\left(B \right) } $$
 ]
 
 Beispiele:
@@ -88,21 +148,36 @@ $P\left(\textrm{es hat geregnet} | \textrm{die Straße ist nass}\right) < 1$
 Bayesianische Ansätze folgen der folgenden charakteristischen Struktur, die sich aus der bedingten Wahrscheinlichkeit ableiten lassen:
 
 .largemath[
-$$P \left( A | B \right) = \frac{ P\left(B | A \right) \times  P\left( B \right)   }{P\left(A \right)  } $$
+$$P \left( A | B \right) = \frac{ P\left(B | A \right) \times  P\left( A \right)   }{P\left(B \right)  } $$
 ]
 
 ---
 
 # Vampirismus und der Satz von Bayes &#129415;
 
+
+```{r echo=FALSE}
+# adapted from Richard McElreath's fantastic book
+PrPV <- .95
+PrPM <- 0.01
+PrV <- 0.001
+PrP <- PrPV*PrV + PrPM*(1-PrV)
+
+PrVP <- PrPV*PrV/PrP
+```
+
+Bekannt sei ein Test, der mit einer Erfolgschance von `r cat(PrPV)` Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
+
 $$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
-- $P \left( + | Vampir \right) = .8$
-- $P \left( Vampir \right) = .XX$
-- $P \left( + \right) = XXX$
+--
+
+- $P \left( + | Vampir \right) = `r print(PrPV)`$
+- $P \left( Vampir \right) = `r print(PrV)`$
+- $P \left( + \right) =  `r print(PrP)`$
 
 Erlaubt uns den Schluss:
 
-$P\left( Vampir | + \right) =$
+$P\left( Vampir | + \right) = $ `r cat(PrVP)`
 
 ---
 
@@ -111,6 +186,7 @@ class: segue-large-red
 .bigfont[
 Aber Achtung: Die Anwendung des Satzes von Bayes macht noch keinen Bayesianer aus Ihnen!
 ]
+
 ---
 
 # Bayesianischer Ansatz
@@ -122,6 +198,7 @@ $$ P\left( Modell | Daten \right) = \frac{ P\left(Daten | Modell\right) \cdot P\
 ]
 
 
+.hide[Der Nenner P(Daten) ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
 
 
 ---
@@ -303,13 +380,14 @@ Das Ergebnis einer Schätzung ist der Posterior:
 .pull-left[
 - Für jeden möglichen Parameterwert erhalten wir eine Wahrscheinlichkeit
 
-– Enthält nicht nur einen einzelnen Punktschätzer (z.B. Effektstärke), sondern auch Informationen über die Genauigkeit / (Un-)Sicherheit unserer Schätzung
+- Enthält nicht nur einen einzelnen Punktschätzer (z.B. Effektstärke), sondern auch Informationen über die Genauigkeit / (Un-)Sicherheit unserer Schätzung
 
 - Posterior ist die Verteilung über all möglichne Parameter gleichzeitig
 ]
+
 .pull-right[
 
-```{r}
+```{r echo=FALSE}
 source("R/posterior.R")
 ```
 
@@ -329,10 +407,13 @@ Für viele Bayessche Anwendung benötigen wir Integrale, z.B., für
 
 -   Berechnung der Evidenz in der Posterior-Verteilung:
 
-$$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left(\right) P\left(\right)} d\theta } $$
+$$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
+- Punkt- und Intervallschätzer, wie z.B. Mean oder Credibility Region
+
+$$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
+  
 
 - Randverteilung der Prior
-- Punkt- und Intervallschätzer, wie z.B. Maximum-A-Posteriori or Credibility Region
 - Modellvergleich mit dem Bayes Faktor
 
 ---
@@ -355,54 +436,6 @@ Es existieren verschiedene Ansätze:
 
 ---  
 
-# Ein Beispiel - Mittelwerte schätzen
-
-.question[Fragestellung: ] Haben Studierende aus Potsdam einen höheren IQ als 100?
-
-Die Stichprobe $y_1,\ldots, y_{10}$ sei:
-
-```{r}
-set.seed(234)
-iqdat <- tibble(x= rnorm(10,mean=110,sd=10))
-ggplot(iqdat,aes(y=x))+geom_boxplot()+ geom_point(x=0,size=4)+ylab("IQ")
-```
-
-Dabei sei $\mu$ der unbekannte wahre Mittelwert der Potsdamer Studierenden
-
-Unsere Modellannahme sei:
-
-$$Y_i = \mu + \epsilon_i$$
-
-- $y_i$ sind Realisierungen einer Zufallsvariable $Y_i$
-- $\mu_i$ ist der wahre aber unbekannte Mittelwert
-- $\epsilon_i$ sind unabhängige Zufallsvariablen mit Mittelwert 0 und Varianz $\sigma^2$, die sowohl wahre Unterschiede als auch Messfehler widerspiegeln
-
----
-
-Frequentistischer Ansatz:
-
-- Unter allen möglichen Normalverteilungen $N(m,s^2)$ mit Mittelwert $m$ uns Varianz $s^2$, wähle die, die am plausibelsten die Daten erzeugt hat:
-
-```{r}
-
-dist_means <- c(80,mean(x), 120)
-dist_sds <- c(10, sqrt(var(x)), 10)
-
-df <- data.frame(x=seq(60,140,.1))
-for (i in 1:3) {
-#y1 <- dnorm(x, mean = dis)
-  df[,paste0("y",i)] <- dnorm(df$x, dist_means[i], dist_sds[i])
-}
-
-df %>% pivot_longer(-1) %>% 
-  ggplot(aes(x=x,y=value,group=name,color=name,fill=name))+
-  geom_line()+geom_ribbon(aes(ymin=0,ymax=value))
-  
-sum(log(dnorm(iqdat$x,mean = 80, sd=10)))
-
-```
-
----
 
 # Zusammenfassung
 
@@ -410,6 +443,7 @@ Die Bayessche Statistik
 
 - benutzt Wahrscheinlichkeiten um Unsicherheiten zu beschreiben
 - erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
+- hat subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv)
 - ist oft aufwendig zu berechnen
 
 ---

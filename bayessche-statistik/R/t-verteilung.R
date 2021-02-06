@@ -10,7 +10,7 @@ x<-seq(-5,5,0.01)
 tval <- dt(x,df = length(obs)-1)
 tvalfilled <- ifelse(x>mytest$statistic,tval,0)
 
-df <- as.tibble(data.frame(x, tval, tvalfilled))
+df <- as_tibble(data.frame(x, tval, tvalfilled))
 
 #pivot_longer(df,2:3)
 plt <- df %>% ggplot(aes(y=tval,x=x))+
