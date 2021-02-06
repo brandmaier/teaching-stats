@@ -323,21 +323,16 @@ source("R/schematic-bayes.R")
 ---
 
 
+class:segue-large-red
 
-# Woher kommt der Prior?
-
-Es gibt verschiedene Wege, Priors zu wählen:
-
-- Uninformierte Priors
-- Sinnvolle Beschränkungen des Parameterraums (z.B. Nicht-Negativität)
-- Vorwissen
-- Expertenmeinungen (elicited priors)
-- Bequeme Prior-Verteilungen (conjugate priors)
----
+.bigfont[
+Woher kommt der _Prior_ überhaupt?
+]
 
 # Beispiel: Beschränkung
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.width=12, fig.height=6}
+source("R/prior_demo.R")
 prior.demo(1)
 ```
 
@@ -345,9 +340,20 @@ prior.demo(1)
 
 # Beispiel: Informierter Prior
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.width=12, fig.height=6}
 prior.demo(2)
 ```
+
+---
+
+# Woher kommt der Prior?
+
+Es gibt verschiedene Wege, Priors zu wählen:
+
+- Flache und uninformierte Priors
+- Sinnvolle Beschränkungen des Parameterraums (z.B. Nicht-Negativität)
+- Vorwissen
+- Expertenmeinungen (elicited priors)
 
 ---
 
@@ -393,8 +399,8 @@ $$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\th
 $$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
   
 
-- Randverteilung der Prior
-- Modellvergleich mit dem Bayes Faktor
+- Randverteilung einzelner Parameter
+- Modellvergleich mit dem _emph[Bayes Faktor]
 
 ---
 

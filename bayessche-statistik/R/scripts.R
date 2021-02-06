@@ -110,32 +110,3 @@ bayes_plot_deprecated<-function(prior_mu=0, prior_sd=1,
 #bayes_plot(prior_mu=0, prior_sd=1,
 #           data_mu=2,data_sd=1, n=300)
 
-
-prior.demo <- function(prior) {
-  
-  x<- seq(0,1,.01)
-  
-  if (prior==1) {
-    prior <- ifelse(x<.5,0,1)*2
-  } else if (prior==2) {
-    prior <- dnorm(x,mean=.2,sd=.1)^2
-  } else if (prior == 3) {
-    
-  }
-  
-  likelihood <- dnorm(x, mean=.5,sd=.1)
-  
-  posterior <- prior*likelihood
-  
-  library(tidyverse)
-  
-  df <- data.frame(x,Prior=prior, Likelihood=likelihood, Posterior=posterior)
-  
-  dflong <- df %>% pivot_longer(Prior:Posterior) 
-  dflong$name <- factor(dflong$name,ordered=FALSE)
-  dflong$name <- relevel(dflong$name, "Prior")
-  dflong %>% ggplot(aes(x=x,y=value,group=name))+
-    geom_line()+ facet_wrap(~name) + ggthemes::theme_clean()+
-    ylab("Dichte")
-  
-}
