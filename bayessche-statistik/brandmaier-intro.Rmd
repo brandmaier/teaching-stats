@@ -4,7 +4,7 @@ subtitle: "<br/>Probelehrveranstaltung"
 author: "Andreas Brandmaier"
 institute: ""
 #date: "`r Sys.Date()`"
-dat: "2021-02-11"
+date: "2021-02-11"
 output:
   xaringan::moon_reader:
     css: [default,  "extra.css","sydney.css", "sydney-fonts.css"]
@@ -86,14 +86,12 @@ $$Y_i = \mu + \epsilon_i$$
 .pull-left[
 ## Schätzen
 
-- Unter allen möglichen Normalverteilungen $N(m,s^2)$ mit Mittelwert $m$ uns Varianz $s^2$, wähle die, die am plausibelsten die Daten erzeugt hat:
+Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die Daten erzeugt hat:
 
 ```{r echo=FALSE, fig.height=4, fig.width=6}
 source("R/likelihood.R")
 
 ```
-
---
 
 ]
 
@@ -102,7 +100,7 @@ source("R/likelihood.R")
 
 Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
 
-```{r echo=FALSE, fig.height=5, fig.width=5, results="hide", warning=FALSE}
+```{r echo=FALSE, fig.height=4, fig.width=6, results="hide", warning=FALSE}
 source("R/t-verteilung.R")
 ```
 ]
@@ -131,6 +129,11 @@ $$P\left(D | M_0 \right) $$
 ]
 ]
 
+<br><br><br><br>
+
+.med[
+.read_more[Wir halten fest, dass beide Ansätze auf _emph[bedingten Wahrscheinlichkeiten] basieren.]
+]
 ---
 
 # Missverständnisse in der frequentistischen Inferenz

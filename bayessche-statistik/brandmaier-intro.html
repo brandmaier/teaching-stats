@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Einführung in die Bayessche Statistik</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Andreas Brandmaier" />
+    <meta name="date" content="2021-02-11" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+    <link rel="stylesheet" href="sydney.css" type="text/css" />
+    <link rel="stylesheet" href="sydney-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Einführung in die Bayessche Statistik
+## <br/>Probelehrveranstaltung
+### Andreas Brandmaier
+### 2021-02-11
+
+---
+
+
+
+
+# Ziel der Inferenzstatistik
+
+.hide[fill]
+.hide[fill]
+
+.larger[
+
+.read_more[Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik.] 
+
+.read_more[Allgemeingültigkeit]
+
+.read_more[Quantifizierung der Unsicherheit]
+
+]
+
+&lt;!--.read_more[Typische Fragen in der Psychologie sind:]
+
+ - Wirkt eine neue Therapieform B besser als eine Therapieform A?
+- Gibt es einen Zusammenhang zwischen Computerspielen und Gewalt bei Jugendlichen?
+- Werden attraktivere Menschen als erfolgreicher eingeschätzt? --&gt;
+
+---
+
+
+# Ein Beispiel - Mittelwerte schätzen
+
+.question[Fragestellung: ] Haben Studierende aus Potsdam einen höheren IQ als 100?
+
+.pull-left[
+
+Die Stichprobe `\(y_1,\ldots, y_{10}\)` sei:
+
+![](brandmaier-intro_files/figure-html/iq-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+Dabei sei `\(\mu\)` der unbekannte wahre Mittelwert der Potsdamer Studierenden
+
+Unsere Modellannahme sei:
+
+`$$Y_i = \mu + \epsilon_i$$`
+
+- `\(y_i\)` sind Realisierungen einer Zufallsvariable `\(Y_i\)`
+- `\(\mu_i\)` ist der wahre aber unbekannte Mittelwert
+- `\(\epsilon_i\)` sind unabhängige Zufallsvariablen mit Mittelwert 0 und Varianz `\(\sigma^2\)`, die sowohl wahre Unterschiede als auch Messfehler widerspiegeln
+]
+
+---
+
+# Frequentistischer Ansatz:
+
+.pull-left[
+## Schätzen
+
+Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die Daten erzeugt hat:
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+## Testen
+
+Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Frequentistischer Ansatz
+
+.pull-left[
+## Schätzen
+
+.largermath[
+`$$\arg \max_\theta P\left( D | M_\theta \right)$$`
+]
+
+
+
+]
+
+.pull-right[
+## Testen
+
+.largermath[
+
+$$P\left(D | M_0 \right) $$
+]
+]
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.med[
+.read_more[Wir halten fest, dass beide Ansätze auf _emph[bedingten Wahrscheinlichkeiten] basieren.]
+]
+---
+
+# Missverständnisse in der frequentistischen Inferenz
+
+Dennoch sind wir sind wir oft versucht, Aussagen über `\(P\left(M | D \right)\)` zu treffen:
+
+- dass ein nicht-signifikanter Unterschied bedeutet, dass der Mittelwerte mit hoher Wahrscheinlichkeit gleich 100 ist (richtig ist: es ist keine Aussage möglich)
+
+- dass der `\(p\)`-Wert die Wahrscheinlichkeit der Nullhypothese angibt (richtig: es gibt an, wie (un)glaubwürdig das Ergebnis (oder ein extremeres) unter der Nullhypothese ist)
+
+- dass das Konfidenzintervall mit 95% Wahrscheinlichkeit den wahren Wert enthält (95% unserer Konfidenzintervalle enthalten den wahren Wert)
+
+---
+
+class: segue-large-red
+
+.bigfont[
+Idee: Können wir `\(P\left(M | D \right)\)` aus `\(P\left(D | M \right)\)` berechnen?
+]
+
+---
+
+# Bedingte Wahrscheinlichkeiten
+
+Die .emph[bedingte Wahrscheinlichkeit], dass A eintritt, wenn B bereits eingetreten ist, lässt sich aus dem Verhältnis der Wahrscheinlichkeit des gemeinsamen Auftretens von A und B und der Wahrscheinlichkeit von B bestimmen:
+
+&lt;!--\newcommand{ba}{\color{blue}{A}}--&gt;
+
+.largemath[
+$$P \left( A | B \right) = \frac{ P\left( A \cap B \right) }{ P\left(B \right) } $$
+]
+
+Beispiele:
+
+- `\(P\left(\textrm{Die Straße ist nass} | \textrm{es hat geregnet}\right) \approx 1\)`
+- `\(P\left(\textrm{es hat geregnet} | \textrm{die Straße ist nass}\right) &lt; 1\)`
+
+---
+
+
+# Der Satz von Bayes
+
+Bayesianische Ansätze folgen der folgenden charakteristischen Struktur, die sich aus der bedingten Wahrscheinlichkeit ableiten lassen:
+
+.largemath[
+$$P \left( A | B \right) = \frac{ P\left(B | A \right) \times  P\left( A \right)   }{P\left(B \right)  } $$
+]
+
+---
+
+# Vampirismus und der Satz von Bayes &amp;#129415;
+
+
+
+
+Bekannt sei ein Test, der mit einer Erfolgschance von 95% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
+
+$$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
+
+- `\(P \left( + | Vampir \right) =\)` 0.95
+- `\(P \left( Vampir \right) =\)` 0.001
+- `\(P \left( + \right) =\)`  0.01094
+
+Erlaubt uns den Schluss:
+
+- `\(P \left( Vampir | + \right) =\)` 0.09
+
+---
+
+# Bayesianischer Ansatz
+
+.read_more[Idee:] Ausgehend von der bekannten Likelihood `\(P\left( Daten | Modell \right)\)`, nutzen wir den Satz von Bayes, um `\(P\left( Modell | Daten \right)\)` zu berechnen
+
+.largermath[
+$$ P\left( Modell | Daten \right) = \frac{ P\left(Daten | Modell\right) \cdot P\left( Modell \right) }{ P\left( Daten \right) } $$
+]
+
+
+.hide[Der Nenner P(Daten) ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
+
+
+---
+
+# Bayesianischer Ansatz
+
+.hide[Idee: Ausgehend von der bekannten Likelihood `\(P\left( Daten | Modell \right)\)`, nutzen wir den Satz von Bayes, um `\(P\left( Modell | Daten \right)\)` zu berechnen
+]
+
+.largermath[
+$$ \underbrace{P\left( Modell | Daten \right)}_{Posterior} = \frac{ \overbrace{P\left(Daten | Modell\right)}^{Likelihood} \cdot \overbrace{P\left( Modell \right)}^{Prior} }{ P\left( Daten \right)  } $$
+]
+
+
+.read_more[Der Nenner `\(P(Daten)\)` ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
+
+
+---
+
+class:segue-large-red
+
+.bigfont[
+Aber Moment... was ist denn die _Wahrscheinlichkeit einer Hypothese_ überhaupt?
+]
+
+---
+
+
+# Frequentistische Postulate
+
+(nochmal zurück zum Start)
+
+- F1: Wahrscheinlichkeiten beziehen sich auf relative Häufigkeit von Ereignisse bei einer großen Anzahl gleicher, wiederholter Durchführungen eines Zufallsexperiments. Wahrscheinlichkeiten sind objektive Eigenschaften der echten Welt.
+
+- F2: Die wahren Parameter sind unbekannte Konstanten. Weil sie nicht veränderlich sind, kann man keine probabilistischen Aussagen über sie treffen.
+
+- F3: Statistische Prozeduren werden so entworfen, dass sie Langzeit-Garantien geben. Beispielsweise enthalten 95 von 100 Konfidenzintervalle enthalten im Mittel den wahren Wert.
+
+
+.citation[frei nach 'All of Statistics' von L. Wassermann]
+---
+
+
+# Wahrscheinlichkeitsbegriff
+
+.pull-left[
+
+.content-box-blue[Frequentistische Perspektive]
+
+Wahrscheinlichkeit ist die .highlight[relative Häufigkeit] (Frequenz) eines Ereignis bei
+sehr häufiger (unendlich oft) Wiederholung
+
+]
+
+.pull-right[
+
+.content-box-gray[Bayesianische Perspektive]
+
+Wahrscheinlichkeit ist der Ausdruck eines .highlight[Grad der Überzeugung] (_"degree of belief"_)
+
+]
+
+.pull-down[
+
+Obwohl wir dieselbe Axiomatik der Wahrscheinlichkeitsrechnung nutzen, ist dies ein entscheidender philosophischer Unterschied. 
+
+]
+
+---
+
+# Prior, Likelihood, und Posterior
+
+.pull-left[
+Beispiel: Statistisches Modell mit einem Parameter (z.B., Mittlerer IQ)
+
+- .blue[Prior]: Glaubwürdigkeit aller möglichen Mittelwerte
+- .red[Likelihood]: Plausibilität gegeben den Daten
+- .green[Posterior]: Glaubwürdigkeit nach Beobachtung der Daten
+]
+
+.pull-right[
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+---
+
+# Wann spielt der Prior eine Rolle?
+
+.pull-left[
+Die Auswirkung der A-Priori-Verteilung ist schwächer,
+- je breiter die Verteilung ist (flacher Prior = wenig Vorinformation)
+- je mehr Daten wir beobachten
+]
+
+.pull-right[
+![](brandmaier-intro_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+---
+
+
+class:segue-large-red
+
+.bigfont[
+Woher kommt der _Prior_ überhaupt?
+]
+
+# Beispiel: Beschränkung
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+# Beispiel: Informierter Prior
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+# Woher kommt der Prior?
+
+Es gibt verschiedene Wege, Priors zu wählen:
+
+- Flache und uninformierte Priors
+- Sinnvolle Beschränkungen des Parameterraums (z.B. Nicht-Negativität)
+- Vorwissen
+- Expertenmeinungen (elicited priors)
+
+---
+
+# Posterior
+
+Das Ergebnis einer Schätzung ist der Posterior:
+
+.pull-left[
+- Für jeden möglichen Parameterwert erhalten wir eine Wahrscheinlichkeit
+
+- Enthält nicht nur einen einzelnen Punktschätzer (z.B. Effektstärke), sondern auch Informationen über die Genauigkeit / (Un-)Sicherheit unserer Schätzung
+
+- Spezifiziert vollständig unsere Unsicherheit
+
+- Erlaubt Aussagen wie, das 95%-Intervall (HDI) enthält zu 95% den wahren Parameter
+]
+
+.pull-right[
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+]
+---
+
+class: segue-large-gold
+
+.bigfont[
+Und was ist daran so kompliziert?
+]
+---
+
+# Bayessche Integrale
+
+Für viele Bayessche Anwendung benötigen wir Integrale, z.B., für
+
+-   Berechnung der Evidenz in der Posterior-Verteilung:
+
+$$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
+- Punkt- und Intervallschätzer, wie z.B. Mean oder Credibility Region
+
+$$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
+  
+
+- Randverteilung einzelner Parameter
+- Modellvergleich mit dem _emph[Bayes Faktor]
+
+---
+
+# Bayesianische Integrale lösen
+
+Es existieren verschiedene Ansätze:
+
+.read_more[] Analytische Lösungen mit .emph[konjugierten Priors]
+
+  Bestimmte statistische Modelle haben Priors, die zu Posteriors führen, die aus derselben Verteilungsfamilie stammen
+  
+- Approximationen wie bspw. .emph[Variational Bayes]
+
+  Finde einfache Verteilungen, die den wahren Posterior annähern
+  
+- .emph[Monte Carlo Markov Chains] (MCMC)
+
+  Anstatt exakt zu rechnen, ziehen wir zufällig aus der Posteriorverteilung und rechnen mit den Samples weiter
+
+---
+
+
+# Zusammenfassung
+
+Die Bayessche Statistik 
+
+- benutzt Wahrscheinlichkeiten um Unsicherheiten zu beschreiben
+- erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
+- hat subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv)
+- ist oft aufwendig zu berechnen
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

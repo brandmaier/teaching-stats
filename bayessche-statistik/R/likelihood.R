@@ -20,7 +20,8 @@ gp <- df %>% pivot_longer(-1,names_to = "Modell") %>%
   geom_text(data=data.frame(name=paste0("Modell ",1:3),lls, x=dist_means,y=c(0.05,0.045,0.05)),
             aes(x=x,y=y,label=lls,color=name), size=10,
             inherit.aes = FALSE)+ labs(fill="Modell")+
-  xlab("Beobachtungen")
+  xlab("Beobachtungen")+theme(legend.position = "none") +
+  theme(text=element_text(size=25))+ylab("Likelihood")
 
 #for ()
 
