@@ -8,6 +8,7 @@ prior.demo <- function(prior) {
     xl<-"Ratewahrscheinlichkeit"
   } else if (prior==2) {
     prior <- dnorm(x,mean=.2,sd=.1)^2
+    xl <- "Wirksamkeit (Symptomreduktion)"
   } else if (prior == 3) {
     prior <- 1
   }

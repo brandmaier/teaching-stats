@@ -21,7 +21,8 @@ gp <- df %>% pivot_longer(-1,names_to = "Modell") %>%
             aes(x=x,y=y,label=lls,color=name), size=10,
             inherit.aes = FALSE)+ labs(fill="Modell")+
   xlab("Beobachtungen")+theme(legend.position = "none") +
-  theme(text=element_text(size=25))+ylab("Likelihood")
+  theme(text=element_text(size=25))+ylab("Likelihood")+
+  geom_point(data=iqdat,aes(y=0,x=x,fill=NULL,group=NULL),color="black",size=8)
 
 #for ()
 

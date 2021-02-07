@@ -65,11 +65,7 @@ Dabei sei `\(\mu\)` der unbekannte wahre Mittelwert der Potsdamer Studierenden
 
 Unsere Modellannahme sei:
 
-`$$Y_i = \mu + \epsilon_i$$`
-
-- `\(y_i\)` sind Realisierungen einer Zufallsvariable `\(Y_i\)`
-- `\(\mu_i\)` ist der wahre aber unbekannte Mittelwert
-- `\(\epsilon_i\)` sind unabhängige Zufallsvariablen mit Mittelwert 0 und Varianz `\(\sigma^2\)`, die sowohl wahre Unterschiede als auch Messfehler widerspiegeln
+IQ-Test Ergebnisse sind normalverteilt mit wahrem Mittelwert `\(\mu\)` und wahrer Varianz `\(\sigma^2\)`.
 ]
 
 ---
@@ -85,6 +81,8 @@ Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die 
 
 ]
 
+--
+
 .pull-right[
 ## Testen
 
@@ -97,6 +95,8 @@ Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
 
 # Frequentistischer Ansatz
 
+Grundsätzlich basiert Schätzen und Testen auf der Plausibilitätsfunktion (Likelihood):
+&lt;br&gt;
 .pull-left[
 ## Schätzen
 
@@ -120,19 +120,15 @@ $$P\left(D | M_0 \right) $$
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
 .med[
-.read_more[Wir halten fest, dass beide Ansätze auf _emph[bedingten Wahrscheinlichkeiten] basieren.]
+.read_more[Wir halten fest, dass beide Ansätze auf .emph[bedingten Wahrscheinlichkeiten] basieren.]
 ]
 ---
 
 # Missverständnisse in der frequentistischen Inferenz
 
-Dennoch sind wir sind wir oft versucht, Aussagen über `\(P\left(M | D \right)\)` zu treffen:
+- `\(p &lt; 0.5\)`: Wir nehmen die Null-Hypothese anXXX
 
-- dass ein nicht-signifikanter Unterschied bedeutet, dass der Mittelwerte mit hoher Wahrscheinlichkeit gleich 100 ist (richtig ist: es ist keine Aussage möglich)
-
-- dass der `\(p\)`-Wert die Wahrscheinlichkeit der Nullhypothese angibt (richtig: es gibt an, wie (un)glaubwürdig das Ergebnis (oder ein extremeres) unter der Nullhypothese ist)
-
-- dass das Konfidenzintervall mit 95% Wahrscheinlichkeit den wahren Wert enthält (95% unserer Konfidenzintervalle enthalten den wahren Wert)
+- 
 
 ---
 
@@ -141,23 +137,6 @@ class: segue-large-red
 .bigfont[
 Idee: Können wir `\(P\left(M | D \right)\)` aus `\(P\left(D | M \right)\)` berechnen?
 ]
-
----
-
-# Bedingte Wahrscheinlichkeiten
-
-Die .emph[bedingte Wahrscheinlichkeit], dass A eintritt, wenn B bereits eingetreten ist, lässt sich aus dem Verhältnis der Wahrscheinlichkeit des gemeinsamen Auftretens von A und B und der Wahrscheinlichkeit von B bestimmen:
-
-&lt;!--\newcommand{ba}{\color{blue}{A}}--&gt;
-
-.largemath[
-$$P \left( A | B \right) = \frac{ P\left( A \cap B \right) }{ P\left(B \right) } $$
-]
-
-Beispiele:
-
-- `\(P\left(\textrm{Die Straße ist nass} | \textrm{es hat geregnet}\right) \approx 1\)`
-- `\(P\left(\textrm{es hat geregnet} | \textrm{die Straße ist nass}\right) &lt; 1\)`
 
 ---
 
@@ -223,7 +202,7 @@ $$ \underbrace{P\left( Modell | Daten \right)}_{Posterior} = \frac{ \overbrace{P
 class:segue-large-red
 
 .bigfont[
-Aber Moment... was ist denn die _Wahrscheinlichkeit einer Hypothese_ überhaupt?
+Aber Moment... was ist denn die _Wahrscheinlichkeit eines Modells_ oder _einer Hypothese_ überhaupt?
 ]
 
 ---
@@ -233,14 +212,13 @@ Aber Moment... was ist denn die _Wahrscheinlichkeit einer Hypothese_ überhaupt?
 
 (nochmal zurück zum Start)
 
-- F1: Wahrscheinlichkeiten beziehen sich auf relative Häufigkeit von Ereignisse bei einer großen Anzahl gleicher, wiederholter Durchführungen eines Zufallsexperiments. Wahrscheinlichkeiten sind objektive Eigenschaften der echten Welt.
+- Wahrscheinlichkeiten beziehen sich auf .emph[relative Häufigkeit] von Ereignisse bei einer großen Anzahl gleicher, wiederholter Durchführungen eines Zufallsexperiments. Wahrscheinlichkeiten sind objektive Eigenschaften der echten Welt.
 
-- F2: Die wahren Parameter sind unbekannte Konstanten. Weil sie nicht veränderlich sind, kann man keine probabilistischen Aussagen über sie treffen.
+- Die wahren -emph[Parameter sind unbekannte Konstanten]. Weil sie nicht veränderlich sind, kann man keine probabilistischen Aussagen über sie treffen.
 
-- F3: Statistische Prozeduren werden so entworfen, dass sie Langzeit-Garantien geben. Beispielsweise enthalten 95 von 100 Konfidenzintervalle enthalten im Mittel den wahren Wert.
+- Ein Modell, bzw. die Hypothese die es repräsentiert, ist immer entweder wahr oder falsch.
 
 
-.citation[frei nach 'All of Statistics' von L. Wassermann]
 ---
 
 
@@ -279,15 +257,44 @@ Beispiel: Statistisches Modell mit einem Parameter (z.B., Mittlerer IQ)
 - .blue[Prior]: Glaubwürdigkeit aller möglichen Mittelwerte
 - .red[Likelihood]: Plausibilität gegeben den Daten
 - .green[Posterior]: Glaubwürdigkeit nach Beobachtung der Daten
+
+.med[
+.green[Posterior] `\(\propto\)` .red[Likelihood] `\(\times\)` .blue[Prior]:
+
+]
 ]
 
 .pull-right[
 
 ![](brandmaier-intro_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 ]
+
 ---
 
-# Wann spielt der Prior eine Rolle?
+# Posterior
+
+Das Ergebnis einer Schätzung ist der Posterior:
+
+.pull-left[
+
+- Enthält nicht nur einen einzelnen Punktschätzer (z.B. Effektstärke)
+
+- Für jeden möglichen Parameterwert erhalten wir eine Wahrscheinlichkeit
+
+- Spezifiziert vollständig unsere Unsicherheit
+
+- Erlaubt (endlich!) Aussagen wie, das 95%-Intervall (.emph[credibility interval]) enthält zu 95% den wahren Parameter
+]
+
+.pull-right[
+
+![](brandmaier-intro_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Wann spielt der Prior (k)eine Rolle?
 
 .pull-left[
 Die Auswirkung der A-Priori-Verteilung ist schwächer,
@@ -296,7 +303,7 @@ Die Auswirkung der A-Priori-Verteilung ist schwächer,
 ]
 
 .pull-right[
-![](brandmaier-intro_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -307,15 +314,17 @@ class:segue-large-red
 Woher kommt der _Prior_ überhaupt?
 ]
 
+--
+
 # Beispiel: Beschränkung
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
 # Beispiel: Informierter Prior
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -328,27 +337,7 @@ Es gibt verschiedene Wege, Priors zu wählen:
 - Vorwissen
 - Expertenmeinungen (elicited priors)
 
----
 
-# Posterior
-
-Das Ergebnis einer Schätzung ist der Posterior:
-
-.pull-left[
-- Für jeden möglichen Parameterwert erhalten wir eine Wahrscheinlichkeit
-
-- Enthält nicht nur einen einzelnen Punktschätzer (z.B. Effektstärke), sondern auch Informationen über die Genauigkeit / (Un-)Sicherheit unserer Schätzung
-
-- Spezifiziert vollständig unsere Unsicherheit
-
-- Erlaubt Aussagen wie, das 95%-Intervall (HDI) enthält zu 95% den wahren Parameter
-]
-
-.pull-right[
-
-![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
-
-]
 ---
 
 class: segue-large-gold
@@ -364,7 +353,7 @@ Für viele Bayessche Anwendung benötigen wir Integrale, z.B., für
 
 -   Berechnung der Evidenz in der Posterior-Verteilung:
 
-$$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
+$$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ P\left D \right) } =  \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
 - Punkt- und Intervallschätzer, wie z.B. Mean oder Credibility Region
 
 $$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
@@ -400,7 +389,8 @@ Die Bayessche Statistik
 
 - benutzt Wahrscheinlichkeiten um Unsicherheiten zu beschreiben
 - erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
-- hat subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv)
+- hat eher subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv)
+- Priors können aber auch uninformativ gewählt werden
 - ist oft aufwendig zu berechnen
 
 ---

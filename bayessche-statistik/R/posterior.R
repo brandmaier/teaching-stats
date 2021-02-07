@@ -22,5 +22,7 @@ gp <- ggplot(df, aes(x=x,y=y))+geom_area(fill=cols[3])+
 #  geom_area(aes(y=y2))+
 geom_vline(xintercept = 100,lwd=1.2,lty=2)+
   geom_errorbar(aes(xmin=q1,xmax=q2,y=0.006,width=0.005))+
+  xlab("Mittlerer IQ")+
+  theme(axis.title.x=element_text(size=rel(2))) 
 NULL
 plot(gp)
