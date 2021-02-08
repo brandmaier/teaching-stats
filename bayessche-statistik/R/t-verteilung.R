@@ -1,9 +1,10 @@
 library(tidyverse)
 
-set.seed(334)
-obs <- rnorm(20, mean = .4)
+#set.seed(334)
+#obs <- rnorm(20, mean = .4)
+obs <- iqdat$x
 
-mytest <- t.test(obs)
+mytest <- t.test(obs, mu=100)
 
 x<-seq(-5,5,0.01)
 
@@ -24,3 +25,5 @@ plt <- df %>% ggplot(aes(y=tval,x=x))+
   theme(text=element_text(size=25)) # increase all font sizes
 
 plot(plt)
+
+pval <- mytest$p.value

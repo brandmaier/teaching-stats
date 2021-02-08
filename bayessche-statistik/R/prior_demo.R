@@ -28,16 +28,20 @@ prior.demo <- function(prior) {
     geom_line()+ facet_wrap(~name) + ggthemes::theme_clean()+
     ylab("Dichte")
   
-  dflong %>% ggplot(aes(x=x,y=value,group=name,fill=name))+
-    geom_line()+ ggthemes::theme_clean()+
+  gp <- dflong %>% ggplot(aes(x=x,y=value,group=name,fill=name))+
+    geom_line()+ 
+    #ggthemes::theme_clean()+
     geom_ribbon(aes(ymin=0,ymax=value),alpha=.7)+
-    ylab("Dichte")+
+    #ylab("Dichte")+
+    ylab("")+
     xlab(xl)+
-    theme(axis.title.x=element_text(size=rel(2))) +
-    theme(axis.title.y=element_text(size=rel(2)))+
-    labs(fill="Verteilung")
-    
+    #theme(axis.title.x=element_text(size=rel(2))) +
+    #theme(axis.title.y=element_text(size=rel(2)))+
+    labs(fill="Verteilung")+
+    theme(text=element_text(size=25)) # increase all font sizes
   
+    
+  return(gp)
 }
 
 prior.demo(2)

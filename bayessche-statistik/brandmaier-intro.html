@@ -51,21 +51,24 @@ class: center, middle, inverse, title-slide
 
 # Ein Beispiel - Mittelwerte schätzen
 
-.question[Fragestellung: ] Haben Studierende aus Potsdam einen höheren IQ als 100?
+.emph[Fragestellung: ] Haben Studierende in Potsdam im Mittel einen höheren IQ als 100?
+
+--
 
 .pull-left[
 
-Die Stichprobe `\(y_1,\ldots, y_{10}\)` sei:
+Die Stichprobe ($n=10$) sei:
 
 ![](brandmaier-intro_files/figure-html/iq-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
-Dabei sei `\(\mu\)` der unbekannte wahre Mittelwert der Potsdamer Studierenden
-
 Unsere Modellannahme sei:
 
 IQ-Test Ergebnisse sind normalverteilt mit wahrem Mittelwert `\(\mu\)` und wahrer Varianz `\(\sigma^2\)`.
+
+.read_more[Dabei] sei `\(\mu\)` der unbekannte wahre Mittelwert der Potsdamer Studierenden
+
 ]
 
 ---
@@ -79,6 +82,7 @@ Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die 
 
 ![](brandmaier-intro_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
 
+Der Stichprobenmittelwert ist hier `\(m=\)` 106.
 ]
 
 --
@@ -89,19 +93,19 @@ Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die 
 Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
 
 ![](brandmaier-intro_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+Der p-Wert ist `\(p=\)` 0.25.
 ]
 
 ---
 
 # Frequentistischer Ansatz
 
-Grundsätzlich basiert Schätzen und Testen auf der Plausibilitätsfunktion (Likelihood):
-&lt;br&gt;
 .pull-left[
 ## Schätzen
 
 .largermath[
-`$$\arg \max_\theta P\left( D | M_\theta \right)$$`
+`$$\arg \max_\theta P\left( D | \theta\right)$$`
 ]
 
 
@@ -113,29 +117,44 @@ Grundsätzlich basiert Schätzen und Testen auf der Plausibilitätsfunktion (Lik
 
 .largermath[
 
-$$P\left(D | M_0 \right) $$
+$$P\left(D | \theta_0 \right) $$
 ]
 ]
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
 .med[
-.read_more[Wir halten fest, dass beide Ansätze auf .emph[bedingten Wahrscheinlichkeiten] basieren.]
+.read_more[Wir halten fest, dass beide Ansätze auf .emph[bedingten Wahrscheinlichkeiten] basieren]. Und zwar auf der .emph[Datenwahrscheinlichkeit].
 ]
 ---
 
 # Missverständnisse in der frequentistischen Inferenz
 
-- `\(p &lt; 0.5\)`: Wir nehmen die Null-Hypothese anXXX
+.med[Typische Irrtümer:]
 
-- 
+--
+
+- Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese (je kleiner, desto unwahrscheinlicher). Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese falsch ist, wenn `\(p &lt; 0.05\)`.
+
+--
+
+- Wir nehmen an, dass die Nullhypothese (wahrscheinlich) wahr ist (wenn `\(p&gt;0.05\)`)
+
+--
+
+- Das Konfidenzintervall enthält mit 95% Wahrscheinlichkeit den wahren Wert.
+
+
+--
+
+Offenbar wollen wir oft Aussagen über die .emph[Parameter- oder Hypothesenwahrscheinlichkeit] `\(P\left(\theta | D \right)\)` machen, nutzen zur Inferenz aber die .emph[Datenwahrscheinlichkeit] `\(P\left(D | \theta \right)\)`.
 
 ---
 
 class: segue-large-red
 
 .bigfont[
-Idee: Können wir `\(P\left(M | D \right)\)` aus `\(P\left(D | M \right)\)` berechnen?
+Idee: Können wir `\(P\left(\theta | D \right)\)` aus `\(P\left(D | \theta \right)\)` berechnen?
 ]
 
 ---
@@ -151,14 +170,20 @@ $$P \left( A | B \right) = \frac{ P\left(B | A \right) \times  P\left( A \right)
 
 ---
 
-# Vampirismus und der Satz von Bayes &amp;#129415;
+#  &amp;#129415; Vampirismus und der Satz von Bayes
 
 
 
 
 Bekannt sei ein Test, der mit einer Erfolgschance von 95% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
 
+--
+
+.med[
 $$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
+]
+
+--
 
 - `\(P \left( + | Vampir \right) =\)` 0.95
 - `\(P \left( Vampir \right) =\)` 0.001
@@ -168,33 +193,35 @@ Erlaubt uns den Schluss:
 
 - `\(P \left( Vampir | + \right) =\)` 0.09
 
----
-
-# Bayesianischer Ansatz
-
-.read_more[Idee:] Ausgehend von der bekannten Likelihood `\(P\left( Daten | Modell \right)\)`, nutzen wir den Satz von Bayes, um `\(P\left( Modell | Daten \right)\)` zu berechnen
-
-.largermath[
-$$ P\left( Modell | Daten \right) = \frac{ P\left(Daten | Modell\right) \cdot P\left( Modell \right) }{ P\left( Daten \right) } $$
-]
-
-
-.hide[Der Nenner P(Daten) ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
-
+.citation[R. McElreath, Statistical Rethinking]
 
 ---
 
 # Bayesianischer Ansatz
 
-.hide[Idee: Ausgehend von der bekannten Likelihood `\(P\left( Daten | Modell \right)\)`, nutzen wir den Satz von Bayes, um `\(P\left( Modell | Daten \right)\)` zu berechnen
+.read_more[Idee:] Ausgehend von der bekannten Likelihood `\(P\left( Daten | \theta\right)\)`, nutzen wir den Satz von Bayes, um `\(P\left( \theta | Daten \right)\)` zu berechnen
+
+.largermath[
+$$ P\left( \theta | Daten \right) = \frac{ P\left(Daten | \theta\right) \cdot P\left( \theta \right) }{ P\left( Daten \right) } $$
+]
+
+
+.hide[Der Nenner `\(P(Daten)\)` ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
+
+
+---
+
+# Bayesianischer Ansatz
+
+.hide[Idee: Ausgehend von der bekannten Likelihood `\(P\left( Daten | \theta \right)\)`, nutzen wir den Satz von Bayes, um `\(P\left( \theta | Daten \right)\)` zu berechnen
 ]
 
 .largermath[
-$$ \underbrace{P\left( Modell | Daten \right)}_{Posterior} = \frac{ \overbrace{P\left(Daten | Modell\right)}^{Likelihood} \cdot \overbrace{P\left( Modell \right)}^{Prior} }{ P\left( Daten \right)  } $$
+$$ \underbrace{P\left( \theta | Daten \right)}_{Posterior} = \frac{ \overbrace{P\left(Daten | \theta\right)}^{Likelihood} \cdot \overbrace{P\left( \theta \right)}^{Prior} }{ P\left( Daten \right)  } $$
 ]
 
 
-.read_more[Der Nenner `\(P(Daten)\)` ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten]
+.read_more[Der] Nenner `\(P(Daten)\)` ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten
 
 
 ---
@@ -202,7 +229,7 @@ $$ \underbrace{P\left( Modell | Daten \right)}_{Posterior} = \frac{ \overbrace{P
 class:segue-large-red
 
 .bigfont[
-Aber Moment... was ist denn die _Wahrscheinlichkeit eines Modells_ oder _einer Hypothese_ überhaupt?
+Aber Moment... was ist denn die _Wahrscheinlichkeit eines Parameters, eines Modells_ oder _einer Hypothese_ überhaupt?
 ]
 
 ---
@@ -214,9 +241,9 @@ Aber Moment... was ist denn die _Wahrscheinlichkeit eines Modells_ oder _einer H
 
 - Wahrscheinlichkeiten beziehen sich auf .emph[relative Häufigkeit] von Ereignisse bei einer großen Anzahl gleicher, wiederholter Durchführungen eines Zufallsexperiments. Wahrscheinlichkeiten sind objektive Eigenschaften der echten Welt.
 
-- Die wahren -emph[Parameter sind unbekannte Konstanten]. Weil sie nicht veränderlich sind, kann man keine probabilistischen Aussagen über sie treffen.
+--
 
-- Ein Modell, bzw. die Hypothese die es repräsentiert, ist immer entweder wahr oder falsch.
+- Die wahren .emph[Parameter sind unbekannte Konstanten]. Weil sie nicht veränderlich sind, kann man keine probabilistischen Aussagen über sie treffen.
 
 
 ---
@@ -226,18 +253,20 @@ Aber Moment... was ist denn die _Wahrscheinlichkeit eines Modells_ oder _einer H
 
 .pull-left[
 
-.content-box-blue[Frequentistische Perspektive]
+## Frequentistische Perspektive
 
-Wahrscheinlichkeit ist die .highlight[relative Häufigkeit] (Frequenz) eines Ereignis bei
+Wahrscheinlichkeit ist die .emph[relative Häufigkeit] (Frequenz) eines Ereignis bei
 sehr häufiger (unendlich oft) Wiederholung
 
 ]
 
+--
+
 .pull-right[
 
-.content-box-gray[Bayesianische Perspektive]
+## Bayesianische Perspektive
 
-Wahrscheinlichkeit ist der Ausdruck eines .highlight[Grad der Überzeugung] (_"degree of belief"_)
+Wahrscheinlichkeit ist der Ausdruck eines .emph[Grad der Überzeugung] (_"degree of belief"_)
 
 ]
 
@@ -258,10 +287,10 @@ Beispiel: Statistisches Modell mit einem Parameter (z.B., Mittlerer IQ)
 - .red[Likelihood]: Plausibilität gegeben den Daten
 - .green[Posterior]: Glaubwürdigkeit nach Beobachtung der Daten
 
-.med[
-.green[Posterior] `\(\propto\)` .red[Likelihood] `\(\times\)` .blue[Prior]:
-
+.larger[
+.green[Posterior] `\(\propto\)` .red[Likelihood] `\(\times\)` .blue[Prior]
 ]
+
 ]
 
 .pull-right[
@@ -294,19 +323,6 @@ Das Ergebnis einer Schätzung ist der Posterior:
 
 ---
 
-# Wann spielt der Prior (k)eine Rolle?
-
-.pull-left[
-Die Auswirkung der A-Priori-Verteilung ist schwächer,
-- je breiter die Verteilung ist (flacher Prior = wenig Vorinformation)
-- je mehr Daten wir beobachten
-]
-
-.pull-right[
-![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
-]
----
-
 
 class:segue-large-red
 
@@ -314,17 +330,17 @@ class:segue-large-red
 Woher kommt der _Prior_ überhaupt?
 ]
 
---
+---
 
 # Beispiel: Beschränkung
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
 # Beispiel: Informierter Prior
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -340,10 +356,16 @@ Es gibt verschiedene Wege, Priors zu wählen:
 
 ---
 
-class: segue-large-gold
+# Wann spielt der Prior (k)eine Rolle?
 
-.bigfont[
-Und was ist daran so kompliziert?
+.pull-left[
+Die Auswirkung der A-Priori-Verteilung ist schwächer,
+- je breiter die Verteilung ist (flacher Prior = wenig Vorinformation)
+- je mehr Daten wir beobachten
+]
+
+.pull-right[
+![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -360,7 +382,7 @@ $$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
   
 
 - Randverteilung einzelner Parameter
-- Modellvergleich mit dem _emph[Bayes Faktor]
+- Modellvergleich mit dem .emph[Bayes Faktor]
 
 ---
 
@@ -387,12 +409,32 @@ Es existieren verschiedene Ansätze:
 
 Die Bayessche Statistik 
 
+- erlaubt Aussagen über die Parameter- und Hypothesenwahrscheinlichkeit anstatt über die Datenwahrscheinlichkeiten
 - benutzt Wahrscheinlichkeiten um Unsicherheiten zu beschreiben
 - erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
-- hat eher subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv)
-- Priors können aber auch uninformativ gewählt werden
-- ist oft aufwendig zu berechnen
+- hat eher subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv), aber Priors können auch uninformativ gewählt werden
+- ist oft aufwendig zu berechnen, aber verschiedene praktische Lösungen existieren
 
+---
+
+
+# Testen mit dem Bayes Factor
+
+- Bayesianer formulieren eine explizite Alternative, gegen die getestet werden kann, bspw: 
+    - `\(H_1\)`: Der mittlere IQ ist 0
+    - Die Prior-Verteilung betrifft dann nur noch die übrigen Parameter, hier, die Varianz.
+
+- Testen wird als Modellvergleich durchgeführt:
+
+$$BF_{10}=\frac{P\left(D | H_1\right)}{P\left(D | H_0\right)} $$
+- Dies korrespondiert zu der Logik des Likelihood-Ratio Tests unter Berücksichtigung der kompletten Unsicherheit im Posterior
+---
+
+class: segue-large-gold
+
+.bigfont[
+Und was ist daran so kompliziert?
+]
 ---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
