@@ -16,7 +16,7 @@ cols = gg_color_hue(3)
 
 df <- data.frame(x,y,y2)
 
-gp <- ggplot(df, aes(x=x,y=y))+geom_area(fill=cols[3])+
+gp <- ggplot(df, aes(x=x,y=y))+geom_area(fill=cols[2])+
   #  geom_area(alpha=.2)+ 
   
 #  geom_area(aes(y=y2))+

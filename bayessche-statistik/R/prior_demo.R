@@ -1,29 +1,40 @@
 
 prior.demo <- function(prior) {
-  
+
+  pos_correction <- 2  
+
   x<- seq(0,1,.01)
+  likelihood <- dnorm(x, mean=.7,sd=.25)
   xl<-"x"
   if (prior==1) {
-    prior <- ifelse(x<.5,0,1)*2
-    xl<-"Ratewahrscheinlichkeit"
+    x <- seq(-100,500,1)
+    likelihood <- dnorm(x, mean=150,sd=100)
+    prior <- ifelse(x<0,0,1) /500
+    pos_correction <- 600
+    xl<-"Reaktionszeit [min]"
   } else if (prior==2) {
-    prior <- dnorm(x,mean=.2,sd=.1)^2
+#    prior <- dchisq(x,df=2)
+    prior <- dnorm(x, mean=.2,sd=.2)
     xl <- "Wirksamkeit (Symptomreduktion)"
   } else if (prior == 3) {
     prior <- 1
+  } else if (prior == 4) {
+    prior <- 1
   }
   
-  likelihood <- dnorm(x, mean=.5,sd=.1)
-  
+
   posterior <- prior*likelihood
+  posterior <- posterior*pos_correction
+  
+
   
   library(tidyverse)
   
   df <- data.frame(x,Prior=prior, Likelihood=likelihood, Posterior=posterior)
   
   dflong <- df %>% pivot_longer(Prior:Posterior) 
-  dflong$name <- factor(dflong$name,ordered=FALSE)
-  dflong$name <- relevel(dflong$name, "Prior")
+ # dflong$name <- factor(dflong$name,ordered=FALSE)
+#  dflong$name <- relevel(dflong$name, "Prior")
   dflong %>% ggplot(aes(x=x,y=value,group=name))+
     geom_line()+ facet_wrap(~name) + ggthemes::theme_clean()+
     ylab("Dichte")
@@ -44,4 +55,4 @@ prior.demo <- function(prior) {
   return(gp)
 }
 
-prior.demo(2)
+prior.demo(1)

@@ -40,11 +40,27 @@ class: center, middle, inverse, title-slide
 
 ]
 
+---
+
+# Aussagen über die Unsicherheit
+
 &lt;!--.read_more[Typische Fragen in der Psychologie sind:]
 
  - Wirkt eine neue Therapieform B besser als eine Therapieform A?
 - Gibt es einen Zusammenhang zwischen Computerspielen und Gewalt bei Jugendlichen?
 - Werden attraktivere Menschen als erfolgreicher eingeschätzt? --&gt;
+
+&lt;br&gt;&lt;br&gt;
+
+.med[Typische Aussagen, die wir als Wissenschaftler gerne für unsere empirischen Effektstärken treffen wollen:]
+
+--
+
+- Das Vakkzin von BioNTech/Pfizer schützt mit sehr hoher Wahrscheinlichkeit besser vor einer COVID19-Erkrankung als der Wirkstoff von AstraZeneca
+
+--
+
+- Studierende in Potsdam haben mit großer Wahrscheinlichkeit einen höheren IQ als der Bevölkerungsdurchschnitt
 
 ---
 
@@ -57,7 +73,7 @@ class: center, middle, inverse, title-slide
 
 .pull-left[
 
-Die Stichprobe ($n=10$) sei:
+Die Stichprobe (n=10) sei:
 
 ![](brandmaier-intro_files/figure-html/iq-1.png)&lt;!-- --&gt;
 ]
@@ -88,6 +104,7 @@ Der Stichprobenmittelwert ist hier `\(m=\)` 106.
 --
 
 .pull-right[
+
 ## Testen
 
 Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
@@ -134,16 +151,17 @@ $$P\left(D | \theta_0 \right) $$
 
 --
 
-- Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese (je kleiner, desto unwahrscheinlicher). Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese falsch ist, wenn `\(p &lt; 0.05\)`.
+- .emph[Falsch]: Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese. Bsp.: Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese (Studierende haben einen mittleren IQ von 100) falsch ist, wenn `\(p &lt; 0.05\)`.
 
 --
 
-- Wir nehmen an, dass die Nullhypothese (wahrscheinlich) wahr ist (wenn `\(p&gt;0.05\)`)
+- Dabei reden wir aber über `\(p(\theta_0 | D)\)` während der p-Wert aber aus der Funktion `\(p(D | \theta_0)\)` berechnet wird 
 
 --
 
-- Das Konfidenzintervall enthält mit 95% Wahrscheinlichkeit den wahren Wert.
+- "Studierende in Potsdam haben mit großer Wahrscheinlichkeit einen höheren IQ als der Bevölkerungsdurchschnitt"
 
+- Das ist eine Aussage über `\(p(H_1 | D)\)`, aber wir arbeiten nur mit p-Werten der Funktion `\(p(D | H_0)\)`
 
 --
 
@@ -167,33 +185,6 @@ Bayesianische Ansätze folgen der folgenden charakteristischen Struktur, die sic
 .largemath[
 $$P \left( A | B \right) = \frac{ P\left(B | A \right) \times  P\left( A \right)   }{P\left(B \right)  } $$
 ]
-
----
-
-#  &amp;#129415; Vampirismus und der Satz von Bayes
-
-
-
-
-Bekannt sei ein Test, der mit einer Erfolgschance von 95% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
-
---
-
-.med[
-$$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
-]
-
---
-
-- `\(P \left( + | Vampir \right) =\)` 0.95
-- `\(P \left( Vampir \right) =\)` 0.001
-- `\(P \left( + \right) =\)`  0.01094
-
-Erlaubt uns den Schluss:
-
-- `\(P \left( Vampir | + \right) =\)` 0.09
-
-.citation[R. McElreath, Statistical Rethinking]
 
 ---
 
@@ -223,6 +214,33 @@ $$ \underbrace{P\left( \theta | Daten \right)}_{Posterior} = \frac{ \overbrace{P
 
 .read_more[Der] Nenner `\(P(Daten)\)` ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten
 
+
+---
+
+#  &amp;#129415; Vampirismus und der Satz von Bayes
+
+
+
+
+.emph[Bedingte Wahrscheinlichkeiten sind manchmal überraschend]. Beispiel: Bekannt sei ein Test, der mit einer Erfolgschance von 95% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
+
+--
+
+.med[
+$$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
+]
+
+--
+
+- `\(P \left( + | Vampir \right) =\)` 0.95
+- `\(P \left( Vampir \right) =\)` 0.001
+- `\(P \left( + \right) =\)`  0.01094
+
+Erlaubt uns den (.emph[immer noch frequentistischen]) Schluss:
+
+- `\(P \left( Vampir | + \right) =\)` 0.09
+
+.citation[R. McElreath, Statistical Rethinking]
 
 ---
 
@@ -332,15 +350,9 @@ Woher kommt der _Prior_ überhaupt?
 
 ---
 
-# Beispiel: Beschränkung
-
-![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
-
----
-
 # Beispiel: Informierter Prior
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -349,9 +361,9 @@ Woher kommt der _Prior_ überhaupt?
 Es gibt verschiedene Wege, Priors zu wählen:
 
 - Flache und uninformierte Priors
-- Sinnvolle Beschränkungen des Parameterraums (z.B. Nicht-Negativität)
+- Sinnvolle Beschränkungen des Parameterraums (z.B. Nicht-Negativität einer Reaktionszeit)
 - Vorwissen
-- Expertenmeinungen (elicited priors)
+- Expertenmeinungen (_elicited priors_)
 
 
 ---
@@ -365,7 +377,7 @@ Die Auswirkung der A-Priori-Verteilung ist schwächer,
 ]
 
 .pull-right[
-![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -375,12 +387,8 @@ Für viele Bayessche Anwendung benötigen wir Integrale, z.B., für
 
 -   Berechnung der Evidenz in der Posterior-Verteilung:
 
-$$P\left(\theta | D \right) = \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ P\left D \right) } =  \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
-- Punkt- und Intervallschätzer, wie z.B. Mean oder Credibility Region
-
-$$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
-  
-
+$$P\left(\theta | D \right) =  \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
+- Punkt- und Intervallschätzer, wie z.B. Mittelwert oder Glaubwürdigkeitsintervall
 - Randverteilung einzelner Parameter
 - Modellvergleich mit dem .emph[Bayes Faktor]
 
@@ -388,19 +396,11 @@ $$\hat{\mu} = \int \theta \cdot P\left(\theta | D \right)  d\theta $$
 
 # Bayesianische Integrale lösen
 
-Es existieren verschiedene Ansätze:
+- Prominenter Ansatz mittels .emph[Monte Carlo Markov Chains] (MCMC)
 
-.read_more[] Analytische Lösungen mit .emph[konjugierten Priors]
+- Anstatt exakt zu rechnen, ziehen wir zufällig aus der Posteriorverteilung und rechnen mit der Zufallsstichprobe näherungsweise weiter
 
-  Bestimmte statistische Modelle haben Priors, die zu Posteriors führen, die aus derselben Verteilungsfamilie stammen
-  
-- Approximationen wie bspw. .emph[Variational Bayes]
-
-  Finde einfache Verteilungen, die den wahren Posterior annähern
-  
-- .emph[Monte Carlo Markov Chains] (MCMC)
-
-  Anstatt exakt zu rechnen, ziehen wir zufällig aus der Posteriorverteilung und rechnen mit den Samples weiter
+![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -409,10 +409,9 @@ Es existieren verschiedene Ansätze:
 
 Die Bayessche Statistik 
 
+- benutzt Wahrscheinlichkeiten um Unsicherheiten vollständig zu beschreiben
 - erlaubt Aussagen über die Parameter- und Hypothesenwahrscheinlichkeit anstatt über die Datenwahrscheinlichkeiten
-- benutzt Wahrscheinlichkeiten um Unsicherheiten zu beschreiben
 - erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
-- hat eher subjektiven Charakter (aber auch die Wahl der Likelihood ist subjektiv), aber Priors können auch uninformativ gewählt werden
 - ist oft aufwendig zu berechnen, aber verschiedene praktische Lösungen existieren
 
 ---

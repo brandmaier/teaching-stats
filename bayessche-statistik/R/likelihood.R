@@ -17,9 +17,10 @@ lls <- round(lls, 1)
 gp <- df %>% pivot_longer(-1,names_to = "Modell") %>% 
   ggplot(aes(x=x,y=value,group=Modell,color=Modell,fill=Modell))+
   geom_line()+geom_ribbon(aes(ymin=0,ymax=value),alpha=.8)+
-  geom_text(data=data.frame(name=paste0("Modell ",1:3),lls, x=dist_means,y=c(0.05,0.045,0.05)),
-            aes(x=x,y=y,label=lls,color=name), size=10,
-            inherit.aes = FALSE)+ labs(fill="Modell")+
+  #geom_text(data=data.frame(name=paste0("Modell ",1:3),lls, x=dist_means,y=c(0.05,0.045,0.05)),
+#            aes(x=x,y=y,label=lls,color=name), size=10,
+#            inherit.aes = FALSE)+ 
+  labs(fill="Modell")+
   xlab("Beobachtungen")+theme(legend.position = "none") +
   theme(text=element_text(size=25))+ylab("Likelihood")+
   geom_point(data=iqdat,aes(y=0,x=x,fill=NULL,group=NULL),color="black",size=8)
