@@ -58,7 +58,7 @@ source("R/scripts.R")
 
 --
 
-- Das Vakkzin von BioNTech/Pfizer schützt mit sehr hoher Wahrscheinlichkeit besser vor einer COVID19-Erkrankung als der Wirkstoff von AstraZeneca
+- Das Vakkzin von BioNTech/Pfizer schützt mit sehr hoher Wahrscheinlichkeit besser vor einer COVID19-Ansteckung als der Wirkstoff von AstraZeneca
 
 --
 
@@ -100,28 +100,40 @@ IQ-Test Ergebnisse sind normalverteilt mit wahrem Mittelwert $\mu$ und wahrer Va
 
 ---
 
-# Frequentistischer Ansatz:
+# Frequentistischer Ansatz
 
-.pull-left[
 ## Schätzen
 
-Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die Daten erzeugt hat:
+.pull-left[
 
+- Allgemeiner Ansatz: Maximum-Likelihood (= maximale Plausibilität)
+- Likelihood-Funktion folgt aus dem gewählten statistischen Modell
+- Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die Daten erzeugt hat
+- Bester Schätzer für $\mu$ unter Normalverteilungsannahmen ist der Stichprobenmittelwert
+- Der Stichprobenmittelwert ist hier $m=$ `r round(mean(iqdat$x))`.
+]
+
+.pull-right[
 ```{r echo=FALSE, fig.height=4, fig.width=6, echo=FALSE}
 source("R/likelihood.R")
 
 ```
-
-Der Stichprobenmittelwert ist hier $m=$ `r round(mean(iqdat$x))`.
 ]
 
---
+---
 
-.pull-right[
+# Frequentistischer Ansatz
 
 ## Testen
 
-Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
+.pull-left[
+
+- Aufstellen einer Verteilung des interessierende Schätzers unter einem Nullmodell (Differenz des empirischen Mittelwerts und 100 ist nur zufällig)
+- Beispiel: t-Statistik als Funktion von geschätztem Mittelwertsunterschied, Varianz und Stichprobengröße
+- p-Wert: Wie unwahrscheinlich (=unplausibel) sind die Beobachtungen (oder extremer) unter einem Nullmodell?
+]
+
+.pull-right[
 
 ```{r echo=FALSE, fig.height=4, fig.width=6, results="hide", warning=FALSE}
 source("R/t-verteilung.R")
@@ -167,17 +179,17 @@ $$P\left(D | \theta_0 \right) $$
 
 --
 
-- .emph[Falsch]: Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese. Bsp.: Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese (Studierende haben einen mittleren IQ von 100) falsch ist, wenn $p < 0.05$.
+- .emph[Falsch]: Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese. Bsp.: Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese (H0: Studierende haben einen mittleren IQ von 100) falsch ist, wenn $p < 0.05$.
 
 --
 
-- Dabei reden wir aber über $p(\theta_0 | D)$ während der p-Wert aber aus der Funktion $p(D | \theta_0)$ berechnet wird 
+-  Der p-Wert wird aus der Funktion $p(D | \theta_0)$ berechnet, dabei reden wir im Beispiel über $p(\theta_0 | D)$ 
 
 --
 
 - "Studierende in Potsdam haben mit großer Wahrscheinlichkeit einen höheren IQ als der Bevölkerungsdurchschnitt"
 
-- Das ist eine Aussage über $p(H_1 | D)$, aber wir arbeiten nur mit p-Werten der Funktion $p(D | H_0)$
+- Das ist eine Aussage über $p(H_1 | D)$, aber wir schließen aufgrund von p-Werten der Funktion $p(D | H_0)$
 
 --
 
@@ -230,41 +242,6 @@ $$ \underbrace{P\left( \theta | Daten \right)}_{Posterior} = \frac{ \overbrace{P
 
 .read_more[Der] Nenner $P(Daten)$ ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten
 
-
----
-
-#  &#129415; Vampirismus und der Satz von Bayes
-
-
-```{r echo=FALSE}
-# adapted from Richard McElreath's fantastic book
-PrPV <- .95
-PrPM <- 0.01
-PrV <- 0.001
-PrP <- PrPV*PrV + PrPM*(1-PrV)
-
-PrVP <- PrPV*PrV/PrP
-```
-
-.emph[Bedingte Wahrscheinlichkeiten sind manchmal überraschend]. Beispiel: Bekannt sei ein Test, der mit einer Erfolgschance von `r round(PrPV*100)`% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
-
---
-
-.med[
-$$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
-]
-
---
-
-- $P \left( + | Vampir \right) =$ `r PrPV`
-- $P \left( Vampir \right) =$ `r PrV`
-- $P \left( + \right) =$  `r PrP`
-
-Erlaubt uns den (.emph[immer noch frequentistischen]) Schluss:
-
-- $P \left( Vampir | + \right) =$ `r round(PrVP,2)`
-
-.citation[R. McElreath, Statistical Rethinking]
 
 ---
 
@@ -415,13 +392,25 @@ source("R/schematic-bayes.R")
 ]
 ---
 
+
+
+class: segue-large-red
+
+.bigfont[
+... und was ist daran jetzt so kompliziert?
+]
+
+---
+
 # Bayessche Integrale
 
 Für viele Bayessche Anwendung benötigen wir Integrale, z.B., für
 
 -   Berechnung der Evidenz in der Posterior-Verteilung:
 
+.med[
 $$P\left(\theta | D \right) =  \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
+]
 - Punkt- und Intervallschätzer, wie z.B. Mittelwert oder Glaubwürdigkeitsintervall
 - Randverteilung einzelner Parameter
 - Modellvergleich mit dem .emph[Bayes Faktor]
@@ -445,10 +434,10 @@ source("R/rejection-sampler.R")
 
 Die Bayessche Statistik 
 
-- benutzt Wahrscheinlichkeiten um Unsicherheiten vollständig zu beschreiben
-- erlaubt Aussagen über die Parameter- und Hypothesenwahrscheinlichkeit anstatt über die Datenwahrscheinlichkeiten
-- erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
-- ist oft aufwendig zu berechnen, aber verschiedene praktische Lösungen existieren
+- benutzt Wahrscheinlichkeiten um .emph[Unsicherheiten vollständig zu beschreiben]
+- erlaubt Aussagen über die .emph[Parameter- und Hypothesenwahrscheinlichkeit] anstatt über die Datenwahrscheinlichkeiten
+- erfordert die Spezifikation von .emph[Prior-Verteilungen] aller Modellparameter
+- ist meist .emph[aufwendiger zu berechnen], aber verschiedene praktische Lösungen existieren
 
 ---
 

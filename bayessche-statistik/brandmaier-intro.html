@@ -89,25 +89,37 @@ IQ-Test Ergebnisse sind normalverteilt mit wahrem Mittelwert `\(\mu\)` und wahre
 
 ---
 
-# Frequentistischer Ansatz:
+# Frequentistischer Ansatz
 
-.pull-left[
 ## Schätzen
 
-Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die Daten erzeugt hat:
+.pull-left[
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
-
-Der Stichprobenmittelwert ist hier `\(m=\)` 106.
+- Allgemeiner Ansatz: Maximum-Likelihood (= maximale Plausibilität)
+- Likelihood-Funktion folgt aus dem gewählten statistischen Modell
+- Unter allen möglichen Normalverteilungen, wähle die, die am plausibelsten die Daten erzeugt hat
+- Bester Schätzer für `\(\mu\)` unter Normalverteilungsannahmen ist der Stichprobenmittelwert
+- Der Stichprobenmittelwert ist hier `\(m=\)` 106.
 ]
 
---
-
 .pull-right[
+![](brandmaier-intro_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Frequentistischer Ansatz
 
 ## Testen
 
-Wie plausibel sind die Beobachtungen (oder extremer) unter einem Nullmodell?
+.pull-left[
+
+- Aufstellen einer Verteilung des interessierende Schätzers unter einem Nullmodell (Differenz des empirischen Mittelwerts und 100 ist nur zufällig)
+- Beispiel: t-Statistik als Funktion von geschätztem Mittelwertsunterschied, Varianz und Stichprobengröße
+- p-Wert: Wie unwahrscheinlich (=unplausibel) sind die Beobachtungen (oder extremer) unter einem Nullmodell?
+]
+
+.pull-right[
 
 ![](brandmaier-intro_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
@@ -151,7 +163,7 @@ $$P\left(D | \theta_0 \right) $$
 
 --
 
-- .emph[Falsch]: Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese. Bsp.: Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese (Studierende haben einen mittleren IQ von 100) falsch ist, wenn `\(p &lt; 0.05\)`.
+- .emph[Falsch]: Der p-Wert ist die Wahrscheinlichkeit der Null-Hypothese. Bsp.: Wir glauben mit großer Wahrscheinlichkeit, dass die Nullhypothese ($H_0$: Studierende haben einen mittleren IQ von 100) falsch ist, wenn `\(p &lt; 0.05\)`.
 
 --
 
@@ -214,33 +226,6 @@ $$ \underbrace{P\left( \theta | Daten \right)}_{Posterior} = \frac{ \overbrace{P
 
 .read_more[Der] Nenner `\(P(Daten)\)` ist im Wesentlichen eine Normierungskonstante, aber wird uns später noch ein paar graue Haare kosten
 
-
----
-
-#  &amp;#129415; Vampirismus und der Satz von Bayes
-
-
-
-
-.emph[Bedingte Wahrscheinlichkeiten sind manchmal überraschend]. Beispiel: Bekannt sei ein Test, der mit einer Erfolgschance von 95% Vampirismus detektiert. Wie hoch ist die Chance, bei positivem Ergebnis, ein Vampir zu sein?
-
---
-
-.med[
-$$P\left( Vampir | + \right) = \frac{ P\left( + | Vampir \right) \times  P\left(Vampir \right)   }{  P\left( + \right)  } $$
-]
-
---
-
-- `\(P \left( + | Vampir \right) =\)` 0.95
-- `\(P \left( Vampir \right) =\)` 0.001
-- `\(P \left( + \right) =\)`  0.01094
-
-Erlaubt uns den (.emph[immer noch frequentistischen]) Schluss:
-
-- `\(P \left( Vampir | + \right) =\)` 0.09
-
-.citation[R. McElreath, Statistical Rethinking]
 
 ---
 
@@ -313,7 +298,7 @@ Beispiel: Statistisches Modell mit einem Parameter (z.B., Mittlerer IQ)
 
 .pull-right[
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -335,7 +320,7 @@ Das Ergebnis einer Schätzung ist der Posterior:
 
 .pull-right[
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -352,7 +337,7 @@ Woher kommt der _Prior_ überhaupt?
 
 # Beispiel: Informierter Prior
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -377,8 +362,18 @@ Die Auswirkung der A-Priori-Verteilung ist schwächer,
 ]
 
 .pull-right[
-![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 ]
+---
+
+
+
+class: segue-large-red
+
+.bigfont[
+... und was ist daran jetzt so kompliziert?
+]
+
 ---
 
 # Bayessche Integrale
@@ -387,7 +382,9 @@ Für viele Bayessche Anwendung benötigen wir Integrale, z.B., für
 
 -   Berechnung der Evidenz in der Posterior-Verteilung:
 
+.med[
 $$P\left(\theta | D \right) =  \frac{ P\left( D | \theta \right) \cdot P\left(\theta \right) }{ \int{ P\left( D | \theta  \right) P\left(\theta \right)} d\theta } $$
+]
 - Punkt- und Intervallschätzer, wie z.B. Mittelwert oder Glaubwürdigkeitsintervall
 - Randverteilung einzelner Parameter
 - Modellvergleich mit dem .emph[Bayes Faktor]
@@ -400,7 +397,7 @@ $$P\left(\theta | D \right) =  \frac{ P\left( D | \theta \right) \cdot P\left(\t
 
 - Anstatt exakt zu rechnen, ziehen wir zufällig aus der Posteriorverteilung und rechnen mit der Zufallsstichprobe näherungsweise weiter
 
-![](brandmaier-intro_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](brandmaier-intro_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -409,10 +406,10 @@ $$P\left(\theta | D \right) =  \frac{ P\left( D | \theta \right) \cdot P\left(\t
 
 Die Bayessche Statistik 
 
-- benutzt Wahrscheinlichkeiten um Unsicherheiten vollständig zu beschreiben
-- erlaubt Aussagen über die Parameter- und Hypothesenwahrscheinlichkeit anstatt über die Datenwahrscheinlichkeiten
-- erfordert die Spezifikation von Prior-Verteilungen aller Modellparameter
-- ist oft aufwendig zu berechnen, aber verschiedene praktische Lösungen existieren
+- benutzt Wahrscheinlichkeiten um .emph[Unsicherheiten vollständig zu beschreiben]
+- erlaubt Aussagen über die .emph[Parameter- und Hypothesenwahrscheinlichkeit] anstatt über die Datenwahrscheinlichkeiten
+- erfordert die Spezifikation von .emph[Prior-Verteilungen] aller Modellparameter
+- ist meist .emph[aufwendiger zu berechnen], aber verschiedene praktische Lösungen existieren
 
 ---
 
