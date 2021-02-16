@@ -1,0 +1,28 @@
+---
+title: "Umgang mit kleinen Stichproben in der psychologischen Forschung"
+subtitle: "<br/>Probelehrveranstaltung"
+author: "Andreas Brandmaier"
+institute: ""
+#date: "`r Sys.Date()`"
+date: "2021-03-04"
+output:
+  xaringan::moon_reader:
+    css: [default,  "extra.css","sydney.css", "sydney-fonts.css"]
+#    css: [robot]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r xaringanExtra, echo=FALSE, message=FALSE, warning=FALSE}
+#xaringanExtra::use_xaringan_extra(c( "animate_css", "tachyons"))
+
+library(here)
+library(tidyverse)
+library(ggx)
+#source(here("R/scripts.R"))
+source("R/scripts.R")
+```
