@@ -47,10 +47,22 @@ Unser Anspruch an die Inferenz:
 ---
 # Teststärke
 
-![](images/thomas-kelley-74096-unsplash.jpg)
+.pull-left[
+.emph[Statistische Teststärke] (_power_):  die Wahrscheinlichkeit, dass ein Test einen real existierenden Effekt einer angenommenen Größe entdeckt
+]
 
-Statistische Teststärke (_power_):  
-  
+.pull-right[
+![](images/thomas-kelley-74096-unsplash.jpg)
+]
+
+---
+
+# Wiederholung: Was ist die Teststärke?
+
+```{r}
+powercurve()
+```
+
 ---
   
 # Determinanten der Teststärke
