@@ -24,6 +24,16 @@
   font-size:180%;
 }
 
+.segue-large-blue {
+  text-align:center;
+  vertical-align: middle;
+  background-color: #0148A4;
+  color: white;
+  text-shadow: 0 0 20px #333;
+  font-size:180%;
+}
+
+
 .segue-large-gold {
   text-align:center;
   vertical-align: middle;
