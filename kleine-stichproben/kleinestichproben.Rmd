@@ -36,7 +36,9 @@ source("R/powerplot.R")
 .larger[
   
 .read_more[Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik.] 
-  
+
+--
+
 Unser Anspruch an die Inferenz:
     
 .read_more[Generalisierbar]
@@ -53,7 +55,15 @@ Unser Anspruch an die Inferenz:
 .larger[
 .emph[Statistische Teststärke] (_power_):  die Wahrscheinlichkeit, dass ein Test einen real existierenden Effekt einer angenommenen Größe entdeckt
 ]
+
+--
+
+Alle folgenden Argumente können ähnlich für die Präzision des Punktschätzers gemacht werden (etwa Standardfehler oder Breite des Konfidenzintervalls)
+
 ]
+
+--
+
 
 .pull-right[
 ![](images/thomas-kelley-74096-unsplash.jpg)
@@ -68,6 +78,7 @@ Unser Anspruch an die Inferenz:
 power_plot(FALSE)
 ```
 
+Beispiel: Gibt es einen Unterschied im IQ der Studierenden an der MSB und der HUB?
 ---
 # Wiederholung: Was ist die Teststärke?
 
@@ -76,13 +87,15 @@ power_plot(FALSE)
 power_plot(TRUE)
 ```
 
+Beispiel: Gibt es einen Unterschied im IQ der Studierenden an der MSB und der HUB?
+
 ---
   
 # Determinanten der Teststärke
   <br>
 .larger[Statistische Teststärke ist eine Funktion von]
   <br>
-.read_more[Effektstärke] (Beispielsweise, der wahre Zusammenhang zweier Merkmale, der wahre Gruppenunterschied)
+.read_more[Effektstärke] (Bsp.: der wahre Zusammenhang zweier Merkmale, der wahre Gruppenunterschied)
 
 --
 
@@ -143,7 +156,7 @@ $$\propto \frac{Teststärke \cdot Pr(\textrm{H0 falsch}) }{ \alpha \cdot \textrm
 
 .pull-left[
 Effekt existiert (H0 ist falsch)
-```{r echo=FALSE, fig.height=4, fig.width=4}
+```{r echo=FALSE, fig.height=6, fig.width=6}
 # H0 is false, Effekt existiert, wird aber nur selten gefunden
 # 20% heißt 10 in 50
 ballsplot(10,50, "H0 ist falsch (Effekt existiert)")
@@ -152,14 +165,14 @@ ballsplot(10,50, "H0 ist falsch (Effekt existiert)")
 
 .pull.right[
 Kein Effekt (H0 ist wahr)
-```{r echo = FALSE, fig.height=3, fig.width=3}
+```{r echo = FALSE, fig.height=6, fig.width=6}
 # H0 is true, no effect, that is, we get only alpha error, 5%
 # 5% heißt 2.5 in 50
 ballsplot(2,50,"H0 ist wahr (Kein Effekt)")
 ```
 ]
 
-FPR = `compute.ppv(power=.20, alpha=.05, r=.5)`
+FPR = `r compute.ppv(power=.20, alpha=.05, r=.5)`
 
 ---
 
@@ -167,7 +180,7 @@ FPR = `compute.ppv(power=.20, alpha=.05, r=.5)`
 
 .pull-left[
 Effekt existiert (H0 ist falsch)
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height=6, fig.width=6}
 # H0 is false, Effekt existiert, wird aber nur selten gefunden
 # 20% heißt 10 in 50
 ballsplot(4, 20, "H0 ist falsch (Effekt existiert)")
@@ -176,14 +189,14 @@ ballsplot(4, 20, "H0 ist falsch (Effekt existiert)")
 
 .pull.right[
 Kein Effekt (H0 ist wahr)
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6, fig.width=6}
 # H0 is true, no effect, that is, we get only alpha error, 5%
 # 5% heißt 2.5 in 50
 ballsplot(4, 80, "H0 ist wahr (Kein Effekt)")
 ```
 ]
 
-FPR = `compute.ppv(power=.20, alpha=.05, r=.2)`
+FPR = `r compute.ppv(power=.20, alpha=.05, r=.2)`
 
 ---
 
@@ -192,11 +205,6 @@ class:segue-large-red
 .large[Welche Auswege gibt es?]
 
 ---
-
-# Auswege 
-
-- Meta-Analyse zur Zusammenführung der Informationen aus mehreren kleinen Stichproben
-
 
 # Meta-Analyse
 
@@ -238,10 +246,10 @@ Ein ausgedachtes Beispiel:
 
 class: segue-large-blue
 
-.larger[Stichprobengröße ist nicht alles....]
+.large[Stichprobengröße ist nicht alles....]
 
 .quote[It is more useful to study one animal for 1000 hours than to study 1000 animals for one hour - B.F.Skinner, zitiert in Kerlinger & Lee (1999)]
-]
+
 ---
 
 # $N$=1
@@ -256,7 +264,7 @@ class: segue-large-blue
 ]
 
 .pull-right[
-```{r echo=FALSE, results='hide'}
+```{r echo=FALSE, results='hide', warning=FALSE}
 x<-c(0, .25, .5, .75, 1,  2,3,4,5,6 ,  7)
 y<-c(100,80, 60, 40 , 35, 29,28,27,26,25   , 24)
 
