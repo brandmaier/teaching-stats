@@ -25,6 +25,7 @@ library(tidyverse)
 library(ggx)
 #source(here("R/scripts.R"))
 source("R/scripts.R")
+source("R/powerplot.R")
 ```
 
 # Ziel der Inferenzstatistik
@@ -48,7 +49,10 @@ Unser Anspruch an die Inferenz:
 # Teststärke
 
 .pull-left[
+<br>
+.larger[
 .emph[Statistische Teststärke] (_power_):  die Wahrscheinlichkeit, dass ein Test einen real existierenden Effekt einer angenommenen Größe entdeckt
+]
 ]
 
 .pull-right[
@@ -59,35 +63,52 @@ Unser Anspruch an die Inferenz:
 
 # Wiederholung: Was ist die Teststärke?
 
-```{r}
-powercurve()
+<br>
+```{r fig.width=12, fig.height=6, echo=FALSE, warning=FALSE}
+power_plot(FALSE)
+```
+
+---
+# Wiederholung: Was ist die Teststärke?
+
+<br>
+```{r fig.width=12, fig.height=6, echo=FALSE}
+power_plot(TRUE)
 ```
 
 ---
   
 # Determinanten der Teststärke
-  
+  <br>
 .larger[Statistische Teststärke ist eine Funktion von]
-  
+  <br>
 .read_more[Effektstärke] (Beispielsweise, der wahre Zusammenhang zweier Merkmale, der wahre Gruppenunterschied)
+
+--
 
 .read_more[Irrtumswahrscheinlichkeit] (Typischerweise 5%)
 
+--
+
 .read_more[Präzision] (Messfehler)
 
+--
+
 .read_more[Stichprobengröße]
+
+--
 ---
 
 # Probleme geringer Teststärke
-
-.read_more[] Geringe Teststärke ist ein Problem für Sie, da die Wahrscheinlichkeit für Type-II-Fehler, d.h., ihre Chancen wahre Effekte zu verpassen steigt
+<br><br>
+.read_more[] Geringe Teststärke ist ein Problem für Sie, da die .emph[Unsicherheit] hoch bleibt und wir die Wahrscheinlichkeit für .emph[Fehler zweiter Art], d.h., ihre Chancen wahre Effekte zu verpassen steigt
 
 - Verschwendung von Forschungsgeldern und Zeit
 - Unnötige Belastung von Probanden ist ethisch bedenklich
 
 --
 
-.read_more[] Geringe Teststärke ist ein Problem für ein Forschungsfeld, da die Wahrscheinlichkeit, dass berichtete Effekte falsch sind steigt (Die Anzahl der Falsch-Positiven Befunde steigt)
+.read_more[] Geringe Teststärke ist ein Problem für ein Forschungsfeld, da die Wahrscheinlichkeit, dass berichtete Effekte falsch sind steigt, d.h, die Anzahl der .emph[Falsch-Positiven Befunde] steigt)
 
 --
 
@@ -103,18 +124,26 @@ powercurve()
 
 # Probleme geringer Teststärke
 
-Teststärke: Pr(Reject H0 | H0 is false)
+<br>
+Wir fragen uns: Welcher Anteil von Studien, die ein signifikantes Ergebnis (Nullhypothese abgelehnt) berichten irren:
 
-Falschpositivrate: Welcher Anteil von Studien, die ein signifikantes Ergebnis berichten irren:
+<br>
+Teststärke: Pr(H0 abgelehnt | H0 ist falsch)
+
+Falschpositivrate: Pr(H0 ist falsch | H0 abgelehnt)
+
+--
 
 $$\textrm{Pr(H0 falsch | H0 abgelehnt)}=\frac{\textrm{Pr(H0 abgelehnt | H0 falsch)} \cdot \textrm{Pr(H0 falsch) }}{\textrm{Pr(H0 abgelehnt)}}$$
+
+$$\propto \frac{Teststärke \cdot Pr(\textrm{H0 falsch}) }{ \alpha \cdot \textrm{Pr(H0 wahr})}$$
 ---
 
 # Illustration der FPR
 
 .pull-left[
 Effekt existiert (H0 ist falsch)
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height=4, fig.width=4}
 # H0 is false, Effekt existiert, wird aber nur selten gefunden
 # 20% heißt 10 in 50
 ballsplot(10,50, "H0 ist falsch (Effekt existiert)")
@@ -123,7 +152,7 @@ ballsplot(10,50, "H0 ist falsch (Effekt existiert)")
 
 .pull.right[
 Kein Effekt (H0 ist wahr)
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=3, fig.width=3}
 # H0 is true, no effect, that is, we get only alpha error, 5%
 # 5% heißt 2.5 in 50
 ballsplot(2,50,"H0 ist wahr (Kein Effekt)")

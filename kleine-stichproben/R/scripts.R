@@ -14,7 +14,11 @@ ballsplot <- function(num.marked, num.visible=100, title="") {
     geom_point(size=10,data=dfsub,aes(color=z))+
     #cowplot::theme_nothing()+
     theme(legend.position = "none") +
-    theme(panel.background = element_rect(fill = "white"))
+    theme(axis.text = element_blank())+
+    theme(panel.background = element_rect(fill = "white"))+
+    theme(axis.title = element_blank())+
+    theme(axis.line = element_blank())+
+    theme(axis.ticks = element_blank())
   #ggtitle(title)
   
 }
