@@ -64,8 +64,13 @@ plot_withinbetween <- function(
   alldat<-data.frame(alldat)
   alldat$ID<-factor(alldat$ID)
   
-  gp <- ggplot(alldat, aes(y=IQ,x=Alkohol, group=ID))+geom_point(aes(color=ID))+
+  gp <- ggplot(alldat, aes(y=IQ,x=Alkohol, group=ID))
+
+  
+  if (with.within) {
+  gp <- gp +geom_point(aes(color=ID))+
     geom_smooth(aes(color=ID),method="lm",se=FALSE)+ xlab("Alkohol")+ ylab("IQ")
+  }
   
   if (with.between) {
     gp<-gp+  geom_smooth(data=betdat,aes(group=NULL), method="lm",se=FALSE, color="black")+
@@ -73,7 +78,9 @@ plot_withinbetween <- function(
       geom_point(data=betdat,aes(color=ID,x=Alkohol,y=IQ),size=4)
   }
   
-  gp <- gp + theme_light()
+  gp <- gp + theme_light()+    theme(axis.title=element_text(size=26),
+                                     axis.text = element_text(size=20) ) +
+    xlim(0,6)+ylim(95,110)
   
   return(gp)
   
