@@ -26,6 +26,7 @@ library(ggx)
 #source(here("R/scripts.R"))
 source("R/scripts.R")
 source("R/powerplot.R")
+source("R/variability.R")
 ```
 
 # Ziel der Inferenzstatistik
@@ -57,20 +58,32 @@ Unser Anspruch an die Inferenz:
 .larger[
 - Es gibt keine harte Grenze für _kleine_ oder _große_ Stichproben
 - Abhängig von vielen Faktoren wie Modellkomplexität und Fragestellung
-- Stichproben sind dann zu klein, wenn sie nicht genügend Informationen liefern, um unsere Frage zu beantworten (wenn Sie also Präzision, Validität und Generalisierbarkeit in Frage stellen)
+- Stichproben sind dann .emph[zu klein], wenn sie nicht genügend Informationen liefern, um unsere Frage zu beantworten (wenn Sie also Präzision, Validität und Generalisierbarkeit in Frage stellen)
 ]
 
 ---
 
-# Stichprobenfehler
+# Auswirkung auf den Stichprobenfehler
 
-Stichprobenfehler:  Streuungsmaß für eine Schätzfunktion für einen unbekannten Parameter  der Grundgesamtheit
+.pull-left[
+Stichprobenfehler: 
 
-- Der Stichprobenfehler hängt direkt von der Stichprobengröße ab
+- Durchschnittliche Abweichung des geschätzten Parameterwertes vom wahren Parameterwert
 
-- Beispiel: Standardfehler des arithmetischen Mittels, \frac{\sigma}{\sqrt{n}} mit Standardabweichung $\sigma$ und Stichprobengröße $n$
+- Große Stichproben minimieren den Einfluss von zufälligen Schwankungen in der Zusammensetzung der Vergleichsgruppen und erhöhen dadurch die Präzision
+ 
+- Beispiel: Standardfehler des arithmetischen Mittels, $\frac{\sigma}{\sqrt{n}}$ mit Standardabweichung $\sigma$ und Stichprobengröße $n$
+]
 
-# Teststärke als Maß der Präzision
+.pull-right[
+```{r echo=FALSE}
+variabilityplot()
+```
+]
+
+---
+
+# Teststärke und kleine Stichproben
 
 .pull-left[
 <br>
@@ -79,8 +92,6 @@ Stichprobenfehler:  Streuungsmaß für eine Schätzfunktion für einen unbekannt
 ]
 
 ]
-
---
 
 
 .pull-right[
@@ -96,7 +107,7 @@ Stichprobenfehler:  Streuungsmaß für eine Schätzfunktion für einen unbekannt
 power_plot(FALSE)
 ```
 
-Beispiel: Gibt es einen Unterschied im IQ der Studierenden an der MSB und der HUB?
+Beispiel: Sind Studierende an der MSB überdurchschnittlich intelligent?
 ---
 # Wiederholung: Was ist die Teststärke?
 
@@ -105,7 +116,7 @@ Beispiel: Gibt es einen Unterschied im IQ der Studierenden an der MSB und der HU
 power_plot(TRUE)
 ```
 
-Beispiel: Gibt es einen Unterschied im IQ der Studierenden an der MSB und der HUB?
+Beispiel: Sind Studierende an der MSB überdurchschnittlich intelligent?
 
 ---
   
@@ -134,16 +145,18 @@ Beispiel: Gibt es einen Unterschied im IQ der Studierenden an der MSB und der HU
 <br><br>
 .read_more[] Geringe Teststärke ist ein Problem für Sie, da die .emph[Unsicherheit] hoch bleibt (z.B. breite Konfidenzintervalle) und wir die Wahrscheinlichkeit für .emph[Fehler zweiter Art], d.h., ihre Chancen wahre Effekte zu verpassen steigt
 
+--
+
 - Verschwendung von Forschungsgeldern und Zeit
 - Unnötige Belastung von Probanden ist ethisch bedenklich
 
 --
 
-.read_more[] Geringe Teststärke ist ein Problem für ein Forschungsfeld, da die Wahrscheinlichkeit, dass berichtete Effekte falsch sind steigt, d.h, die Anzahl der .emph[Falsch-Positiven Befunde] steigt)
+.read_more[] _Der Fluch des Gewinners_ führt oft dazu, dass publizierte Effektstärken  zu groß sind (große Zufallsschwankung + Publikationsverzerrung).
 
 --
 
-.read_more[] _Der Fluch des Gewinners_ führt oft dazu, dass berichtete Effektstärken zu groß sind.
+.read_more[] Geringe Teststärke ist ein Problem für ein Forschungsfeld, da die Wahrscheinlichkeit, dass berichtete Effekte falsch sind steigt, d.h, die Anzahl der .emph[Falsch-Positiven Befunde] steigt)
 
 
 
@@ -179,48 +192,15 @@ Anteil der signifikanten Ergebnisse, die wahre Effekte repräsentieren:
 
 $$\textrm{PPV} \propto \frac{Teststärke \cdot Pr(\textrm{H0 falsch}) }{ \alpha \cdot \textrm{Pr(H0 wahr})}$$
 
-- je höher die .emph[Teststärke], desto besser
-- je öfter es einen zu testenden Effekt (.emph[H0 ist falsch]) wirklich gibt, desto besser
-- je kleiner unser .emph[𝛼], desto besser
+Kleine Stichprobe $\Rightarrow$ Kleine Teststärke $\Rightarrow$ Niedrige PPV
 
 ]
 ---
 
-# Illustration der PPV (1:1)
+# Illustration der PPV
 
 .pull-left[
-50 Studien
-Effekt existiert (H0 ist falsch)
-```{r echo=FALSE, fig.height=5, fig.width=5}
-# H0 is false, Effekt existiert, wird aber nur selten gefunden
-# 20% heißt 10 in 50
-ballsplot(10,50, "H0 ist falsch (Effekt existiert)")
-```
-
-Teststärke: 20%
-]
-
-.pull.right[
-50 Studien
-Kein Effekt (H0 ist wahr)
-```{r echo = FALSE, fig.height=5, fig.width=5}
-# H0 is true, no effect, that is, we get only alpha error, 5%
-# 5% heißt 2.5 in 50
-ballsplot(2,50,"H0 ist wahr (Kein Effekt)")
-```
-
-Fehler 1.Art: 5%
-]
-
-<p style="font-size:40px;">
-PPV = `r 100*compute.ppv(power=.20, alpha=.05, r=.5)`%
-</p>
----
-
-# Illustration der PPV (1:5)
-
-.pull-left[
-20 Studien
+20 Studien<br>
 Effekt existiert (H0 ist falsch)
 ```{r echo=FALSE, fig.height=5, fig.width=5}
 # H0 is false, Effekt existiert, wird aber nur selten gefunden
@@ -232,7 +212,7 @@ Teststärke: 20%
 ]
 
 .pull.right[
-80 Studien
+80 Studien<br>
 Kein Effekt (H0 ist wahr)
 ```{r echo = FALSE, fig.height=5, fig.width=5}
 # H0 is true, no effect, that is, we get only alpha error, 5%
@@ -250,19 +230,28 @@ PPV = `r 100*compute.ppv(power=.20, alpha=.05, r=.2)`%
 
 class:segue-large-red
 
-.large[Welche Auswege gibt es?]
+.bigfont[Welche Auswege gibt es?]
 
 ---
 
 # Stichprobenumfangsplannung
 
-- Studien sollten so gestaltet werden, dass sie eine optimale Teststärke haben (bspw. 80%)
+.pull-left[
+- Studien sollten so gestaltet werden, dass sie eine ausreichende Teststärke haben (bspw. > 80%)
 
 - Gegeben einer Ziel-Teststärke kann man dann die Stichprobengröße errechnen
 
 - Dies erfordert Annahmen über: Fehler 1. Art, Messfehler, und die angenommene Effektstärke
 
 - Durchzuführen bspw. mit G*Power (Faul et al., 2009)
+
+]
+
+.pull-right[
+```{r}
+knitr::include_graphics("images/G_Power_screenshot.png")
+```
+]
 
 ---
 
@@ -273,6 +262,7 @@ class:segue-large-red
 - hilft uns Evidenz über mehrere Studien zu akkumulieren
 - ist besonders nützlich wenn die Einzelstudien inkonklusiv oder widersprüchlich sind
 - Meta-Analyse bildet einen Meta-Effektschätzer unter Berücksichtigung der Präzision der Einzelstudien
+- Vorsicht vor dem Schubladen-Effekt (Fluch des Gewinners)!
 ]
 
 ---
@@ -285,34 +275,7 @@ knitr::include_graphics("images/meta-analyse-gm-cog.png")
 .citation[Walhovd et al., 2020]
 ---
 
-# Das Schubladenproblem (_file drawer problem_)
-
-```{r fig.height=3, fig.width=3, echo=FALSE, out.height="70%", out.width="70%"}
-knitr::include_graphics("images/maksym-kaharlytskyi-Q9y3LRuuxmg-unsplash.jpg")
-```
-
----
-
-# Beispiel: Der Schubladeneffekt
-
-.pull-left[
-- Die Bewertung der Lehre durch Studenten (_student evaluation of teaching_; SET) wird zur Beurteilung der Effektivität der Lehre von Lehrkräften verwendet und basiert auf der weit verbreiteten Annahme, dass Studenten von sehr gut bewerteten Professoren mehr lernen. 
-
-- Primär gestützt durch Meta-Analysen von Studien, die geringe bis mäßige Korrelationen zwischen SET-Bewertungen und Studentenleistungen zeigen 
-
-- Die Ergebnisse waren vermutlich ein Artefakt von Studien mit kleinen Stichproben und Publikationsverzerrungen.
-]
-
-.pull-right[
-```{r echo=FALSE,incluttl, out.width="80%", out.height="80%"}
-knitr::include_graphics("images/uttl2016.jpg")
-```
-.citation[Uttl et al. (2016), Studies in Educational Evaluation]
-]
-
----
-
-class: segue-large-blue
+class: segue-large-red
 
 .bigfont[N=1]
 
@@ -386,15 +349,15 @@ plot_withinbetween(with.between=TRUE, with.within = TRUE)
 
 ---
 
-# Anmerkung: Sehr kleine Stichproben
+# Das Beste aus beiden Welten
 
-Bei sehr kleinen Stichproben können asymptotische Annahmen der Schätzer verletzt sein. Je nach Modellklasse gibt es dann sehr unterschiedliche Ansätze:
+- In der psychologischen Forschung bietet es sich an, Modelle sowohl für .emph[interindividuelle] als auch .emph[intraindividuelle] Fragestellungen zu schätzen. 
 
-- Analytische Korrekturansätze (Kenward-Roger-Korrektur für Mehrebenenmodelle)
-- Bootstraps für Standardfehler (statt Verlass auf den zentralen Grenzwertsatz)
-- Bayesianische Methoden 
+- Geeignet sind zum Beispiel Mehrebenen-Modelle oder Strukturgleichungsmodelle
 
-Einfache Tests wie t-Tests sind aber sogar in sehr kleinen Stichproben robust
+- Forschungsfragen können dabei sowohl auf mittlere intraindivuelle Effekte abzielen als auch auf interindividuelle Unterschiede in den intraindividuellen Effekten
+
+- Viele Freiheitsgrade in der Versuchsdesignplanung (z.B., nicht nur Stichprobengröße sondern auch Anzahl der Messungen pro Person und Bedingung)
 
 ---
 

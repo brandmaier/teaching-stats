@@ -80,7 +80,7 @@ plot_withinbetween <- function(
   
   gp <- gp + theme_light()+    theme(axis.title=element_text(size=26),
                                      axis.text = element_text(size=20) ) +
-    xlim(0,6)+ylim(95,110)
+    xlim(0,6)+ylim(95,110)+xlab("Alkoholkonsum")
   
   return(gp)
   

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Umgang mit kleinen Stichproben in der psychologischen Forschung</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Andreas Brandmaier" />
+    <meta name="date" content="2021-03-04" />
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+    <link rel="stylesheet" href="sydney.css" type="text/css" />
+    <link rel="stylesheet" href="sydney-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Umgang mit kleinen Stichproben in der psychologischen Forschung
+## <br/>Probelehrveranstaltung
+### Andreas Brandmaier
+### 2021-03-04
+
+---
+
+  
+
+
+# Ziel der Inferenzstatistik
+
+.hide[fill]
+.hide[fill]
+
+.larger[
+  
+.read_more[Um aus Daten einer begrenzten Anzahl Personen auf eine große Anzahl von Menschen schließen kann, befassen wir uns mit der Inferenzstatistik.] 
+]
+
+--
+
+.larger[
+Unser Anspruch an die Inferenz:
+
+  
+.read_more[Präzise]
+      
+.read_more[Valide und generalisierbar]
+
+]
+
+---
+
+# Was ist denn eine _kleine_ Stichprobe?
+
+.larger[
+- Es gibt keine harte Grenze für _kleine_ oder _große_ Stichproben
+- Abhängig von vielen Faktoren wie Modellkomplexität und Fragestellung
+- Stichproben sind dann .emph[zu klein], wenn sie nicht genügend Informationen liefern, um unsere Frage zu beantworten (wenn Sie also Präzision, Validität und Generalisierbarkeit in Frage stellen)
+]
+
+---
+
+# Auswirkung auf den Stichprobenfehler
+
+.pull-left[
+Stichprobenfehler: 
+
+- Durchschnittliche Abweichung des geschätzten Parameterwertes vom wahren Parameterwert
+
+- Große Stichproben minimieren den Einfluss von zufälligen Schwankungen in der Zusammensetzung der Vergleichsgruppen und erhöhen dadurch die Präzision
+ 
+- Beispiel: Standardfehler des arithmetischen Mittels, `\(\frac{\sigma}{\sqrt{n}}\)` mit Standardabweichung `\(\sigma\)` und Stichprobengröße `\(n\)`
+]
+
+.pull-right[
+![](kleinestichproben_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Teststärke und kleine Stichproben
+
+.pull-left[
+&lt;br&gt;
+.larger[
+.emph[Statistische Teststärke] (_power_):  die Wahrscheinlichkeit, dass ein Test einen real existierenden Effekt einer angenommenen Größe entdeckt
+]
+
+]
+
+
+.pull-right[
+![](images/thomas-kelley-74096-unsplash.jpg)
+]
+
+---
+
+# Wiederholung: Was ist die Teststärke?
+
+&lt;br&gt;
+![](kleinestichproben_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+Beispiel: Sind Studierende an der MSB überdurchschnittlich intelligent?
+---
+# Wiederholung: Was ist die Teststärke?
+
+&lt;br&gt;
+![](kleinestichproben_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+Beispiel: Sind Studierende an der MSB überdurchschnittlich intelligent?
+
+---
+  
+# Determinanten der Teststärke
+&lt;br&gt;
+.larger[Statistische Teststärke ist eine Funktion von]
+&lt;br&gt;&lt;br&gt;
+.read_more[Effektstärke] (Bsp.: der wahre Zusammenhang zweier Merkmale, der wahre Gruppenunterschied)
+
+--
+
+.read_more[Irrtumswahrscheinlichkeit] (Typischerweise 5%)
+
+--
+
+.read_more[Präzision] des Messinstruments (Messfehler)
+
+--
+
+.read_more[Stichprobengröße]
+
+--
+---
+
+# Probleme geringer Teststärke
+&lt;br&gt;&lt;br&gt;
+.read_more[] Geringe Teststärke ist ein Problem für Sie, da die .emph[Unsicherheit] hoch bleibt (z.B. breite Konfidenzintervalle) und wir die Wahrscheinlichkeit für .emph[Fehler zweiter Art], d.h., ihre Chancen wahre Effekte zu verpassen steigt
+
+--
+
+- Verschwendung von Forschungsgeldern und Zeit
+- Unnötige Belastung von Probanden ist ethisch bedenklich
+
+--
+
+.read_more[] _Der Fluch des Gewinners_ führt oft dazu, dass publizierte Effektstärken  zu groß sind (große Zufallsschwankung + Publikationsverzerrung).
+
+--
+
+.read_more[] Geringe Teststärke ist ein Problem für ein Forschungsfeld, da die Wahrscheinlichkeit, dass berichtete Effekte falsch sind steigt, d.h, die Anzahl der .emph[Falsch-Positiven Befunde] steigt)
+
+
+
+
+
+
+---
+
+
+# Wieviele Studien berichten korrekte Ergebnisse?
+
+.larger[
+&lt;br&gt;
+Bisher: .emph[Teststärke] = `\(Pr\)`(H0 abgelehnt | H0 ist falsch)
+]
+--
+.larger[
+&lt;br&gt;
+Wir fragen uns nun: .emph[Wieviele Studien], die ein signifikantes Ergebnis (Nullhypothese abgelehnt) berichten, .emph[sind korrekt]:
+
+$$ Pr(\textrm{H0 ist falsch}\ |\ \textrm{H0 abgelehnt})$$
+Auch bekannt als .emph[Positiver Vorhersagewert]
+]
+
+
+---
+
+# Wieviele Studien berichten korrekte Ergebnisse?
+
+.larger[
+
+Anteil der signifikanten Ergebnisse, die wahre Effekte repräsentieren:
+
+`$$\textrm{PPV} \propto \frac{Teststärke \cdot Pr(\textrm{H0 falsch}) }{ \alpha \cdot \textrm{Pr(H0 wahr})}$$`
+
+Kleine Stichprobe `\(\Rightarrow\)` Kleine Teststärke `\(\Rightarrow\)` Niedrige PPV
+
+]
+---
+
+# Illustration der PPV
+
+.pull-left[
+20 Studien&lt;br&gt;
+Effekt existiert (H0 ist falsch)
+![](kleinestichproben_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+Teststärke: 20%
+]
+
+.pull.right[
+80 Studien&lt;br&gt;
+Kein Effekt (H0 ist wahr)
+![](kleinestichproben_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+Fehler 1.Art: 5%
+]
+
+&lt;p style="font-size:40px;"&gt;
+PPV = 50%
+&lt;/p&gt;
+---
+
+class:segue-large-red
+
+.bigfont[Welche Auswege gibt es?]
+
+---
+
+# Stichprobenumfangsplannung
+
+.pull-left[
+- Studien sollten so gestaltet werden, dass sie eine ausreichende Teststärke haben (bspw. &gt; 80%)
+
+- Gegeben einer Ziel-Teststärke kann man dann die Stichprobengröße errechnen
+
+- Dies erfordert Annahmen über: Fehler 1. Art, Messfehler, und die angenommene Effektstärke
+
+- Durchzuführen bspw. mit G*Power (Faul et al., 2009)
+
+]
+
+.pull-right[
+
+```r
+knitr::include_graphics("images/G_Power_screenshot.png")
+```
+
+&lt;img src="images/G_Power_screenshot.png" width="813" /&gt;
+]
+
+---
+
+# Meta-Analyse
+
+.larger[
+- ist eine Studie von Studien 
+- hilft uns Evidenz über mehrere Studien zu akkumulieren
+- ist besonders nützlich wenn die Einzelstudien inkonklusiv oder widersprüchlich sind
+- Meta-Analyse bildet einen Meta-Effektschätzer unter Berücksichtigung der Präzision der Einzelstudien
+- Vorsicht vor dem Schubladen-Effekt (Fluch des Gewinners)!
+]
+
+---
+
+# Ein Beispiel
+
+&lt;img src="images/meta-analyse-gm-cog.png" width="55%" height="55%" /&gt;
+.citation[Walhovd et al., 2020]
+---
+
+class: segue-large-red
+
+.bigfont[N=1]
+
+.larger[It is more useful to study one animal 
+for 1000 hours than to study 1000 animals for 
+one hour 
+ `\(-\)` B.F. Skinner, zitiert in Kerlinger &amp; Lee (1999)]
+
+---
+
+# `\(N\)`=1
+
+- Klassischerweise sprechen wir meist über die Stichprobengröße als primäre Stellschraube für die Größe einer Studie
+
+- Messungen kann man aber auch statt über Individuen auch "innerhalb" von Individuen (also über die Zeit hinweg) verteilen
+
+.pull-left[
+
+- Die Psychologie hat verschiedene Erfolgsbeispiele, bspw. die .emph[Ebbinghaussche Kurve], die den Grad des Vergessens über einen Zeitraum angibt und im Selbstversuch 1885 entdeckt  wurde
+]
+
+.pull-right[
+![](kleinestichproben_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Validität der Inferenz
+
+.pull-left[
+.emph[Welche Frage wollen wir eigentlich beantworten?]
+
+Beispiel: Wir interessieren uns für den Zusammenhang von IQ und Alkoholkonsum
+
+Vgl. Alkoholkonsum und IQ sind positiv korreliert (UK; Batty et al., 2008)
+]
+
+.pull-right[
+![](kleinestichproben_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+---
+
+# Validität der Inferenz
+
+.pull-left[
+.emph[Welche Frage wollen wir eigentlich beantworten?]
+
+Beispiel: Wir interessieren uns für den Zusammenhang von IQ und Alkoholkonsum
+
+Vgl. Alkoholkonsum und IQ sind positiv korreliert (UK; Batty et al., 2008)
+
+]
+
+.pull-right[
+![](kleinestichproben_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Das Beste aus beiden Welten
+
+- In der psychologischen Forschung bietet es sich an, Modelle sowohl für .emph[interindividuelle] als auch .emph[intraindividuelle] Fragestellungen zu schätzen. 
+
+- Geeignet sind zum Beispiel Mehrebenen-Modelle oder Strukturgleichungsmodelle
+
+- Forschungsfragen können dabei sowohl auf mittlere intraindivuelle Effekte abzielen als auch auf interindividuelle Unterschiede in den intraindividuellen Effekten
+
+- Viele Freiheitsgrade in der Versuchsdesignplanung (z.B., nicht nur Stichprobengröße sondern auch Anzahl der Messungen pro Person und Bedingung)
+
+---
+
+# Zusammenfassung
+
+Zwei zentrale Gedanken zur .emph[kleine Stichprobengrößen]:
+
+- Validität (Beantworten wir wirklich die Frage, die wir beantworten wollten?)
+- Präzision (Beantworten wir die Frage so, dass uns die Antwort einen nutzen bringt?)
+
+--
+
+.read_more[Planen] Sie Studien mit Sorgfalt unter Beachtung dieser Aspekte
+
+.read_more[Meta-Analysen] für bereits existierende Daten (aber achten Sie auf mögliche Schubladeneffekte)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="jquery-3.5.1.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
