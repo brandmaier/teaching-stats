@@ -112,23 +112,22 @@ Beispiel: Sind Studierende an der MSB überdurchschnittlich intelligent?
   
 # Determinanten der Teststärke
 &lt;br&gt;
+.pull-left[
 .larger[Statistische Teststärke ist eine Funktion von]
 &lt;br&gt;&lt;br&gt;
 .read_more[Effektstärke] (Bsp.: der wahre Zusammenhang zweier Merkmale, der wahre Gruppenunterschied)
 
---
-
 .read_more[Irrtumswahrscheinlichkeit] (Typischerweise 5%)
-
---
 
 .read_more[Präzision] des Messinstruments (Messfehler)
 
---
-
 .read_more[Stichprobengröße]
 
---
+]
+
+.pull-right[
+![](kleinestichproben_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
 ---
 
 # Probleme geringer Teststärke
@@ -167,7 +166,8 @@ Bisher: .emph[Teststärke] = `\(Pr\)`(H0 abgelehnt | H0 ist falsch)
 &lt;br&gt;
 Wir fragen uns nun: .emph[Wieviele Studien], die ein signifikantes Ergebnis (Nullhypothese abgelehnt) berichten, .emph[sind korrekt]:
 
-$$ Pr(\textrm{H0 ist falsch}\ |\ \textrm{H0 abgelehnt})$$
+`$$Pr(\textrm{Wahrer Effekt}\ |\ \textrm{Signifikantes Ergebnis})$$`
+$$ = Pr(\textrm{H0 ist falsch}\ |\ \textrm{H0 abgelehnt})$$
 Auch bekannt als .emph[Positiver Vorhersagewert]
 ]
 
@@ -192,7 +192,7 @@ Kleine Stichprobe `\(\Rightarrow\)` Kleine Teststärke `\(\Rightarrow\)` Niedrig
 .pull-left[
 20 Studien&lt;br&gt;
 Effekt existiert (H0 ist falsch)
-![](kleinestichproben_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](kleinestichproben_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 Teststärke: 20%
 ]
@@ -200,7 +200,7 @@ Teststärke: 20%
 .pull.right[
 80 Studien&lt;br&gt;
 Kein Effekt (H0 ist wahr)
-![](kleinestichproben_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](kleinestichproben_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 Fehler 1.Art: 5%
 ]
@@ -219,7 +219,7 @@ class:segue-large-red
 # Stichprobenumfangsplannung
 
 .pull-left[
-- Studien sollten so gestaltet werden, dass sie eine ausreichende Teststärke haben (bspw. &gt; 80%)
+- Studien sollten so gestaltet werden, dass sie eine ausreichende Teststärke haben (bspw. &gt; 80%) 
 
 - Gegeben einer Ziel-Teststärke kann man dann die Stichprobengröße errechnen
 
@@ -230,11 +230,6 @@ class:segue-large-red
 ]
 
 .pull-right[
-
-```r
-knitr::include_graphics("images/G_Power_screenshot.png")
-```
-
 &lt;img src="images/G_Power_screenshot.png" width="813" /&gt;
 ]
 
@@ -281,25 +276,10 @@ one hour
 ]
 
 .pull-right[
-![](kleinestichproben_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
-
-]
-
----
-
-# Validität der Inferenz
-
-.pull-left[
-.emph[Welche Frage wollen wir eigentlich beantworten?]
-
-Beispiel: Wir interessieren uns für den Zusammenhang von IQ und Alkoholkonsum
-
-Vgl. Alkoholkonsum und IQ sind positiv korreliert (UK; Batty et al., 2008)
-]
-
-.pull-right[
 ![](kleinestichproben_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
 ]
+
 ---
 
 # Validität der Inferenz
@@ -310,11 +290,26 @@ Vgl. Alkoholkonsum und IQ sind positiv korreliert (UK; Batty et al., 2008)
 Beispiel: Wir interessieren uns für den Zusammenhang von IQ und Alkoholkonsum
 
 Vgl. Alkoholkonsum und IQ sind positiv korreliert (UK; Batty et al., 2008)
-
 ]
 
 .pull-right[
 ![](kleinestichproben_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+---
+
+# Validität der Inferenz
+
+.pull-left[
+.emph[Welche Frage wollen wir eigentlich beantworten?]
+
+Beispiel: Wir interessieren uns für den Zusammenhang von IQ und Alkoholkonsum
+
+Vgl. Alkoholkonsum und IQ sind positiv korreliert (UK; Batty et al., 2008)
+
+]
+
+.pull-right[
+![](kleinestichproben_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -340,9 +335,10 @@ Zwei zentrale Gedanken zur .emph[kleine Stichprobengrößen]:
 
 --
 
-.read_more[Planen] Sie Studien mit Sorgfalt unter Beachtung dieser Aspekte
+.read_more[Planen] Sie Studien mit Sorgfalt unter Beachtung dieser Aspekte!
 
 .read_more[Meta-Analysen] für bereits existierende Daten (aber achten Sie auf mögliche Schubladeneffekte)
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

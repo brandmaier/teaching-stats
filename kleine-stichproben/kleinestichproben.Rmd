@@ -122,23 +122,24 @@ Beispiel: Sind Studierende an der MSB überdurchschnittlich intelligent?
   
 # Determinanten der Teststärke
 <br>
+.pull-left[
 .larger[Statistische Teststärke ist eine Funktion von]
 <br><br>
 .read_more[Effektstärke] (Bsp.: der wahre Zusammenhang zweier Merkmale, der wahre Gruppenunterschied)
 
---
-
 .read_more[Irrtumswahrscheinlichkeit] (Typischerweise 5%)
-
---
 
 .read_more[Präzision] des Messinstruments (Messfehler)
 
---
-
 .read_more[Stichprobengröße]
 
---
+]
+
+.pull-right[
+```{r fig.width=12, fig.height=6, echo=FALSE}
+power_plot(TRUE)
+```
+]
 ---
 
 # Probleme geringer Teststärke
@@ -177,7 +178,8 @@ Bisher: .emph[Teststärke] = $Pr$(H0 abgelehnt | H0 ist falsch)
 <br>
 Wir fragen uns nun: .emph[Wieviele Studien], die ein signifikantes Ergebnis (Nullhypothese abgelehnt) berichten, .emph[sind korrekt]:
 
-$$ Pr(\textrm{H0 ist falsch}\ |\ \textrm{H0 abgelehnt})$$
+$$Pr(\textrm{Wahrer Effekt}\ |\ \textrm{Signifikantes Ergebnis})$$
+$$ = Pr(\textrm{H0 ist falsch}\ |\ \textrm{H0 abgelehnt})$$
 Auch bekannt als .emph[Positiver Vorhersagewert]
 ]
 
@@ -237,7 +239,7 @@ class:segue-large-red
 # Stichprobenumfangsplannung
 
 .pull-left[
-- Studien sollten so gestaltet werden, dass sie eine ausreichende Teststärke haben (bspw. > 80%)
+- Studien sollten so gestaltet werden, dass sie eine ausreichende Teststärke haben (bspw. > 80%) 
 
 - Gegeben einer Ziel-Teststärke kann man dann die Stichprobengröße errechnen
 
@@ -248,7 +250,7 @@ class:segue-large-red
 ]
 
 .pull-right[
-```{r}
+```{r echo=FALSE}
 knitr::include_graphics("images/G_Power_screenshot.png")
 ```
 ]
@@ -370,6 +372,7 @@ Zwei zentrale Gedanken zur .emph[kleine Stichprobengrößen]:
 
 --
 
-.read_more[Planen] Sie Studien mit Sorgfalt unter Beachtung dieser Aspekte
+.read_more[Planen] Sie Studien mit Sorgfalt unter Beachtung dieser Aspekte!
 
 .read_more[Meta-Analysen] für bereits existierende Daten (aber achten Sie auf mögliche Schubladeneffekte)
+
