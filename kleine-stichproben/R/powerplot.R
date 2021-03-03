@@ -7,7 +7,7 @@ y_h1 <- dnorm(x = x, mean=(mn+3))
 df <- data_frame(x,y_h0,y_h1,y_h0_p)
 y_h1_p <- ifelse( pnorm(x, mean=mn)>=.95, y_h1,0)
 gp <- ggplot(df)+
-  ggthemes::theme_clean()+ylab("Effekt")+ylab("Mutmaßlichkeit")+xlab("Effekt")+
+  ggthemes::theme_clean()+ylab("Effekt")+ylab("Plausibilität")+xlab("IQ")+
   geom_ribbon(aes(ymin=0,ymax=y_h0_p,x=x),fill="lightblue")+
 geom_line(aes(x=x,y=y_h0),lwd=2,color="darkgrey")+
   theme(axis.title=element_text(size=26),

@@ -153,10 +153,6 @@ power_plot(TRUE)
 
 --
 
-.read_more[] _Der Fluch des Gewinners_ führt oft dazu, dass publizierte Effektstärken  zu groß sind (große Zufallsschwankung + Publikationsverzerrung).
-
---
-
 .read_more[] Geringe Teststärke ist ein Problem für ein Forschungsfeld, da die Wahrscheinlichkeit, dass berichtete Effekte falsch sind steigt, d.h, die Anzahl der .emph[Falsch-Positiven Befunde] steigt)
 
 
@@ -213,6 +209,8 @@ ballsplot(4, 20, "H0 ist falsch (Effekt existiert)")
 Teststärke: 20%
 ]
 
+--
+
 .pull.right[
 80 Studien<br>
 Kein Effekt (H0 ist wahr)
@@ -225,9 +223,21 @@ ballsplot(4, 80, "H0 ist wahr (Kein Effekt)")
 Fehler 1.Art: 5%
 ]
 
+--
+
 <p style="font-size:40px;">
 PPV = `r 100*compute.ppv(power=.20, alpha=.05, r=.2)`%
 </p>
+---
+
+# Generalisierbarkeit
+
+```{r echo=FALSE, out.height="70%", out.width="70%"}
+knitr::include_graphics("images/Generalization.png")
+```
+
+Beispiel: Wirksamkeit einer Therapie
+Potentielle Gefahr: Relevante Heterogenität in einem oder mehreren Merkmalen
 ---
 
 class:segue-large-red
@@ -264,7 +274,7 @@ knitr::include_graphics("images/G_Power_screenshot.png")
 - hilft uns Evidenz über mehrere Studien zu akkumulieren
 - ist besonders nützlich wenn die Einzelstudien inkonklusiv oder widersprüchlich sind
 - Meta-Analyse bildet einen Meta-Effektschätzer unter Berücksichtigung der Präzision der Einzelstudien
-- Vorsicht vor dem Schubladen-Effekt (Fluch des Gewinners)!
+- Vorsicht vor Verzerrung durch den Schubladen-Effekt (Fluch des Gewinners)!
 ]
 
 ---
@@ -332,7 +342,7 @@ plot_withinbetween(with.between=TRUE, with.within = FALSE)
 ]
 ---
 
-# Validität der Inferenz
+# Ebene der Inferenz
 
 .pull-left[
 .emph[Welche Frage wollen wir eigentlich beantworten?]
